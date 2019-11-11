@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_gallery"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="Gallery"
+        />
+
+    <item
+        android:id="@+id/menu_send"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="send"
+        />
+
+    <item
+        android:id="@+id/nav_switch"
+        app:actionLayout="@layout/z0_draktheme"
+        android:icon="@drawable/moon"
+        android:title="다크 테마" />
+
+
+    <!--    구분선 만들고 그 안에 넣으면 됨 -->
+    <item android:title="">
+        <menu>
+            <item android:id="@+id/updateIcon"
+                android:title="업데이트"
+                />
+            <item android:id="@+id/menu_bb"
+                android:title="bb"
+                />
+
+        </menu>
+    </item>
+
+</menu>

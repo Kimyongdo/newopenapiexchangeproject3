@@ -1,0 +1,33 @@
+<resources>
+
+    <!-- Base application theme. -->
+<!--    네비게이션 뷰를 만들었기 때문에 NoActionbar는 필요하다. -->
+<!--    DayNight하나만 추가한것으로 이미지가 바뀌긴 하지만 여전히 색깔은 좋지 않다. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorday_black</item>
+
+    </style>
+
+
+<!--    네비게이션 색깔 -->
+    <style name="AppTheme.Navi_header" parent="Widget.Design.NavigationView">
+        <item name="android:headerBackground">@color/colordark_green</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+<!-- 툴바 색상 담당 -->
+    <style name="AppTheme.Toolbar">
+        <!-- 툴바 배경색 어떤건 android, 있는게 있고 없는게 있는데 그때마다 빨간줄 뜨면 지우거나 해서 찾아본다. -->
+        <item name="android:background">@color/colorPrimary</item>
+        <!-- 제목글씨색상-->
+        <item name="titleTextColor">@color/colorWhite</item>
+        <!-- 툴바의 메뉴 색상 -->
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
+
+
+</resources>
