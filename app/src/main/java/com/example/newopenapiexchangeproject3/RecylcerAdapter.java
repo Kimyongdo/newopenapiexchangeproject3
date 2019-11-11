@@ -1,5 +1,6 @@
 package com.example.newopenapiexchangeproject3;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -30,14 +32,11 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
 
     ArrayList<Itemlist> datas;
     Context context;
-    //RecyclerView recyclerView;
-    public static int OpenAndClose;  //확대,축소
 
 
-    public RecylcerAdapter(ArrayList<Itemlist> datas, Context context, RecyclerView recyclerView) {
+    public RecylcerAdapter(ArrayList<Itemlist> datas, Context context) {
         this.datas = datas;
         this.context = context;
-        //this.recyclerView = recyclerView;
     }
 
 
@@ -161,6 +160,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",0);
                                 intent0.putExtra("name","Arab");
                                 intent0.putExtra("time","Asia/Dubai");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //기존 액티비티가 있다면 전부제거하고 호출
                                 context.startActivity(intent0);
 
                                 break;
@@ -170,7 +170,10 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",1);
                                 intent0.putExtra("name","Australia");
                                 intent0.putExtra("time","Australia/Canberra");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
+
+
                                 break;
                             case "BHD"://바레인
                                 searchNaverJson1.searching("바레인",2);
@@ -178,6 +181,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",2);
                                 intent0.putExtra("name","Bahrain");
                                 intent0.putExtra("time","Asia/Bahrain");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "CAD"://캐나다
@@ -186,6 +190,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",3);
                                 intent0.putExtra("name","Canada");
                                 intent0.putExtra("time","America/Toronto");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "CHF"://스위스
@@ -194,6 +199,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",4);
                                 intent0.putExtra("name","Swiss");
                                 intent0.putExtra("time","Europe/Zurich");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "CNH"://중국
@@ -202,6 +208,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",5);
                                 intent0.putExtra("name","China");
                                 intent0.putExtra("time","Asia/Shanghai");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "DKK"://덴마크
@@ -210,6 +217,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",6);
                                 intent0.putExtra("name","Denmark");
                                 intent0.putExtra("time","Europe/Copenhagen");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "EUR"://유로
@@ -218,6 +226,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",7);
                                 intent0.putExtra("name","Europe");
                                 intent0.putExtra("time","Europe/Brussels");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "GBP"://영국
@@ -226,6 +235,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",8);
                                 intent0.putExtra("name","England");
                                 intent0.putExtra("time","Europe/London");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "HKD"://홍콩
@@ -234,6 +244,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",9);
                                 intent0.putExtra("name","HongKong");
                                 intent0.putExtra("time","Asia/Hong_Kong");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "IDR(100)"://인도네시아
@@ -242,6 +253,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",10);
                                 intent0.putExtra("name","Indonesia");
                                 intent0.putExtra("time","Asia/Jakarta");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "JPY(100)"://일본
@@ -250,6 +262,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",11);
                                 intent0.putExtra("name","Japan");
                                 intent0.putExtra("time","Asia/Tokyo");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "KRW"://한국
@@ -258,6 +271,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",12);
                                 intent0.putExtra("name","Korea");
                                 intent0.putExtra("time","Asia/Seoul");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "KWD"://쿠웨이트
@@ -266,6 +280,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",13);
                                 intent0.putExtra("name","Kuwait");
                                 intent0.putExtra("time","Asia/Kuwait");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "MYR"://말레이지아
@@ -274,6 +289,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",1);
                                 intent0.putExtra("name","Malaysia");
                                 intent0.putExtra("time","Asia/Kuala_Lumpur");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "NOK"://노르웨이
@@ -282,6 +298,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",15);
                                 intent0.putExtra("name","Norway");
                                 intent0.putExtra("time","Europe/Oslo");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "NZD"://뉴질랜드
@@ -290,6 +307,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",16);
                                 intent0.putExtra("name","New Zealand");
                                 intent0.putExtra("time","Pacific/Auckland");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "SAR"://사우디
@@ -298,6 +316,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",17);
                                 intent0.putExtra("name","Saudi");
                                 intent0.putExtra("time","Asia/Riyadh");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "SEK"://스웨덴
@@ -306,6 +325,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",18);
                                 intent0.putExtra("name","Sweden");
                                 intent0.putExtra("time","Europe/Stockholm");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "SGD"://싱가포르
@@ -314,6 +334,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",19);
                                 intent0.putExtra("name","Singapore");
                                 intent0.putExtra("time","Asia/Singapore");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "THB"://태국
@@ -322,6 +343,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",20);
                                 intent0.putExtra("name","Thailand");
                                 intent0.putExtra("time","Asia/Bangkok");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
                             case "USD"://미국
@@ -330,6 +352,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",21);
                                 intent0.putExtra("name","USA");
                                 intent0.putExtra("time","America/New_York");
+                                intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 context.startActivity(intent0);
                                 break;
 

@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UpdateContent"></activity>
+        <activity android:name=".NoteText"></activity>
+        <activity android:name=".NoteMain" />
+        <activity android:name=".UpdateNote" />
+        <activity android:name=".UpdateMain" />
         <activity
             android:name=".Cal_Calculator"
             android:windowSoftInputMode="stateAlwaysVisible" />

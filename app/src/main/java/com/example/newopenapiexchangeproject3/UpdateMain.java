@@ -25,10 +25,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class UpdateContent extends AppCompatActivity {
+public class UpdateMain extends AppCompatActivity {
 
     RecyclerView UpdateRecyclerView;
-    ArrayList<UpdateVO> updates = new ArrayList<>();
+    static ArrayList<UpdateVO> updates = new ArrayList<>();
     UpdateAdapter updateAdapter;
 
     @Override
@@ -44,7 +44,6 @@ public class UpdateContent extends AppCompatActivity {
 
         loading();
         UpdateRecyclerView = findViewById(R.id.update_recyclerview);
-        updates.add(new UpdateVO("content", "name", "date"));
 
         updateAdapter = new UpdateAdapter(this, updates);
         UpdateRecyclerView.setAdapter(updateAdapter);
@@ -63,14 +62,16 @@ public class UpdateContent extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
                         int no = Integer.parseInt(jsonObject.getString("no")); //db테이블의 제목이 no라고 하는 것을 가져옴
+                        String title = jsonObject.getString("title");     //db테이블의 content 제목에 해당하는 값을 가져옴
+                        String nickname = jsonObject.getString("name");
                         String content = jsonObject.getString("content");
-                        String name = jsonObject.getString("name");
-                        String date = jsonObject.getString("date");
+                        String now = jsonObject.getString("date");
 
-                        Log.d("TAGggg",content);
-                        updates.add(0,new UpdateVO(content, name, date));
+                        updates.add(0,new UpdateVO(title, nickname, content,now));
                         updateAdapter.notifyItemInserted(0);
 
+
+                        Log.d("NUMBER",updates.get(0).getUpdateContent());
 
                     } catch (JSONException e) {
                         e.printStackTrace();

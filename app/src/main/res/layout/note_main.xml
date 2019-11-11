@@ -35,14 +35,14 @@
                 android:layout_height="match_parent">
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                >
-            </androidx.recyclerview.widget.RecyclerView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/note_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    >
+                </androidx.recyclerview.widget.RecyclerView>
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -91,15 +91,15 @@
                 android:layout_gravity="bottom|right"
                 >
 
-<!--                app:menu_fab_label="목록 선택"을 지웠음-->
+                <!--                app:menu_fab_label="목록 선택"을 지웠음-->
 
 
 
-<!--                #41AF39 - 녹색 -->
-<!--                백그라운드 컬러 반투명하게[   ]
-                    애니메이션 이미지 누가 담당하는거지 -->
-<!--                여기 이미지는 24px로만 가능 -->
-<!--                국가 추가 하기                          -->
+                <!--                #41AF39 - 녹색 -->
+                <!--                백그라운드 컬러 반투명하게[   ]
+                                    애니메이션 이미지 누가 담당하는거지 -->
+                <!--                여기 이미지는 24px로만 가능 -->
+                <!--                국가 추가 하기                          -->
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/menu_item_world"
                     android:layout_width="24dp"
@@ -112,7 +112,7 @@
                     android:onClick="ClikNationSelction"
                     />
 
-<!--                 환율 계산하기                            -->
+                <!--                 환율 계산하기                            -->
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/menu_item_calculator"
                     android:layout_width="24dp"
@@ -126,14 +126,14 @@
                     />
 
                 <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/menu_item_text"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/text"
+                    android:id="@+id/menu_item3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/phoebook"
                     app:fab_colorNormal="#41AF39"
                     app:fab_size="mini"
-                    app:fab_label="텍스트 노트"
-                    android:onClick="clicktext"
+                    app:fab_label="불러오기"
+                    android:onClick="clickload"
                     />
 
             </com.github.clans.fab.FloatingActionMenu>

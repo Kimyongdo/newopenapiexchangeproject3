@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 
+import com.bumptech.glide.Glide;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
 
@@ -48,15 +50,19 @@ import static com.example.newopenapiexchangeproject3.WeatherJSon.todayweather;
 public class MainActivity extends AppCompatActivity {
 
 
+
     //플로팅버튼
     FloatingActionMenu fab;
+    FloatingActionButton fabbtn_world;
+    FloatingActionButton fabbtn_cal;
+    FloatingActionButton fabbtn_text;
 
     //레이아웃
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;                                     //toolbar import시 appcompat->setsupport 가능해짐.
-    public static RecyclerView recyclerView;
+    RecyclerView recyclerView;
 
     public static ArrayList<Itemlist> datas =new ArrayList<>();
     static RecylcerAdapter recyclerAdapter;
@@ -71,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true); //벡터이미지 관련코드
         setContentView(R.layout.activity_main);
 
         /////////////////////volley 라이브러리 생성//////////////////////////////
@@ -89,9 +96,18 @@ public class MainActivity extends AppCompatActivity {
         globalTime.koreantime();
         /////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
         //플로팅 버튼 외부 터치시 끝나도록.
         fab = findViewById(R.id.flaotingActionButton);
         fab.setClosedOnTouchOutside(true);
+        fabbtn_world = findViewById(R.id.menu_item_world);
+        fabbtn_cal = findViewById(R.id.menu_item_calculator);
+        fabbtn_text = findViewById(R.id.menu_item_text);
+        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world); //navigation item은 px상관없이 작게 들어가는데 비해 fab 속 이미지는 glide을 통해서 들어가야 사이즈 조절이 알맞게 가능함. wrap -> 24dp
+        Glide.with(this).load(R.drawable.calculator1).into(fabbtn_cal);
+        Glide.with(this).load(R.drawable.text).into(fabbtn_text);
+
 
         //레이아웃 연결
         drawerLayout = findViewById(R.id.layout_drawer);
@@ -104,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState(); //화살표모양->삼선모양
 
         ///////////////////////////////////////////////다크 테마////////////////////////////////////////////////////////////////////
-
         Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
         actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
         actionview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -141,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         Dataload();
         //리싸이클러 연결하기 - onCreate에서만 보임.
         recyclerView = findViewById(R.id.recyclerview);
-        recyclerAdapter = new RecylcerAdapter(datas,this, recyclerView);
+        recyclerAdapter = new RecylcerAdapter(datas,this);
         recyclerView.setAdapter(recyclerAdapter);
 
         //비교 후 최신데이터
@@ -151,14 +166,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.menu_gallery :
-                        Toast.makeText(MainActivity.this, "주소록입니다.", Toast.LENGTH_SHORT).show();
-                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                    case R.id.menu_note :
+                        Intent intent = new Intent(MainActivity.this,NoteMain.class);
+                        startActivity(intent);
+                        drawerLayout.closeDrawer(navigationView); //클 릭 후 네비뷰 닫힘
                         break;
                     case R.id.updateIcon:
-                        Intent intent = new Intent(MainActivity.this, UpdateContent.class);
-                        startActivity(intent);
+                        Intent intent0 = new Intent(MainActivity.this, UpdateMain.class);
+                        startActivity(intent0);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+
                 }
 
                 return false;
@@ -225,7 +242,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    public void clickload(View view) {
+    public void clicktext(View view) {
+        Intent intent = new Intent(this, NoteText.class);
+        startActivity(intent);
+
     }
 
     public void DataSave(){

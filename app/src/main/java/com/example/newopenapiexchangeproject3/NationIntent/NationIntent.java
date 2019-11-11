@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -186,15 +185,15 @@ public class NationIntent extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
-
-    @Override
-    public void onBackPressed() {
-        //뒤로가기 누르면 계속 원래 페이지를 보여준다. 그래서 우선 intent를 시킴.
-        super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//
+//    @Override
+//    public void onBackPressed() {
+//        //뒤로가기 누르면 계속 원래 페이지를 보여준다. 그래서 우선 intent를 시킴. 임시방편임.
+//        super.onBackPressed();
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
 
     @Override

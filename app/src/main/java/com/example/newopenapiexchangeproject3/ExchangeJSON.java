@@ -23,7 +23,7 @@ public class ExchangeJSON {
     public void sendRequest(){
 
         Date date = new Date();
-        date.setTime(date.getTime()-(1000*60*60*24));
+//        date.setTime(date.getTime()-(1000*60*60*24));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String dateStr = sdf.format(date); //null값 아직 해결 안 함.
 

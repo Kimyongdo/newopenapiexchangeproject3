@@ -1,11 +1,17 @@
 package com.example.newopenapiexchangeproject3;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -14,6 +20,8 @@ import java.util.ArrayList;
 public class UpdateAdapter extends RecyclerView.Adapter {
     Context context;
     ArrayList<UpdateVO> updateVOS;
+    FragmentManager fragmentManager;
+
 
     public UpdateAdapter(Context context, ArrayList<UpdateVO> updateVOS) {
         this.context = context;
@@ -33,7 +41,8 @@ public class UpdateAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         UpdateVH updateVH = (UpdateVH)holder;
         UpdateVO updateVO = updateVOS.get(position);
-        updateVH.UpdateTv.setText(updateVO.getUpdateTv());
+
+        updateVH.Updatetitle.setText(updateVO.getUpdateTtitle());
         updateVH.UpdateName.setText(updateVO.getUpdateName());
         updateVH.UpdateTime.setText(updateVO.getUpdateTime());
 
@@ -47,15 +56,32 @@ public class UpdateAdapter extends RecyclerView.Adapter {
     }
 
     class UpdateVH extends RecyclerView.ViewHolder{
-        TextView UpdateTv;
+        TextView Updatetitle;
         TextView UpdateName;
         TextView UpdateTime;
+        RelativeLayout UpdateRelativeLayout;
+
         public UpdateVH(@NonNull View itemView) {
             super(itemView);
-            UpdateTv = itemView.findViewById(R.id.update_content);
+            Updatetitle = itemView.findViewById(R.id.update_title);
             UpdateName = itemView.findViewById(R.id.tv_update_name);
             UpdateTime = itemView.findViewById(R.id.update_tv_date);
 
+
+            UpdateRelativeLayout = itemView.findViewById(R.id.UpdateRelativeLayout);
+            UpdateRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int a = getAdapterPosition();
+                    Intent intent = new Intent(context,UpdateNote.class);
+                    intent.putExtra("number",a);
+                    context.startActivity(intent);
+                    ((Activity)context).finish();
+
+                }
+            });
         }
+
+
     }
 }

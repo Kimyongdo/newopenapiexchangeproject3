@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:weightSum="100"
+    tools:context=".NoteText">
+
+    <RelativeLayout
+        android:id="@+id/note_relayivelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_updateNote_first_done"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/moon4"
+            android:clickable="true"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/note_relayivelayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginTop="10dp"
+        >
+
+        <EditText
+            android:id="@+id/et_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/moon4"
+            android:hint="노트 제목"
+            android:background="@null"
+            android:textCursorDrawable="@drawable/notecursor"
+            >
+
+            <requestFocus/>
+        </EditText>
+
+<!--        null을 사용하여 밑줄제거가능 -->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/note_relayivelayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:layout_marginTop="10dp"
+        >
+
+        <EditText
+            android:id="@+id/et_note_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/moon4"
+            android:hint="작성을 시작해주세요"
+            android:background="@null"
+            android:textCursorDrawable="@drawable/notecursor"
+            />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

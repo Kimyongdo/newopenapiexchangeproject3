@@ -2,22 +2,24 @@ package com.example.newopenapiexchangeproject3;
 
 public class UpdateVO {
 
-  private String UpdateTv;
+  private String UpdateTtitle;
   private String UpdateName;
+  private String UpdateContent;
   private String UpdateTime;
 
-    public UpdateVO(String updateTv, String updateName, String updateTime) {
-        UpdateTv = updateTv;
+    public UpdateVO(String updateTtitle, String updateName, String updateContent, String updateTime) {
+        UpdateTtitle = updateTtitle;
         UpdateName = updateName;
+        UpdateContent = updateContent;
         UpdateTime = updateTime;
     }
 
-    public String getUpdateTv() {
-        return UpdateTv;
+    public String getUpdateTtitle() {
+        return UpdateTtitle;
     }
 
-    public void setUpdateTv(String updateTv) {
-        UpdateTv = updateTv;
+    public void setUpdateTtitle(String updateTtitle) {
+        UpdateTtitle = updateTtitle;
     }
 
     public String getUpdateName() {
@@ -26,6 +28,14 @@ public class UpdateVO {
 
     public void setUpdateName(String updateName) {
         UpdateName = updateName;
+    }
+
+    public String getUpdateContent() {
+        return UpdateContent;
+    }
+
+    public void setUpdateContent(String updateContent) {
+        UpdateContent = updateContent;
     }
 
     public String getUpdateTime() {
