@@ -20,15 +20,7 @@
 
 
         <ImageView
-            android:id="@+id/iv_updateNote_first_camera"
-            android:layout_width="18sp"
-            android:layout_height="18sp"
-            android:src="@drawable/camera"
-            android:layout_alignParentRight="true"
-            android:clickable="true"
-            />
-        <ImageView
-            android:id="@+id/iv_updateNote_first_done"
+            android:id="@+id/iv_updateNote_Second_done"
             android:layout_width="18sp"
             android:layout_height="18sp"
             android:clickable="true"
@@ -46,7 +38,7 @@
         >
 
         <EditText
-            android:id="@+id/et_note_title"
+            android:id="@+id/et_note_second_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/moon4"
@@ -114,7 +106,7 @@
         >
 
         <EditText
-            android:id="@+id/et_note_content"
+            android:id="@+id/et_note_second_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/moon4"

@@ -35,7 +35,7 @@
             android:id="@+id/iv_nation_selection"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/korea"
+            android:src="@drawable/a13_korea"
             android:layout_marginLeft="40dp"
             />
 

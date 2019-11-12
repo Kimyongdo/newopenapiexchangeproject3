@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/layout_drawer"
-    tools:context=".MainActivity">
+    tools:context=".NoteMain">
 
 
     <!--                             제목 영역                               -->
@@ -29,11 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/layout_refresh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/note_recycler"
@@ -44,7 +39,6 @@
                     >
                 </androidx.recyclerview.widget.RecyclerView>
 
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
             <com.github.clans.fab.FloatingActionMenu
@@ -109,7 +103,7 @@
                     android:src="@drawable/worldwide1"
                     app:fab_colorNormal="#41AF39"
                     app:fab_colorPressed="#41AF39"
-                    android:onClick="ClikNationSelction"
+                    android:onClick="ClikNationSelction2"
                     />
 
                 <!--                 환율 계산하기                            -->
@@ -122,18 +116,18 @@
                     app:fab_colorPressed="#41AF39"
                     app:fab_size="mini"
                     app:fab_label="환율 계산기"
-                    android:onClick="clickCalculator"
+                    android:onClick="clickCalculator2"
                     />
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/menu_item3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/phoebook"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/text"
                     app:fab_colorNormal="#41AF39"
                     app:fab_size="mini"
-                    app:fab_label="불러오기"
-                    android:onClick="clickload"
+                    app:fab_label="텍스트 노트"
+                    android:onClick="clicktext2"
                     />
 
             </com.github.clans.fab.FloatingActionMenu>
@@ -150,7 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/navigatiopnviewheader"
+        app:headerLayout="@layout/z_navigation_header"
         app:menu="@menu/nagigationviewcontent">
     </com.google.android.material.navigation.NavigationView>
 

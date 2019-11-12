@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.newopenapiexchangeproject3.ExchangeJSON;
+import com.example.newopenapiexchangeproject3.JsonExchangeRate;
 import com.example.newopenapiexchangeproject3.GlobalTime;
 import com.example.newopenapiexchangeproject3.MainActivity;
 import com.example.newopenapiexchangeproject3.R;
@@ -108,10 +108,10 @@ public class NationIntent extends AppCompatActivity {
 
         //정보받기
         //환율
-        Glide.with(this).load(ExchangeJSON.iv_nationflag[i]).into(iv_D_Nationflag);
-        tv_D_NationName.setText(ExchangeJSON.cur_nm[i]);
-        tv_D_NationMoeny.setText(ExchangeJSON.cur_unit[i]);
-        tv_D_NationExchange.setText(ExchangeJSON.kftc_deal_bas_r[i]);
+        Glide.with(this).load(JsonExchangeRate.iv_nationflag[i]).into(iv_D_Nationflag);
+        tv_D_NationName.setText(JsonExchangeRate.cur_nm[i]);
+        tv_D_NationMoeny.setText(JsonExchangeRate.cur_unit[i]);
+        tv_D_NationExchange.setText(JsonExchangeRate.kftc_deal_bas_r[i]);
 
         //시간
         TimeThread timeThread = new TimeThread();

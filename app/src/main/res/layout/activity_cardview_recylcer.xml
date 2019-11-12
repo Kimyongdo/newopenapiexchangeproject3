@@ -33,7 +33,7 @@
             android:id="@+id/iv_flag"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/korea"
+            android:src="@drawable/a13_korea"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             />

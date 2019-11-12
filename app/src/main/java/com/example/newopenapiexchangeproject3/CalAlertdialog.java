@@ -1,11 +1,11 @@
 package com.example.newopenapiexchangeproject3;
 
-public class Cal_Alert_dialog {
+public class CalAlertdialog {
 
     private String tv;
     private int iv;       //이미지는  int로 받는다. 여기서 계속 ImageView로 썼음..
 
-    public Cal_Alert_dialog(String tv, int iv) {
+    public CalAlertdialog(String tv, int iv) {
         this.tv = tv;
         this.iv = iv;
     }

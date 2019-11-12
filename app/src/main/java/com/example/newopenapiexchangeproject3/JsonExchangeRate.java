@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExchangeJSON {
+public class JsonExchangeRate {
   public  static ExchangeMoney[] exchangeMonies;
     public  static String[] cur_nm = new String[22];
     public  static String[] cur_unit = new String[22];

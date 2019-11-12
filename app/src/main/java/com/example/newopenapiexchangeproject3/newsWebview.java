@@ -15,7 +15,7 @@ public class newsWebview extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.z0_newswebview);
+        setContentView(R.layout.z_newswebview);
 
         Intent intent = getIntent();
         String link = intent.getStringExtra("Link");

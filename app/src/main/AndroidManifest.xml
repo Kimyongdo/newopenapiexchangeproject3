@@ -12,12 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NoteText"></activity>
+        <activity android:name=".NoteInText"></activity>
+        <activity android:name=".NoteText" />
         <activity android:name=".NoteMain" />
         <activity android:name=".UpdateNote" />
         <activity android:name=".UpdateMain" />
         <activity
-            android:name=".Cal_Calculator"
+            android:name=".CalCalculator"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity android:name=".NationIntent.NationIntent" />
         <activity android:name=".newsWebview" />
@@ -29,6 +30,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        
+        <provider
+            android:authorities="com.example.newopenapiexchangeproject3"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths"/>
+        </provider>
     </application>
 
 </manifest>

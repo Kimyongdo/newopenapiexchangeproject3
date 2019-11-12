@@ -150,7 +150,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/navigatiopnviewheader"
+        app:headerLayout="@layout/z_navigation_header"
         app:menu="@menu/nagigationviewcontent">
     </com.google.android.material.navigation.NavigationView>
 

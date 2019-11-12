@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/nav_switch"
-        app:actionLayout="@layout/z0_draktheme"
+        app:actionLayout="@layout/z_draktheme"
         android:icon="@drawable/moon4"
         android:title="다크 테마" />
 

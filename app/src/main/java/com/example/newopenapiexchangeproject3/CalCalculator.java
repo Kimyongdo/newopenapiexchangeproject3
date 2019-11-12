@@ -33,11 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.cur_nm;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.iv_nationflag;
-import static com.example.newopenapiexchangeproject3.MainActivity.datas;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_nm;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.iv_nationflag;
 
-public class Cal_Calculator extends AppCompatActivity  {
+public class CalCalculator extends AppCompatActivity  {
 
     private static final String TAG_TEXT = "text";
     private static final String TAG_IMAGE = "image";
@@ -133,8 +132,8 @@ public class Cal_Calculator extends AppCompatActivity  {
                         }
 
                         //String으로 받아왔을 경우 ,와 . 를 제거해줌.
-                        String KftcUp = ExchangeJSON.kftc_deal_bas_r[nationPostionUp];
-                        String KftcDown = ExchangeJSON.kftc_deal_bas_r[nationPostionDown];
+                        String KftcUp = JsonExchangeRate.kftc_deal_bas_r[nationPostionUp];
+                        String KftcDown = JsonExchangeRate.kftc_deal_bas_r[nationPostionDown];
 
                         KftcUp = KftcUp.replace(",", "");
 //                        KftcUp = KftcUp.replace(".", ""); //.까지 지우면 숫자가 훨씬 더 커지니까 여기서 변경
@@ -218,8 +217,8 @@ public class Cal_Calculator extends AppCompatActivity  {
                             et_number2.setSelection(result2.length());
                         }
 
-                        String KftcUp = ExchangeJSON.kftc_deal_bas_r[nationPostionUp];
-                        String KftcDown = ExchangeJSON.kftc_deal_bas_r[nationPostionDown];
+                        String KftcUp = JsonExchangeRate.kftc_deal_bas_r[nationPostionUp];
+                        String KftcDown = JsonExchangeRate.kftc_deal_bas_r[nationPostionDown];
 
 
 
@@ -330,7 +329,7 @@ public class Cal_Calculator extends AppCompatActivity  {
 
     public void firstshowAlert() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Cal_Calculator.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalCalculator.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.calcaulator_dialog, null);
         builder.setView(view);
@@ -338,7 +337,7 @@ public class Cal_Calculator extends AppCompatActivity  {
         final ListView listview = (ListView)view.findViewById(R.id.listview_alterdialog_list);
         final AlertDialog dialog = builder.create();
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(Cal_Calculator.this, dialog_arraylist,
+        SimpleAdapter simpleAdapter = new SimpleAdapter(CalCalculator.this, dialog_arraylist,
                 R.layout.calculator_dialog_itemlist,
                 new String[]{TAG_IMAGE, TAG_TEXT},
                 new int[]{R.id.iv_nation_selection_alert, R.id.tv_nation_selection_alert});
@@ -348,10 +347,10 @@ public class Cal_Calculator extends AppCompatActivity  {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(Cal_Calculator.this, text[position]+"", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CalCalculator.this, text[position]+"", Toast.LENGTH_SHORT).show();
                 iv_CompareNation1.setImageResource(image[position]);
                 tv_name.setText(text[position]);
-                tv_currency.setText(ExchangeJSON.cur_unit[position]);
+                tv_currency.setText(JsonExchangeRate.cur_unit[position]);
                 nationPostionUp = position;
                 et_number.setText("");
                 et_number2.setText("");
@@ -367,7 +366,7 @@ public class Cal_Calculator extends AppCompatActivity  {
 
     public void secondshowAlert1() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Cal_Calculator.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalCalculator.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.calcaulator_dialog, null);
         builder.setView(view);
@@ -375,7 +374,7 @@ public class Cal_Calculator extends AppCompatActivity  {
         final ListView listview = (ListView)view.findViewById(R.id.listview_alterdialog_list);
         final AlertDialog dialog = builder.create();
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(Cal_Calculator.this, dialog_arraylist,
+        SimpleAdapter simpleAdapter = new SimpleAdapter(CalCalculator.this, dialog_arraylist,
                 R.layout.calculator_dialog_itemlist,
                 new String[]{TAG_IMAGE, TAG_TEXT},
                 new int[]{R.id.iv_nation_selection_alert, R.id.tv_nation_selection_alert});
@@ -385,10 +384,10 @@ public class Cal_Calculator extends AppCompatActivity  {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(Cal_Calculator.this, text[position]+"", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CalCalculator.this, text[position]+"", Toast.LENGTH_SHORT).show();
                 iv_CompareNation2.setImageResource(image[position]);
                 tv_name2.setText(text[position]);
-                tv_currency2.setText(ExchangeJSON.cur_unit[position]);
+                tv_currency2.setText(JsonExchangeRate.cur_unit[position]);
 
                 nationPostionDown = position;
 

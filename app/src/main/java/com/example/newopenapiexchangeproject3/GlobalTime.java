@@ -11,8 +11,13 @@ public class GlobalTime {
     public static String newstime2;
     public static Date date2;
     public static SimpleDateFormat sdf2;
+
     public static TimeZone[] timeZone2 = new TimeZone[22];
     public static DateFormat[] dateFormat2 = new DateFormat[22];
+
+    public static String noetime;
+    public static Date notedate;
+    public static SimpleDateFormat notesdf;
 
 
     public static  String[] timedifferent = new String[22];
@@ -27,9 +32,16 @@ public class GlobalTime {
     long minute;
 
 
+    //노트업데이트
+    public void Notetime(){
+        notedate= new Date();
+        notesdf = new SimpleDateFormat("yy/MM/dd");
+        noetime = notesdf.format(notedate);
+    }
+
     public void koreantime(){
         date2= new Date();
-        sdf2 = new SimpleDateFormat("yy-MM-dd a hh:mm ");
+        sdf2 = new SimpleDateFormat("yy-MM-dd a hh:mm");
         newstime2 = sdf2.format(date2);
     }
 
@@ -596,10 +608,11 @@ public class GlobalTime {
                     timedifferent[i]=minute+"";
                     break;
             }
+
+
         }
 
     }
-
 
 
 }

@@ -1,6 +1,5 @@
 package com.example.newopenapiexchangeproject3;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -44,10 +42,14 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.cardview_recylcer, parent, false);
+        View itemView = inflater.inflate(R.layout.activity_cardview_recylcer, parent, false);
+        VH vh = new VH(itemView);
+
+
         itemView.findViewById(R.id.cardviewlayoutroot);
-         VH vh = new VH(itemView);
         return vh;
 
 

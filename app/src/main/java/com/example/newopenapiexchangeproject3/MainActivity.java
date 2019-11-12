@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 
@@ -36,10 +35,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.cur_nm;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.cur_unit;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.iv_nationflag;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.kftc_deal_bas_r;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_nm;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_unit;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.iv_nationflag;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.kftc_deal_bas_r;
 import static com.example.newopenapiexchangeproject3.GlobalTime.date2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.dateFormat2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.newstime2;
@@ -86,14 +85,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //이걸 주석으로 해도 I/Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
-        ExchangeJSON exchangeJSON = new ExchangeJSON();
-        exchangeJSON.sendRequest();
+        JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
+        jsonExchangeRate.sendRequest();
         WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
         weahterCallMethod.WeahterCallMethod();
         //대량의 데이터 - 시간
         GlobalTime globalTime = new GlobalTime();
         globalTime.globaltime();
         globalTime.koreantime();
+        globalTime.Notetime();
         /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void clickCalculator(View view) {
-        Intent intent = new Intent(this, Cal_Calculator.class);
+        Intent intent = new Intent(this, CalCalculator.class);
         startActivity(intent);
 
     }
@@ -281,8 +281,8 @@ public class MainActivity extends AppCompatActivity {
         //Dataload();
 
         //다시 한번 메소드를 집어넣음 안넣으니까 실시간 반영이 불가능함.
-        ExchangeJSON exchangeJSON = new ExchangeJSON();
-        exchangeJSON.sendRequest();
+        JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
+        jsonExchangeRate.sendRequest();
         //대량의 데이터 - 시간
         GlobalTime globalTime = new GlobalTime();
         globalTime.globaltime();
@@ -506,4 +506,5 @@ public class MainActivity extends AppCompatActivity {
         DataSave();
         recyclerAdapter.notifyDataSetChanged();
     }
+
 }

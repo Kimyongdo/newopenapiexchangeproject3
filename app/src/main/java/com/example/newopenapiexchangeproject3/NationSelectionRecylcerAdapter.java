@@ -1,14 +1,11 @@
 package com.example.newopenapiexchangeproject3;
 
 import android.content.Context;
-import android.media.audiofx.AudioEffect;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,19 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.newopenapiexchangeproject3.NaverSearchApi.SearchApi;
-import com.google.android.material.internal.NavigationMenuItemView;
-import com.google.gson.Gson;
-
-import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,28 +27,19 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TimeZone;
 
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.cur_nm;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.cur_unit;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.iv_nationflag;
-import static com.example.newopenapiexchangeproject3.ExchangeJSON.kftc_deal_bas_r;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_nm;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_unit;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.iv_nationflag;
+import static com.example.newopenapiexchangeproject3.JsonExchangeRate.kftc_deal_bas_r;
 import static com.example.newopenapiexchangeproject3.GlobalTime.date2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.dateFormat2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.newstime2;
 
 import static com.example.newopenapiexchangeproject3.GlobalTime.timedifferent;
 import static com.example.newopenapiexchangeproject3.MainActivity.datas;
-import static com.example.newopenapiexchangeproject3.SearchNaverJson1.newsContent;
-import static com.example.newopenapiexchangeproject3.SearchNaverJson1.newsUrl;
-import static com.example.newopenapiexchangeproject3.SearchNaverJson1.newstitle;
-import static com.example.newopenapiexchangeproject3.WeatherJSon.todayC;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayC1;
-import static com.example.newopenapiexchangeproject3.WeatherJSon.todayCity;
-import static com.example.newopenapiexchangeproject3.WeatherJSon.todayIcon;
-import static com.example.newopenapiexchangeproject3.WeatherJSon.todayNation;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayweather;
 
 public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {

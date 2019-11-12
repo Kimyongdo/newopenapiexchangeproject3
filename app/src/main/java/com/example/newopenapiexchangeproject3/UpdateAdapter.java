@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class UpdateAdapter extends RecyclerView.Adapter {
     Context context;
     ArrayList<UpdateVO> updateVOS;
-    FragmentManager fragmentManager;
 
 
     public UpdateAdapter(Context context, ArrayList<UpdateVO> updateVOS) {
