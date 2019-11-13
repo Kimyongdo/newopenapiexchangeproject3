@@ -1,6 +1,7 @@
 package com.example.newopenapiexchangeproject3;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -12,13 +13,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 
@@ -34,7 +45,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_nm;
 import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_unit;
 import static com.example.newopenapiexchangeproject3.JsonExchangeRate.iv_nationflag;
@@ -43,11 +59,18 @@ import static com.example.newopenapiexchangeproject3.GlobalTime.date2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.dateFormat2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.newstime2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.timedifferent;
+import static com.example.newopenapiexchangeproject3.Loginclass.nnickname;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayC1;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayweather;
+import static com.kakao.usermgmt.StringSet.nickname;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    //카카오톡 이미지 및 닉네임
+    String kNickname;
+    String kNickimage;
+    TextView tvKickname;
 
 
     //플로팅버튼
@@ -58,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     //레이아웃
     DrawerLayout drawerLayout;
-    NavigationView navigationView;
+    static NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;                                     //toolbar import시 appcompat->setsupport 가능해짐.
     RecyclerView recyclerView;
@@ -96,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         globalTime.Notetime();
         /////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+        getHashKey();
 
         //플로팅 버튼 외부 터치시 끝나도록.
         fab = findViewById(R.id.flaotingActionButton);
@@ -108,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(this).load(R.drawable.calculator1).into(fabbtn_cal);
         Glide.with(this).load(R.drawable.text).into(fabbtn_text);
 
+
+        //카카오톡 로그인 네비게이션뷰 연결
+        tvKickname = findViewById(R.id.tv_navi_header_name);
 
         //레이아웃 연결
         drawerLayout = findViewById(R.id.layout_drawer);
@@ -121,7 +147,11 @@ public class MainActivity extends AppCompatActivity {
 
         ///////////////////////////////////////////////다크 테마////////////////////////////////////////////////////////////////////
         Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
-        actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
+            }
+        }
         actionview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) { //처음엔 true로 시작한다.
@@ -140,6 +170,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             }         //토글버튼을 이용할 때는 ChangeListner를 사용해야함, click을 하면 두번 눌러야 한번 작동이 됨.
         });
+
+
+//        navigationView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//            @Override
+//            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+//                navigationView.removeOnLayoutChangeListener(this);
+//                TextView textView = navigationView.findViewById(R.id.tv_navi_header_name);
+//                textView.setText(nnickname);
+//
+//            }
+//        });
+
 
         SharedPreferences sharedPreferences = getSharedPreferences("switch",MODE_PRIVATE);
         if(sharedPreferences!=null){
@@ -175,7 +217,10 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent0 = new Intent(MainActivity.this, UpdateMain.class);
                         startActivity(intent0);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
-
+//                    case R.id.login:
+//                        Intent intent1 = new Intent(MainActivity.this,Loginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+//                        startActivity(intent1);
+//                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                 }
 
                 return false;
@@ -191,7 +236,50 @@ public class MainActivity extends AppCompatActivity {
     }///////////////////////////////////////////////////onCreate//////////////////////////////////////////////////////////////////
 
 
+    //actionbar 붙이는 곳
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater(); //메뉴에서 가져올 인플레이터이므로 layout이 아닌 Menu
+        inflater.inflate(R.menu.loginicon, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int n = item.getItemId();
+        switch (n){
+            case R.id.menu_lock:
+                Intent intent = new Intent(this,Loginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                startActivityForResult(intent,333);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 333:
+                if(resultCode==RESULT_OK){
+                    kNickname = data.getStringExtra("nickname");
+                    kNickimage = data.getStringExtra("nicknameimage");
+
+                    Log.d("안녕하세요",kNickname);
+                    Log.d("안녕하세요",kNickimage);
+                    //여기까지는 잘 옴
+
+                    //네비게이션 글을 바꾸는 기능좀.. 하 이거 못 찾아서 지금 뭐하냐 ㅠㅠ
+                    NavigationView navigationView = findViewById(R.id.navi);
+                    View headerView = navigationView.getHeaderView(0);
+                    TextView navUsername = headerView.findViewById(R.id.tv_navi_header_name);
+                    CircleImageView navUserimage = headerView.findViewById(R.id.iv_header);
+                    Glide.with(this).load(kNickimage).into(navUserimage);
+                    navUsername.setText(kNickname);
+
+                }
+
+        }
+    }
 
     // onDestory를 통해 뒤로가기 누르고 화면이 완전히 없어지면 datas.add가 추가로 들어가는 것을 막는다.
     @Override
@@ -506,5 +594,24 @@ public class MainActivity extends AppCompatActivity {
         DataSave();
         recyclerAdapter.notifyDataSetChanged();
     }
+
+
+    private void getHashKey(){
+        try {                                                        // 패키지이름을 입력해줍니다.
+            PackageInfo info = getPackageManager().getPackageInfo("com.example.newopenapiexchangeproject3", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+                    Log.d("카카오톡 해쉬코드","key_hash="+ Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

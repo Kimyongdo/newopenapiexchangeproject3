@@ -74,6 +74,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(context, NoteInText.class);
                     intent.putExtra("number",number);
                     ((Activity)context).startActivityForResult(intent,100);
+                    ((Activity)context).finish();
                     //리사이클러뷰는 no place이므로 이를 받아주는 main에서 onResult를 행해야함.
                     //100은 임의의 수로 나중에 FIANL로 상수로 바꿔주어야한다.
 

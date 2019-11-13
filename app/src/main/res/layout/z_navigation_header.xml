@@ -8,25 +8,30 @@
     android:theme="@style/AppTheme.Navi_header"
     >
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_header"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@mipmap/ic_launcher"
-        android:layout_margin="8dp"
-        />
+        android:layout_margin="8dp">
+    </de.hdodenhof.circleimageview.CircleImageView>
+
     <TextView
+        android:id="@+id/tv_navi_header_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Android"
+        android:text="Anonymous님"
+
         android:textSize="20sp"
+
         android:textStyle="bold"
         android:layout_marginLeft="8dp"
         />
     <TextView
+        android:id="@+id/tv_navi_header_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Android@gmail.com"
+        android:text="오늘도 힘내죠!!"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginLeft="8dp"

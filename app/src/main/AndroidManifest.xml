@@ -11,8 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".NoteInText"></activity>
+        android:theme="@style/AppTheme"
+        android:name=".GlobalApplication"
+        >
+<!--         android:name=".GlobalApplication"으로 우선 위에다가 추가함. -->
+        <activity android:name=".Loginclass"></activity>
+        <activity android:name=".NoteInText" />
         <activity android:name=".NoteText" />
         <activity android:name=".NoteMain" />
         <activity android:name=".UpdateNote" />
@@ -29,19 +33,22 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        
-        
+        </activity> <!-- 사진기능 -->
         <provider
-            android:authorities="com.example.newopenapiexchangeproject3"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.newopenapiexchangeproject3"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/paths"/>
-        </provider>
+                android:resource="@xml/paths" />
+        </provider> <!-- 카카오톡 관리자 기능 -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
+
+
     </application>
 
 </manifest>

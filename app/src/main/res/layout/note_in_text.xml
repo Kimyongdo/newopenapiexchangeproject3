@@ -18,6 +18,14 @@
         android:layout_marginTop="20dp"
         >
 
+        <ImageView
+            android:id="@+id/iv_updateNote_second_camera"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:src="@drawable/camera"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            />
 
         <ImageView
             android:id="@+id/iv_updateNote_Second_done"
@@ -117,7 +125,16 @@
             android:layout_marginTop="10dp"
             />
 
+        <ImageView
+            android:id="@+id/iv_camareaImage_second"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/et_note_second_content"
+            />
+
+
     </RelativeLayout>
+
 
 
 </LinearLayout>

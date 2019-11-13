@@ -22,8 +22,8 @@
             <item android:id="@+id/updateIcon"
                 android:title="업데이트"
                 />
-            <item android:id="@+id/menu_bb"
-                android:title="bb"
+            <item android:id="@+id/login"
+                android:title="로그인"
                 />
 
         </menu>
