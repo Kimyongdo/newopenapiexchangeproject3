@@ -26,6 +26,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -97,6 +99,7 @@ public class CalCalculator extends AppCompatActivity  {
         tv_currency2=findViewById(R.id.click_nation_name2_currency);
 
 
+        //눌렀을 경우 지우기 누르면 바로 ""로 만들도록
         et_number.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -107,6 +110,7 @@ public class CalCalculator extends AppCompatActivity  {
                 return false;
             }
         });
+
 
 
         //////////////////////////////////////////////숫자입력하는 곳/////////////////////////////////////////////////////////
@@ -289,19 +293,22 @@ public class CalCalculator extends AppCompatActivity  {
                 InputMethodManager.SHOW_IMPLICIT);
        ////////////////////////////////////////////////////////////////////////////////
 
-        for(int i=0; i<22; i++){
-            image[i] = iv_nationflag[i];
-            text[i] = cur_nm[i];
-        }
+
+//        //다이얼로그 속 이미지뷰가 나오는 곳. // 동일방식이라 바꿈.
+//        for(int i=0; i<22; i++){
+////            Glide.with(this).load(iv_nationflag[i]).into(image[i]);
+//            image[i] = iv_nationflag[i];
+//            text[i] = cur_nm[i];
+//        }
+
 
 
         dialog_arraylist = new ArrayList<>();
-
-        for(int i=0;i<image.length;i++)
+        for(int i=0;i<22;i++)
         {
             Map<String, Object> itemMap = new HashMap<>();
-            itemMap.put(TAG_IMAGE, image[i]);
-            itemMap.put(TAG_TEXT, text[i]);
+            itemMap.put(TAG_IMAGE, iv_nationflag[i]);
+            itemMap.put(TAG_TEXT, cur_nm[i]);
             dialog_arraylist.add(itemMap);
         }
 
@@ -337,19 +344,23 @@ public class CalCalculator extends AppCompatActivity  {
         final ListView listview = (ListView)view.findViewById(R.id.listview_alterdialog_list);
         final AlertDialog dialog = builder.create();
 
+
+        //심플어댑터를 쓰지 말고 어댑터를 이용해서 글라이드를 사용해서 32dp를 하는것을 목표로 해보자.
         SimpleAdapter simpleAdapter = new SimpleAdapter(CalCalculator.this, dialog_arraylist,
                 R.layout.calculator_dialog_itemlist,
                 new String[]{TAG_IMAGE, TAG_TEXT},
                 new int[]{R.id.iv_nation_selection_alert, R.id.tv_nation_selection_alert});
 
         listview.setAdapter(simpleAdapter);
+
+
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(CalCalculator.this, text[position]+"", Toast.LENGTH_SHORT).show();
-                iv_CompareNation1.setImageResource(image[position]);
-                tv_name.setText(text[position]);
+//                iv_CompareNation1.setImageResource(image[position]);
+                Glide.with(CalCalculator.this).load(iv_nationflag[position]).into(iv_CompareNation1);
+                tv_name.setText(cur_nm[position]);
                 tv_currency.setText(JsonExchangeRate.cur_unit[position]);
                 nationPostionUp = position;
                 et_number.setText("");
@@ -384,9 +395,8 @@ public class CalCalculator extends AppCompatActivity  {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(CalCalculator.this, text[position]+"", Toast.LENGTH_SHORT).show();
-                iv_CompareNation2.setImageResource(image[position]);
-                tv_name2.setText(text[position]);
+                Glide.with(CalCalculator.this).load(iv_nationflag[position]).into(iv_CompareNation2);
+                tv_name2.setText(cur_nm[position]);
                 tv_currency2.setText(JsonExchangeRate.cur_unit[position]);
 
                 nationPostionDown = position;

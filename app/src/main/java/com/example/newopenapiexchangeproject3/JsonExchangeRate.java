@@ -1,5 +1,7 @@
 package com.example.newopenapiexchangeproject3;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.error.AuthFailureError;
@@ -64,15 +66,25 @@ public class JsonExchangeRate {
         Gson gson = new Gson();
         int i;
         exchangeMonies = gson.fromJson(response, ExchangeMoney[].class); //Json 문서가 [ 로 시작하면 바로 배열부터 시작하는것이니 []로 시작해서 꺼내준다.
-        if(exchangeMonies !=null){
+        if(exchangeMonies !=null && exchangeMonies.length!=0){
+            Log.d("taggg","위에꺼");
             for(i=0; i<exchangeMonies.length; i++){
                 //환율Json
                 cur_nm[i] =  exchangeMonies[i].getCur_nm(); //나라이름
                 cur_unit[i] = exchangeMonies[i].getCur_unit(); //통화종류
                 kftc_deal_bas_r[i] = exchangeMonies[i].getKftc_deal_bas_r(); //기준매매환율
                 //환율이미지(안드로이드 내장)
-                iv_nationflag[i] = R.drawable.a01_arabemirates+i;       //순서를 통해 나라를 지정함.
+                iv_nationflag[i] = R.drawable.a01_arabemirates +i;       //순서를 통해 나라를 지정함.
             }
+        }else{ //공휴일 및 휴일에 값이 0인 경우 - 준비중으로 바꾸어야할 필요가 있음.
+            for(int k=0; k<22; k++){
+                cur_nm[k]="준비중입니다";
+                cur_unit[k] = "오전 10시에 열립니다.";
+                kftc_deal_bas_r[k] ="";
+                iv_nationflag[k] = R.drawable.a01_arabemirates +k;
+            }
+
         }
+
     }//processResponse
 }

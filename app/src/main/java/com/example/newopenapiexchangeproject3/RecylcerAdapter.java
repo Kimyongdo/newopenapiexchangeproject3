@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -153,6 +154,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     int a= getAdapterPosition();
+                    Toast.makeText(context, a+"", Toast.LENGTH_SHORT).show();
                     SearchNaverJson1 searchNaverJson1 = new SearchNaverJson1(); //여기로 하나로 고정해도 괜찮지 않을까?? 11060916
                     for(int i=0; i<22; i++){
                         switch (datas.get(a).getCur_unit()){ //

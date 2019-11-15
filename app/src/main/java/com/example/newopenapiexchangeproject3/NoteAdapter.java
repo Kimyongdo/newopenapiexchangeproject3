@@ -6,19 +6,27 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 
-public class NoteAdapter extends RecyclerView.Adapter {
+public class NoteAdapter extends RecyclerView.Adapter{
     Context context;
+
+    ArrayList<NoteVO> exmapleFull;
+
 
     public NoteAdapter(Context context) {
         this.context = context;
+        exmapleFull = new ArrayList<>(notelist);
     }
 
     @NonNull
@@ -27,7 +35,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
 
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View itemview = layoutInflater.inflate(R.layout.note_itemlist,parent,false);
+        View itemview = layoutInflater.inflate(R.layout.note_itemlist, parent, false);
         NoteVH noteVH = new NoteVH(itemview);
         return noteVH;
     }
@@ -37,7 +45,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
 
-        NoteVH noteVH = (NoteVH)holder;
+        NoteVH noteVH = (NoteVH) holder;
         NoteVO noteVO = notelist.get(position);
         noteVH.NoteDate.setText(noteVO.getNoteDate());
         noteVH.NoteTitle.setText(noteVO.getNoteTitle());
@@ -48,6 +56,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return notelist.size();
     }
+
 
 
 

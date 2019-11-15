@@ -100,7 +100,7 @@ public class SelectNation extends AppCompatActivity {
         if(exchangeMonies !=null){
             for(int i=0; i<exchangeMonies.length; i++){
                 cur_nm_2[i] =  exchangeMonies[i].getCur_nm(); //나라이름
-                iv_nationflag_2[i] = R.drawable.a01_arabemirates+i; //국가깃발이미지
+                iv_nationflag_2[i] = R.drawable.a01_arabemirates +i; //국가깃발이미지
                 Nsdatas.add(new Itemlist_nation(cur_nm_2[i],iv_nationflag_2[i])); //  Nsdata==22임을 확정지음.
                 nationSelectionRecylcerAdapter.notifyDataSetChanged();
             }

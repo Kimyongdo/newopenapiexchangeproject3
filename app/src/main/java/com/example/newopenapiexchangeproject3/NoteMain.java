@@ -12,12 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -49,6 +57,9 @@ import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 
 public class NoteMain extends AppCompatActivity {
+
+    //노트검색
+    String texture;
 
     //수정 뒤 노트내용
     String ReTitle;
@@ -172,7 +183,49 @@ public class NoteMain extends AppCompatActivity {
             Dataload();   //휴대폰 내부 데이터 로드
         }
         noteAdapter.notifyDataSetChanged();
+    }//////////////////////////////////////////////////////////oncreate///////////////////////////////////////////////////
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.search,menu);
+        final MenuItem menuitem = menu.findItem(R.id.menu_action);
+        View v = menuitem.getActionView(); //레이아웃을 찾아줘
+        final EditText actionVeiwEditText;
+        actionVeiwEditText = v.findViewById(R.id.actionview_et); //레이아웃에 있는 editText를 차아줘
+        actionVeiwEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) { //i는 actionID의 값
+                if(i== EditorInfo.IME_ACTION_SEARCH) {//actionid가 에디터정보 중 서치버튼이냐?
+                    actionVeiwEditText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
+
+                    menuitem.collapseActionView(); //collapse 다시 무너뜨려라 = 닫쳐라. //이거 안 쓰면 내용이 그대로 남아있음.
+
+                }
+                return true;//return false를 true로 바꿔라.
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
+
+
+
 
     public void Dataload(){
         try {

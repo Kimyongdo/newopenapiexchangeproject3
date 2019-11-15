@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ///////////////////////////////////////새로고침 기능////////////////////////////////////////////////////////
+        Log.d("datassize",datas.size()+"");
         swipeRefreshLayout = findViewById(R.id.layout_refresh);
         swiperefresh();
 
@@ -366,6 +367,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START);
+        }else if(fab.isOpened()) {
+            fab.close(true);
         }else{
             finish(); //뒤로가기 누른 경우 앱을 종료.
             super.onBackPressed();
@@ -394,6 +397,7 @@ public class MainActivity extends AppCompatActivity {
 
     //계산기로 이동
     public void clickCalculator(View view) {
+        fab.close(true);
         Intent intent = new Intent(this, CalCalculator.class);
         startActivity(intent);
 
@@ -401,6 +405,7 @@ public class MainActivity extends AppCompatActivity {
 
     //메모장으로 이동
     public void clicktext(View view) {
+        fab.close(true);
         Intent intent = new Intent(this, NoteText.class);
         startActivity(intent);
 
@@ -439,6 +444,7 @@ public class MainActivity extends AppCompatActivity {
         //다시 한번 메소드를 집어넣음 안넣으니까 실시간 반영이 불가능함.
         JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
         jsonExchangeRate.sendRequest();
+        Log.d("나라이름",cur_nm[0]);
         //대량의 데이터 - 시간
         GlobalTime globalTime = new GlobalTime();
         globalTime.globaltime();
@@ -446,99 +452,102 @@ public class MainActivity extends AppCompatActivity {
         if(datas.size()==0) return; //0이여도 할게 없으니까 바로 종료해도 문제 없을 듯
         for(int i=0; i<datas.size(); i++){
             int k;
-            switch (datas.get(i).getCur_nm()){
-                case "아랍에미리트 디르함":
+            switch (datas.get(i).getNationimage()){ //여기서는 준비중입니다임.
+                case R.drawable.a01_arabemirates:
                   k=0; //숫자를 직접 입력해서 넣으면 OOM이 발생해서 오류가 뜬다.
                        //시계는 같이 써야 작용한다.SearchNaverJson1를 써야 뉴스의 글씨가 나타난다!!!<----------매우중요.. ㅋㅋ 그럼 왜  static쓴거지 ㅠㅠ
                     SetData(i,k);
                     break;
-                case "호주 달러":
+                case R.drawable.a02_australia:
                    k=1;
                     SetData(i,k);
                     break;
-                case "바레인 디나르":
+                case R.drawable.a03_bahrain:
                     k=2;
                     SetData(i,k);
                     break;
-                case "캐나다 달러":
+                case R.drawable.a04_canada:
                     k=3;
                     SetData(i,k);
                     break;
-                case "스위스 프랑":
+                case R.drawable.a05_switzerland:
                     k=4;
                     SetData(i,k);
                     break;
-                case "위안화":
+                case R.drawable.a06_china:
                     k=5;
                     SetData(i,k);
                     break;
-                case "덴마아크 크로네":
+                case R.drawable.a07_denmark:
                     k=6;
                     SetData(i,k);
                     break;
-                case "유로":
+                case R.drawable.a08_europeaninion:
                     k=7;
                     SetData(i,k);
                     break;
-                case "영국 파운드":
+                case R.drawable.a09_unitedkingdom:
                     k=8;
                     SetData(i,k);
                     break;
-                case "홍콩 달러":
+                case R.drawable.a10_hongkong:
                     k=9;
                     SetData(i,k);
                     break;
-                case "인도네시아 루피아":
+                case R.drawable.a11_indonesia:
                     k=10;
                     SetData(i,k);
                     break;
-                case "일본 옌":
+                case R.drawable.a12_japan:
                     k=11;
                     SetData(i,k);
                     break;
-                case "한국 원":
+                case R.drawable.a13_korea:
                     k=12;
                     SetData(i,k);
                     break;
-                case "쿠웨이트 디나르":
+                case R.drawable.a14_kuwait:
                     k=13;
                     SetData(i,k);
                     break;
-                case "말레이지아 링기트":
+                case R.drawable.a15_malaysia:
                     k=14;
                     SetData(i,k);
                     break;
-                case "노르웨이 크로네":
+                case R.drawable.a16_norway:
                     k=15;
                     SetData(i,k);
                     break;
-                case "뉴질랜드 달러":
+                case R.drawable.a17_newzealand:
                     k=16;
                     SetData(i,k);
                     break;
-                case "사우디 리얄":
+                case R.drawable.a18_saudiarabia:
                     k=17;
                     SetData(i,k);
                     break;
-                case "스웨덴 크로나":
+                case R.drawable.a19_sweden:
                     k=18;
                     SetData(i,k);
                     break;
-                case "싱가포르 달러":
+                case R.drawable.a20_singapore:
                     k=19;
                     SetData(i,k);
                     break;
-                case "태국 바트":
+                case R.drawable.a21_thailand:
                     k=20;
                     SetData(i,k);
                     break;
-                case "미국 달러":
+                case R.drawable.a22_usa:
                     k=21;
                     SetData(i,k);
                     break;
             }
 
         }
+        swipeRefreshLayout.setRefreshing(false);
+        DataSave();
+        recyclerAdapter.notifyDataSetChanged();
         //아예 새롭게 new RecyclerAdapter를 통해서 만들어냄. 이거 두줄 추가하는데 4시간 걸림 ㅠㅠ..
 
 //        recyclerAdapter = new RecylcerAdapter(datas,MainActivity.this, recyclerView);
@@ -552,116 +561,113 @@ public class MainActivity extends AppCompatActivity {
                 ,newstime2,dateFormat2[k].format(date2),
                 todayC1[k],todayweather[k],timedifferent[k]
         ));
-        DataSave();
-        recyclerAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
-    public void NewData() {
-        if (datas.size() == 0) return; //0이여도 할게 없으니까 바로 종료해도 문제 없을 듯
-        for (int i = 0; i < datas.size(); i++) {
-            int k;
-            switch (datas.get(i).getCur_nm()) {
-                case "아랍에미리트 디르함":
-                    k=0; //숫자를 직접 입력해서 넣으면 OOM이 발생해서 오류가 뜬다.
-                    //시계는 같이 써야 작용한다.SearchNaverJson1를 써야 뉴스의 글씨가 나타난다!!!<----------매우중요.. ㅋㅋ 그럼 왜  static쓴거지 ㅠㅠ
-                    NewDataCall(i,k);
-                    break;
-                case "호주 달러":
-                    k=1;
-                    NewDataCall(i,k);
-                    break;
-                case "바레인 디나르":
-                    k=2;
-                    NewDataCall(i,k);
-                    break;
-                case "캐나다 달러":
-                    k=3;
-                    NewDataCall(i,k);
-                    break;
-                case "스위스 프랑":
-                    k=4;
-                    NewDataCall(i,k);
-                    break;
-                case "위안화":
-                    k=5;
-                    NewDataCall(i,k);
-                    break;
-                case "덴마아크 크로네":
-                    k=6;
-                    NewDataCall(i,k);
-                    break;
-                case "유로":
-                    k=7;
-                    NewDataCall(i,k);
-                    break;
-                case "영국 파운드":
-                    k=8;
-                    NewDataCall(i,k);
-                    break;
-                case "홍콩 달러":
-                    k=9;
-                    NewDataCall(i,k);
-                    break;
-                case "인도네시아 루피아":
-                    k=10;
-                    NewDataCall(i,k);
-                    break;
-                case "일본 옌":
-                    k=11;
-                    NewDataCall(i,k);
-                    break;
-                case "한국 원":
-                    k=12;
-                    NewDataCall(i,k);
-                    break;
-                case "쿠웨이트 디나르":
-                    k=13;
-                    NewDataCall(i,k);
-                    break;
-                case "말레이지아 링기트":
-                    k=14;
-                    NewDataCall(i,k);
-                    break;
-                case "노르웨이 크로네":
-                    k=15;
-                    NewDataCall(i,k);
-                    break;
-                case "뉴질랜드 달러":
-                    k=16;
-                    NewDataCall(i,k);
-                    break;
-                case "사우디 리얄":
-                    k=17;
-                    NewDataCall(i,k);
-                    break;
-                case "스웨덴 크로나":
-                    k=18;
-                    NewDataCall(i,k);
-                    break;
-                case "싱가포르 달러":
-                    k=19;
-                    NewDataCall(i,k);
-                    break;
-                case "태국 바트":
-                    k=20;
-                    NewDataCall(i,k);
-                    break;
-                case "미국 달러":
-                    k=21;
-                    NewDataCall(i,k);
-                    break;
-            }
-        }
-    }
-    public void NewDataCall(int i, int k){
-        datas.set(i,new Itemlist(cur_nm[k],cur_unit[k],kftc_deal_bas_r[k],iv_nationflag[k]
-                ,newstime2,dateFormat2[k].format(date2),
-                todayC1[k],todayweather[k],timedifferent[k]
-        ));
-        DataSave();
-        recyclerAdapter.notifyDataSetChanged();
-    }
+//    public void NewData() {
+//        if (datas.size() == 0) return; //0이여도 할게 없으니까 바로 종료해도 문제 없을 듯
+//        for (int i = 0; i < datas.size(); i++) {
+//            int k;
+//            switch (datas.get(i).getCur_nm()) {
+//                case "아랍에미리트 디르함":
+//                    k=0; //숫자를 직접 입력해서 넣으면 OOM이 발생해서 오류가 뜬다.
+//                    //시계는 같이 써야 작용한다.SearchNaverJson1를 써야 뉴스의 글씨가 나타난다!!!<----------매우중요.. ㅋㅋ 그럼 왜  static쓴거지 ㅠㅠ
+//                    NewDataCall(i,k);
+//                    break;
+//                case "호주 달러":
+//                    k=1;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "바레인 디나르":
+//                    k=2;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "캐나다 달러":
+//                    k=3;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "스위스 프랑":
+//                    k=4;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "위안화":
+//                    k=5;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "덴마아크 크로네":
+//                    k=6;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "유로":
+//                    k=7;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "영국 파운드":
+//                    k=8;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "홍콩 달러":
+//                    k=9;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "인도네시아 루피아":
+//                    k=10;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "일본 옌":
+//                    k=11;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "한국 원":
+//                    k=12;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "쿠웨이트 디나르":
+//                    k=13;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "말레이지아 링기트":
+//                    k=14;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "노르웨이 크로네":
+//                    k=15;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "뉴질랜드 달러":
+//                    k=16;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "사우디 리얄":
+//                    k=17;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "스웨덴 크로나":
+//                    k=18;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "싱가포르 달러":
+//                    k=19;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "태국 바트":
+//                    k=20;
+//                    NewDataCall(i,k);
+//                    break;
+//                case "미국 달러":
+//                    k=21;
+//                    NewDataCall(i,k);
+//                    break;
+//            }
+//        }
+//    }
+//    public void NewDataCall(int i, int k){
+//        datas.set(i,new Itemlist(cur_nm[k],cur_unit[k],kftc_deal_bas_r[k],iv_nationflag[k]
+//                ,newstime2,dateFormat2[k].format(date2),
+//                todayC1[k],todayweather[k],timedifferent[k]
+//        ));
+//        DataSave();
+//        recyclerAdapter.notifyDataSetChanged();
+//    }
 
 
     private void getHashKey(){
