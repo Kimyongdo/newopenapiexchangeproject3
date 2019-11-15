@@ -5,9 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.newopenapiexchangeproject3.WeatherApi.Main;
@@ -15,20 +14,23 @@ import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 
-import static com.example.newopenapiexchangeproject3.MainActivity.navigationView;
+
+public class KaKaoLoginclass extends AppCompatActivity {
 
 
-public class Loginclass extends AppCompatActivity {
-
-    static String nnickname=null;
 
     private static final String TAG = "";
     SessionCallback callback;
+
+    Button kakao_custom_login;
+    LoginButton com_kakao_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,26 +41,33 @@ public class Loginclass extends AppCompatActivity {
         Session.getCurrentSession().addCallback(callback);
         requestMe();
 
-
-
-//        Intent intent = new Intent(Loginclass.this,MainActivity.class);
-//        intent.putExtra("nickname",nnickname);
-//        startActivity(intent);
-
-
-//        navigationView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-//            @Override
-//            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-//                navigationView.removeOnLayoutChangeListener(this);
-//                TextView textView = navigationView.findViewById(R.id.tv_navi_header_name);
-//                textView.setText("gd");
-//
-//            }
-//        });
+        kakao_custom_login = findViewById(R.id.kakao_custom_login);
+        kakao_custom_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                com_kakao_login.performClick();
+            }
+        });
+        com_kakao_login = findViewById(R.id.com_kakao_login);
 
     }
 
+    //로그아웃 기능은 따로 설정 탭 만들어서 하는게 나을 수 있음. --> 한 로그인 페이지에 넣지 말자.
+    public void kakao_logout(View view) {
+        UserManagement.requestLogout(new LogoutResponseCallback() {
+            @Override
+            public void onCompleteLogout() {
+                Intent intent = getIntent();
+                intent.putExtra("logout",123);
+                intent.putExtra("logoutNickname","Anonymous");
+                intent.putExtra("logoutImage",R.drawable.a01_arabemirates);
+                KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
+                Toast.makeText(KaKaoLoginclass.this, "로그아웃 완료", Toast.LENGTH_SHORT).show();
+                finish();
 
+            }
+        });
+    }
 
 
     class SessionCallback implements ISessionCallback {
@@ -93,18 +102,21 @@ public class Loginclass extends AppCompatActivity {
                 public void onSuccess(UserProfile userProfile) {
                     //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                    Log.e("UserProfile", userProfile.getNickname());
-                    Log.e("UserProfile", userProfile.getThumbnailImagePath());
-                    Log.e("UserProfile", userProfile.getId() + "");
+                //    Log.e("UserProfile", userProfile.getNickname());
+                //    Log.e("UserProfile", userProfile.getThumbnailImagePath());
+                //    Log.e("UserProfile", userProfile.getId() + "");
+                    long nicknumber = userProfile.getId();
                     String nickname = userProfile.getNickname();
                     String nickimage = userProfile.getProfileImagePath();
 
                     Intent intent = getIntent();
+                    intent.putExtra("login",124);
+                    intent.putExtra("nicknumber",nicknumber);
                     intent.putExtra("nickname",nickname);
                     intent.putExtra("nicknameimage",nickimage);
-                    Loginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
+                    KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
 
-                    Toast.makeText(Loginclass.this, "로그인 완료", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KaKaoLoginclass.this, "로그인 완료", Toast.LENGTH_SHORT).show();
                 }
 
 //여기다가 Toast를 하는 경우 mainThread와 인터넷 Thread의 차이로 null이 생성된다.
@@ -143,6 +155,9 @@ public class Loginclass extends AppCompatActivity {
                 Log.e("UserProfile", result.getId() + "");
             }
         });
+
+
     }
+
 
 }

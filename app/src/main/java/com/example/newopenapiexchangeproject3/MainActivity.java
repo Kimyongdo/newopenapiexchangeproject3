@@ -26,10 +26,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 
@@ -59,19 +57,24 @@ import static com.example.newopenapiexchangeproject3.GlobalTime.date2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.dateFormat2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.newstime2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.timedifferent;
-import static com.example.newopenapiexchangeproject3.Loginclass.nnickname;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayC1;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayweather;
-import static com.kakao.usermgmt.StringSet.nickname;
 
 public class MainActivity extends AppCompatActivity {
 
 
     //카카오톡 이미지 및 닉네임
+    static long nicknumber; //카카오톡 고유넘버
     String kNickname;
     String kNickimage;
-    TextView tvKickname;
+    String logoutNickname;
+    int logoutImage;
+    int logoutcheckout;
+    int logincheckin;
 
+    View headerView;
+    TextView navUsername;
+    CircleImageView navUserimage;
 
     //플로팅버튼
     FloatingActionMenu fab;
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     public static ArrayList<Itemlist> datas =new ArrayList<>();
+    static ArrayList<kakaoVO> kakaodatas  = new ArrayList<>();
     static RecylcerAdapter recyclerAdapter;
 
     //다크모드 on/off
@@ -119,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         globalTime.Notetime();
         /////////////////////////////////////////////////////////////////////////////////////////////////
 
-        getHashKey();
+
 
         //플로팅 버튼 외부 터치시 끝나도록.
         fab = findViewById(R.id.flaotingActionButton);
@@ -131,10 +135,6 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(this).load(R.drawable.calculator1).into(fabbtn_cal);
         Glide.with(this).load(R.drawable.text).into(fabbtn_text);
 
-
-        //카카오톡 로그인 네비게이션뷰 연결
-        tvKickname = findViewById(R.id.tv_navi_header_name);
-
         //레이아웃 연결
         drawerLayout = findViewById(R.id.layout_drawer);
         navigationView = findViewById(R.id.navi);
@@ -144,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name,R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle); //화살표모양 누르면 navi소환
         actionBarDrawerToggle.syncState(); //화살표모양->삼선모양
+
+
+        //////////////////////////////////카카오톡 로그인 네비게이션뷰 연결/////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////다크 테마////////////////////////////////////////////////////////////////////
         Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
@@ -170,17 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }         //토글버튼을 이용할 때는 ChangeListner를 사용해야함, click을 하면 두번 눌러야 한번 작동이 됨.
         });
-
-
-//        navigationView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-//            @Override
-//            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-//                navigationView.removeOnLayoutChangeListener(this);
-//                TextView textView = navigationView.findViewById(R.id.tv_navi_header_name);
-//                textView.setText(nnickname);
-//
-//            }
-//        });
 
 
         SharedPreferences sharedPreferences = getSharedPreferences("switch",MODE_PRIVATE);
@@ -218,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent0);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
 //                    case R.id.login:
-//                        Intent intent1 = new Intent(MainActivity.this,Loginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+//                        Intent intent1 = new Intent(MainActivity.this,KaKaoLoginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
 //                        startActivity(intent1);
 //                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                 }
@@ -232,6 +224,28 @@ public class MainActivity extends AppCompatActivity {
         swiperefresh();
 
         //데이터를 처음부터 로드하는 순간.
+
+        getHashKey();  //카카오톡 해시키 얻어오기.
+        DataloadKakao();
+        if(kakaodatas.size()==0) return;
+            //로그인
+        else if(kakaodatas.get(0).getLogintnumber()==124){
+            headerView = navigationView.getHeaderView(0);
+            navUsername = headerView.findViewById(R.id.tv_navi_header_name);
+            navUserimage = headerView.findViewById(R.id.iv_header);
+            navUsername.setText(kakaodatas.get(0).getLoginNickname()+"님"); //유저이름+"님"
+            Glide.with(this).load(kakaodatas.get(0).getLoginNickimage()).into(navUserimage);
+        }
+        //로그아웃
+        else if(kakaodatas.get(0).getLogoutnumber()==123){
+            headerView = navigationView.getHeaderView(0);
+            navUsername = headerView.findViewById(R.id.tv_navi_header_name);
+            navUserimage = headerView.findViewById(R.id.iv_header);
+            navUsername.setText("Anonymous"+"님"); //유저이름+"님
+            Glide.with(this).load(R.drawable.user).into(navUserimage);
+        }
+
+
 
     }///////////////////////////////////////////////////onCreate//////////////////////////////////////////////////////////////////
 
@@ -249,8 +263,9 @@ public class MainActivity extends AppCompatActivity {
         int n = item.getItemId();
         switch (n){
             case R.id.menu_lock:
-                Intent intent = new Intent(this,Loginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                Intent intent = new Intent(this, KaKaoLoginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
                 startActivityForResult(intent,333);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -261,25 +276,76 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode){
             case 333:
                 if(resultCode==RESULT_OK){
+                    //로그인 넘버로 판별식 짜야함.
+                    nicknumber = data.getLongExtra("nicknumber",0);
+                    //로그인사진
                     kNickname = data.getStringExtra("nickname");
                     kNickimage = data.getStringExtra("nicknameimage");
+                    //로그아웃 사진
+                    logoutNickname = data.getStringExtra("logoutNickname");
+                    logoutImage = data.getIntExtra("logoutImage",0);
+                    //로그인,로그아웃 임의토큰
+                    logincheckin = data.getIntExtra("login",0);
+                    logoutcheckout  = data.getIntExtra("logout",0);
 
-                    Log.d("안녕하세요",kNickname);
-                    Log.d("안녕하세요",kNickimage);
-                    //여기까지는 잘 옴
+                    //카카오톡 프로필 이미지 사진 나옴.
 
-                    //네비게이션 글을 바꾸는 기능좀.. 하 이거 못 찾아서 지금 뭐하냐 ㅠㅠ
-                    NavigationView navigationView = findViewById(R.id.navi);
-                    View headerView = navigationView.getHeaderView(0);
-                    TextView navUsername = headerView.findViewById(R.id.tv_navi_header_name);
-                    CircleImageView navUserimage = headerView.findViewById(R.id.iv_header);
-                    Glide.with(this).load(kNickimage).into(navUserimage);
-                    navUsername.setText(kNickname);
+                     headerView = navigationView.getHeaderView(0);
+                     navUsername = headerView.findViewById(R.id.tv_navi_header_name);
+                     navUserimage = headerView.findViewById(R.id.iv_header);
 
+                    //로그인
+                    if(logincheckin==124){
+                        Glide.with(this).load(kNickimage).into(navUserimage);
+                        navUsername.setText(kNickname+"님"); //유저이름+"님"
+                    }
+                    //로그아웃
+                    else if(logoutcheckout==123){
+                        Glide.with(this).load(logoutImage).into(navUserimage);
+                        navUsername.setText(logoutNickname+"님"); //유저이름+"님"
+                    }
+
+                    kakaodatas.add(0,new kakaoVO(kNickname,kNickimage,logincheckin,logoutNickname,logoutImage,logoutcheckout));
+                    DataSaveKakao();
                 }
 
         }
     }
+
+    public void DataSaveKakao(){
+        try {
+            File file = new File(getFilesDir(),"kakao.tmp");
+            FileOutputStream  fos  = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(kakaodatas); //현재의 datas를 저장.
+            oos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void DataloadKakao(){
+        try {
+            File file = new File(getFilesDir(),"kakao.tmp");
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            kakaodatas= (ArrayList<kakaoVO>) ois.readObject();  //앱 꺼도 새롭게 저장한 파일이 있음을 파악함.
+            ois.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
     // onDestory를 통해 뒤로가기 누르고 화면이 완전히 없어지면 datas.add가 추가로 들어가는 것을 막는다.
     @Override
@@ -325,17 +391,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    //계산기로 이동
     public void clickCalculator(View view) {
         Intent intent = new Intent(this, CalCalculator.class);
         startActivity(intent);
 
     }
+
+    //메모장으로 이동
     public void clicktext(View view) {
         Intent intent = new Intent(this, NoteText.class);
         startActivity(intent);
 
     }
 
+    //
     public void DataSave(){
         try {
             File file = new File(getFilesDir(),"t.tmp");
@@ -349,9 +420,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-
-
 
 
     /////////////////////////////////////////////////////////새로고침기능//////////////////////////////////////////////////////////////

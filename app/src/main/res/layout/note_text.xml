@@ -23,7 +23,7 @@
             android:id="@+id/iv_updateNote_first_camera"
             android:layout_width="18sp"
             android:layout_height="18sp"
-            android:src="@drawable/camera"
+            android:src="@drawable/photocamera"
             android:layout_alignParentRight="true"
             android:clickable="true"
             />
@@ -32,7 +32,7 @@
             android:layout_width="18sp"
             android:layout_height="18sp"
             android:clickable="true"
-            android:src="@drawable/tick" />
+            android:src="@drawable/tick1" />
     </RelativeLayout>
 
 
@@ -75,7 +75,7 @@
             android:id="@+id/notebookimage"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/notebook22"
+            android:src="@drawable/notebook10"
             android:layout_alignBottom="@+id/tv_note_group"
 
 

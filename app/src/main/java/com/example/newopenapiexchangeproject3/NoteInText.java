@@ -24,6 +24,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.AuthFailureError;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -33,7 +40,11 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
+import static com.example.newopenapiexchangeproject3.NoteMain.noteAdapter;
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 
 public class NoteInText extends AppCompatActivity {
@@ -52,10 +63,16 @@ public class NoteInText extends AppCompatActivity {
 
     InputMethodManager imm;
 
+    //길이
     int beforeEtTitle;
     int beforeEtContent;
     int afterEtTitle;
     int afterEtContent;
+    //내용
+    String BTS;
+    String BCS;
+
+
 
     int number; //리사이클러뷰 각 몇번 째인지 확인가능.
     int save;//세이브했는지 확인
@@ -71,7 +88,7 @@ public class NoteInText extends AppCompatActivity {
         setContentView(R.layout.note_in_text);
 
         final Intent intent = getIntent();
-        number = intent.getIntExtra("number",0);
+        number = intent.getIntExtra("number",0); //item뷰 선택시의 위치값
 
         iv_done_second = findViewById(R.id.iv_updateNote_Second_done);
         et_title_second = findViewById(R.id.et_note_second_title);
@@ -84,6 +101,8 @@ public class NoteInText extends AppCompatActivity {
         //페이지를 열마자마자 받은 글씨 개수
         beforeEtTitle = et_title_second.length();
         beforeEtContent = et_content_second.length();
+        BTS = et_title_second.getText().toString();
+        BCS = et_content_second.getText().toString();
 
         //처음 글을 썼을 때의 글자 개수 - 이 글자수와 달라지면 변경 된 것...(우연하게 글자수가 같은 경우는...ㅋㅋ)
 
@@ -127,8 +146,8 @@ public class NoteInText extends AppCompatActivity {
                 //제목의 글자와 내용이 수정 전 후 모두 같은 경우
 
                 if(beforeEtTitle==0 && beforeEtContent==0){
-                    et_title_reader_second = et_title_second.getText().toString();
-                     et_content_reader_second= et_content_second.getText().toString();
+//                    et_title_reader_second = et_title_second.getText().toString();
+//                     et_content_reader_second= et_content_second.getText().toString();
                     et_title_reader_second="제목없는 노트";
                     IntentForResult();
                 }
@@ -152,19 +171,69 @@ public class NoteInText extends AppCompatActivity {
         et_title_reader_second = et_title_second.getText().toString();
         et_content_reader_second= et_content_second.getText().toString();
         save=911; //저장토큰
-        notelist.set(number,new NoteVO(GlobalTime.noetime,et_title_reader_second, et_content_reader_second));
+        notelist.set(number,new NoteVO(GlobalTime.noetime,et_title_reader_second, et_content_reader_second)); //여기서 바뀜.
+        noteAdapter.notifyDataSetChanged();
         //키보드 내리기
         imm.hideSoftInputFromWindow(et_title_second.getWindowToken(),0);
         imm.hideSoftInputFromWindow(et_content_second.getWindowToken(),0);
         Toast.makeText(NoteInText.this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
         //리사이클러뷰에 변환됨을 바로 보여줄 수 있음.
-        Intent intent1 = getIntent();
-        intent1.putExtra("title", et_title_reader_second);
-        intent1.putExtra("content",et_content_reader_second);
-        intent1.putExtra("number",number);
-        NoteInText.this.setResult(RESULT_OK,intent1);
-        DataSaveNote();
+//        Intent intent1 = getIntent();
+//        intent1.putExtra("title", et_title_reader_second);
+//        intent1.putExtra("content",et_content_reader_second);
+//        intent1.putExtra("number",number);
+//        NoteInText.this.setResult(RESULT_OK,intent1);
+
+
+        //여기서 db를 바꾸는 메소드를 써야할듯
+        if (nicknumber !=0.0) {
+            ChangeDateDB();
+        }else{
+            DataSaveNote();
+        }
+
     }
+
+    public void ChangeDateDB(){
+        final String noetime = GlobalTime.noetime;
+        final String title = et_title_reader_second;
+        final String content = et_content_reader_second;
+        String serverurl = "http://chocojoa123.dothome.co.kr/Exchange/changeupdate.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> datas = new HashMap<>();
+
+                //글 수정하기 위해 리사이클러뷰 처음 열었을 때의 edittext의 내용
+                datas.put("BTS",BTS);
+                datas.put("BCS",BCS);
+
+                //수정 완료 후 저장을 눌렀을 때의 edittext 내용
+                datas.put("number",nicknumber+"");
+                datas.put("time",noetime);
+                datas.put("title",title);
+                datas.put("content",content); //서버에 저장.
+                return datas;
+            }
+        };//stringRequest
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
     public void DataSaveNote(){
         try {
             File file = new File(getFilesDir(),"notelist");

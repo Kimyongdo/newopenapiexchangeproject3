@@ -27,6 +27,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.AuthFailureError;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -38,6 +45,10 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
 
 public class NoteText extends AppCompatActivity {
 
@@ -152,14 +163,57 @@ public class NoteText extends AppCompatActivity {
     public void noelistGroup(){
         //여기서는 이거 add하나만으로도 변경가능했음.
         notelist.add(0,new NoteVO(GlobalTime.noetime,et_title_reader, et_content_reader));
-        DataSaveNote();
         save=911; //저장토큰 토큰 기본값을 0으로 주면 안됨. int 초기값 자체가 0
         imm.hideSoftInputFromWindow(et_title.getWindowToken(),0);
         imm.hideSoftInputFromWindow(et_content.getWindowToken(),0);
         Toast.makeText(NoteText.this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+
+        //로그인 여부
+        if(nicknumber!=0.0){ //0인지 0.0인지..
+            //db에 저장
+            Noteupdate(); //서버저장-휴대폰 내부저장 불필요
+        }else{
+            //비로그인
+            DataSaveNote();
+        }
+
     }
 
+    public void Noteupdate(){
 
+        final String noetime = GlobalTime.noetime;
+        final String title = et_title.getText().toString();
+        final String content = et_content.getText().toString();
+        String serverurl = "http://chocojoa123.dothome.co.kr/Exchange/Noteupdate.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> datas = new HashMap<>();
+
+                datas.put("number",nicknumber+"");
+                datas.put("time",noetime);
+                datas.put("title",title);
+                datas.put("content",content); //서버에 저장.
+                return datas;
+            }
+        };//stringRequest
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
 
     public void DataSaveNote(){
         try {
@@ -297,4 +351,6 @@ public class NoteText extends AppCompatActivity {
                 break;
         }
     }
+
+
 }

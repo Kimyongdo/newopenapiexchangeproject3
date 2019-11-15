@@ -15,7 +15,7 @@
         android:name=".GlobalApplication"
         >
 <!--         android:name=".GlobalApplication"으로 우선 위에다가 추가함. -->
-        <activity android:name=".Loginclass"></activity>
+        <activity android:name=".KaKaoLoginclass"></activity>
         <activity android:name=".NoteInText" />
         <activity android:name=".NoteText" />
         <activity android:name=".NoteMain" />
@@ -47,8 +47,11 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-
-
+<!--http 허용 -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false"
+            />
     </application>
 
 </manifest>

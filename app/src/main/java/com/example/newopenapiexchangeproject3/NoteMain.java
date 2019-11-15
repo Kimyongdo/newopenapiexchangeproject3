@@ -12,16 +12,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.AuthFailureError;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.JsonArrayRequest;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,10 +42,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 
 public class NoteMain extends AppCompatActivity {
+
+    //수정 뒤 노트내용
+    String ReTitle;
+    String ReContent;
+
 
     //플로팅버튼
     FloatingActionMenu fab;
@@ -49,7 +70,7 @@ public class NoteMain extends AppCompatActivity {
 
     RecyclerView noteRecycler;
     //어레이리스트는 note에서 저장할떄 만들었으니 거기서 불러오는 걸로 해야할듯?
-    NoteAdapter noteAdapter;
+    static NoteAdapter noteAdapter;
 
     boolean isDarkmode = true;
     Switch actionview;
@@ -144,22 +165,13 @@ public class NoteMain extends AppCompatActivity {
         noteRecycler.setAdapter(noteAdapter);
 
 
-        Dataload();
-        noteAdapter.notifyDataSetChanged();
-    }
-
-    //리사이클러뷰는 장소가 없기 때문에 이를 보여주는 액티비티에서 result를 받아야한다.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case 100:
-                if(resultCode==RESULT_OK){
-                    //에버노트 경우 최신으로 바뀌지 않고 그 날 고정함.
-                    notelist.set(data.getIntExtra("number",0),new NoteVO(GlobalTime.noetime,data.getStringExtra("title"),data.getStringExtra("content")));
-                    noteAdapter.notifyDataSetChanged();
-                }
+        //데이터스를 로드.
+        if(nicknumber!=0.0){
+            NoteLoadFromDB();   //DB데이터 로드
+        }else{
+            Dataload();   //휴대폰 내부 데이터 로드
         }
+        noteAdapter.notifyDataSetChanged();
     }
 
     public void Dataload(){
@@ -194,5 +206,48 @@ public class NoteMain extends AppCompatActivity {
     public void clicktext2(View view) {
         Intent intent = new Intent(this, NoteText.class);
         startActivity(intent);
+    }
+
+    public void NoteLoadFromDB(){
+        String serverUrl ="http://chocojoa123.dothome.co.kr/Exchange/NoteLoad.php";
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, serverUrl, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                notelist.clear();
+                noteAdapter.notifyDataSetChanged();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        int no = Integer.parseInt(jsonObject.getString("no")); //db테이블의 제목이 no라고 하는 것을 가져옴
+                        String number = jsonObject.getString("number");     //db테이블의 content 제목에 해당하는 값을 가져옴
+                        String time = jsonObject.getString("time");
+                        String title = jsonObject.getString("title");
+                        String content = jsonObject.getString("content");
+
+                        if(number.equals(nicknumber+"")){ //배열을 돌리면서 db number와 카카오 아이디가 같으면 그것만 추가하도록.
+                            notelist.add(0,new NoteVO(time, title, content)); //첫 글씨를 쓴 것을 저장하는 만큼 문제 없음.
+                            //noteAdapter.notifyItemInserted(0);
+                            noteAdapter.notifyDataSetChanged();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        //실제 요청작업을 수행해주는 요청큐 객체 생성
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+
+        //요청큐에 요청객체 추가
+        requestQueue.add(jsonArrayRequest);
     }
 }
