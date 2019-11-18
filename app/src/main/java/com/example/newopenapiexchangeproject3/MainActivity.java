@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 
@@ -112,15 +113,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //이걸 주석으로 해도 I/Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
-        JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
-        jsonExchangeRate.sendRequest();
-        WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
-        weahterCallMethod.WeahterCallMethod();
-        //대량의 데이터 - 시간
-        GlobalTime globalTime = new GlobalTime();
-        globalTime.globaltime();
-        globalTime.koreantime();
-        globalTime.Notetime();
+
+        Runnable r = new MyRunnable();
+        Thread tt = new Thread(r);
+        tt.start();
+        try {
+            tt.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "no"+"", Toast.LENGTH_SHORT).show();
+        }
+//        JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
+//        jsonExchangeRate.sendRequest();
+//
+//
+//        WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
+//        weahterCallMethod.WeahterCallMethod();
+//        //대량의 데이터 - 시간
+//        GlobalTime globalTime = new GlobalTime();
+//        globalTime.globaltime();
+//        globalTime.koreantime();
+//        globalTime.Notetime();
         /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -186,15 +199,12 @@ public class MainActivity extends AppCompatActivity {
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //데이터 로드
         Dataload();
         //리싸이클러 연결하기 - onCreate에서만 보임.
         recyclerView = findViewById(R.id.recyclerview);
         recyclerAdapter = new RecylcerAdapter(datas,this);
         recyclerView.setAdapter(recyclerAdapter);
 
-        //비교 후 최신데이터
-        //NewData(); - 주말이라 데이터가 없어서 그런지 오류가 생김. 평일에 다시 한번 확인해볼 필요가 있음.
         /////////////////////////////////////////네비게이션//////////////////////////////////////////////////////////////////
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -209,25 +219,25 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent0 = new Intent(MainActivity.this, UpdateMain.class);
                         startActivity(intent0);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
-//                    case R.id.login:
-//                        Intent intent1 = new Intent(MainActivity.this,KaKaoLoginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
-//                        startActivity(intent1);
-//                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        break;
+                    case R.id.address:
+                        Intent intent1 = new Intent(MainActivity.this,Address.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        startActivity(intent1);
+                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        break;
                 }
-
                 return false;
             }
         });
 
         ///////////////////////////////////////새로고침 기능////////////////////////////////////////////////////////
-        Log.d("datassize",datas.size()+"");
         swipeRefreshLayout = findViewById(R.id.layout_refresh);
         swiperefresh();
 
-        //데이터를 처음부터 로드하는 순간.
-
-        getHashKey();  //카카오톡 해시키 얻어오기.
+        ////////////////////////////////////////////카카오 기능//////////////////////////////////////////////////
+        getHashKey();
         DataloadKakao();
+
         if(kakaodatas.size()==0) return;
             //로그인
         else if(kakaodatas.get(0).getLogintnumber()==124){
@@ -246,10 +256,25 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(this).load(R.drawable.user).into(navUserimage);
         }
 
-
-
+        //업데이트 기능 - 끝쪽에 놔야 작동을- 대기시간이 필요한듯.
+        UpdateDataLoad();
     }///////////////////////////////////////////////////onCreate//////////////////////////////////////////////////////////////////
 
+    class MyRunnable implements Runnable{
+
+        @Override
+        public void run() {
+            JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
+            jsonExchangeRate.sendRequest();
+            WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
+            weahterCallMethod.WeahterCallMethod();
+            //대량의 데이터 - 시간
+            GlobalTime globalTime = new GlobalTime();
+            globalTime.globaltime();
+            globalTime.koreantime();
+            globalTime.Notetime();
+        }
+    }
 
     //actionbar 붙이는 곳
     @Override
@@ -434,21 +459,32 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
 //                if(datas.size()==0) return;
                 UpdateDataLoad();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }//refresh
 
     public void UpdateDataLoad(){
-        //Dataload();
 
-        //다시 한번 메소드를 집어넣음 안넣으니까 실시간 반영이 불가능함.
-        JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
-        jsonExchangeRate.sendRequest();
-        Log.d("나라이름",cur_nm[0]);
-        //대량의 데이터 - 시간
-        GlobalTime globalTime = new GlobalTime();
-        globalTime.globaltime();
-        globalTime.koreantime();
+        Runnable r = new MyRunnable();
+        Thread tt = new Thread(r);
+        tt.start();
+        try {
+            tt.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "no"+"", Toast.LENGTH_SHORT).show();
+        }
+
+      ////////////////////  //지우지 마시길.. /////////////////////
+        //다시 한번 메소드를 집어넣음 안넣으니까 실시간 반영이 불가/능함.
+//        JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
+//        jsonExchangeRate.sendRequest();
+//
+//        //대량의 데이터 - 시간
+//        GlobalTime globalTime = new GlobalTime();
+//        globalTime.globaltime();
+//        globalTime.koreantime();
         if(datas.size()==0) return; //0이여도 할게 없으니까 바로 종료해도 문제 없을 듯
         for(int i=0; i<datas.size(); i++){
             int k;
@@ -545,15 +581,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        swipeRefreshLayout.setRefreshing(false);
+        //swipeRefreshLayout.setRefreshing(false);
         DataSave();
         recyclerAdapter.notifyDataSetChanged();
-        //아예 새롭게 new RecyclerAdapter를 통해서 만들어냄. 이거 두줄 추가하는데 4시간 걸림 ㅠㅠ..
-
-//        recyclerAdapter = new RecylcerAdapter(datas,MainActivity.this, recyclerView);
-//        recyclerView.setAdapter(recyclerAdapter);
-//        DataSave();
-//        recyclerAdapter.notifyDataSetChanged();
     }
 
     public void SetData(int i, int k){
@@ -562,114 +592,6 @@ public class MainActivity extends AppCompatActivity {
                 todayC1[k],todayweather[k],timedifferent[k]
         ));
     }
-
-//    public void NewData() {
-//        if (datas.size() == 0) return; //0이여도 할게 없으니까 바로 종료해도 문제 없을 듯
-//        for (int i = 0; i < datas.size(); i++) {
-//            int k;
-//            switch (datas.get(i).getCur_nm()) {
-//                case "아랍에미리트 디르함":
-//                    k=0; //숫자를 직접 입력해서 넣으면 OOM이 발생해서 오류가 뜬다.
-//                    //시계는 같이 써야 작용한다.SearchNaverJson1를 써야 뉴스의 글씨가 나타난다!!!<----------매우중요.. ㅋㅋ 그럼 왜  static쓴거지 ㅠㅠ
-//                    NewDataCall(i,k);
-//                    break;
-//                case "호주 달러":
-//                    k=1;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "바레인 디나르":
-//                    k=2;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "캐나다 달러":
-//                    k=3;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "스위스 프랑":
-//                    k=4;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "위안화":
-//                    k=5;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "덴마아크 크로네":
-//                    k=6;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "유로":
-//                    k=7;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "영국 파운드":
-//                    k=8;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "홍콩 달러":
-//                    k=9;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "인도네시아 루피아":
-//                    k=10;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "일본 옌":
-//                    k=11;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "한국 원":
-//                    k=12;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "쿠웨이트 디나르":
-//                    k=13;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "말레이지아 링기트":
-//                    k=14;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "노르웨이 크로네":
-//                    k=15;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "뉴질랜드 달러":
-//                    k=16;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "사우디 리얄":
-//                    k=17;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "스웨덴 크로나":
-//                    k=18;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "싱가포르 달러":
-//                    k=19;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "태국 바트":
-//                    k=20;
-//                    NewDataCall(i,k);
-//                    break;
-//                case "미국 달러":
-//                    k=21;
-//                    NewDataCall(i,k);
-//                    break;
-//            }
-//        }
-//    }
-//    public void NewDataCall(int i, int k){
-//        datas.set(i,new Itemlist(cur_nm[k],cur_unit[k],kftc_deal_bas_r[k],iv_nationflag[k]
-//                ,newstime2,dateFormat2[k].format(date2),
-//                todayC1[k],todayweather[k],timedifferent[k]
-//        ));
-//        DataSave();
-//        recyclerAdapter.notifyDataSetChanged();
-//    }
-
-
     private void getHashKey(){
         try {                                                        // 패키지이름을 입력해줍니다.
             PackageInfo info = getPackageManager().getPackageInfo("com.example.newopenapiexchangeproject3", PackageManager.GET_SIGNATURES);

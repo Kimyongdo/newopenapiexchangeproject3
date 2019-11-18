@@ -40,6 +40,7 @@ import static com.example.newopenapiexchangeproject3.JsonExchangeRate.iv_nationf
 
 public class CalCalculator extends AppCompatActivity  {
 
+    //리스트뷰
     private static final String TAG_TEXT = "text";
     private static final String TAG_IMAGE = "image";
 
@@ -50,7 +51,6 @@ public class CalCalculator extends AppCompatActivity  {
     DecimalFormat df2 = new DecimalFormat("###,###.####");
 
     String result="";
-    String resultTemp="";
     String result2="";
 
     Toolbar toolbar;
@@ -67,11 +67,7 @@ public class CalCalculator extends AppCompatActivity  {
     int nationPostionDown=21; //미국
     int nationPostionUp=12; //한국
 
-
-    List<Map<String, Object>> dialog_arraylist;
-
-    int[] image = new int[22];
-    String [] text = new String[22];
+    ArrayList<CalAlertVO> dialog_arraylist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,8 +106,6 @@ public class CalCalculator extends AppCompatActivity  {
                 return false;
             }
         });
-
-
 
         //////////////////////////////////////////////숫자입력하는 곳/////////////////////////////////////////////////////////
         et_number.addTextChangedListener(new TextWatcher() {
@@ -220,46 +214,32 @@ public class CalCalculator extends AppCompatActivity  {
                             et_number2.setText(result2);
                             et_number2.setSelection(result2.length());
                         }
-
                         String KftcUp = JsonExchangeRate.kftc_deal_bas_r[nationPostionUp];
                         String KftcDown = JsonExchangeRate.kftc_deal_bas_r[nationPostionDown];
 
-
-
                         //여기에 숫자가 있는 상황 EX) 1,062.09라면
-
                         KftcUp = KftcUp.replace(",", "");
 //                        KftcUp = KftcUp.replace(".", ""); //.까지 지우면 숫자가 훨씬 더 커지니까 여기서 변경
                         //1062.09가 나오는 상황
                         double tempup = Double.parseDouble(KftcUp); //double이 .은 허용함
                         tempup = (Math.round(tempup*10)/10.0);
                         //1062.5가 나옴
-
-
                         KftcDown = KftcDown.replace(",", "");
 //                        KftcDown = KftcDown.replace(".", "");
                         double tempdown = Double.parseDouble(KftcDown); //double이 .은 허용함
                         tempdown = (Math.round(tempdown*10)/10.0);
-
                         /////////////////////////////////////////////////////////////////////////
-
                         input2 = input2.replace(",", ""); //지우는 순간 .은 인식하지 못해서. 오류가 나는 상황 .는 지워도 DOUBLE이기에 끝에 .0이 계속 남음.
-
                         double ExNum = Double.parseDouble(input2);//파서는 ""를 지우는 상황.
-
                         double convert;
-
                         if(nationPostionUp==11 || nationPostionUp==10){ //위에가 일본이면서 아래에서 숫자를 입력하는 경우 - 각각 위에꺼와 연동됨
-
                             convert = Math.round( (   ((tempdown*100) / (tempup)  ) * ExNum * 1000)  );
                         }else if(nationPostionDown==11 || nationPostionDown==10){ //두번째 eidttext이면서 아래가 일본인 경우
                             convert = Math.round( (   ((tempdown/100) / (tempup)  ) * ExNum * 1000)  );
                         } else {
                             convert = Math.round( (   (tempdown / (tempup)  ) * ExNum * 1000)  );
                         }
-
                         convert = convert/1000.0;
-
                         //숫자 천단위 마다 변형하는 코드.
                         //숫자 커지면 뒤에 E나오는 문제도 해결됨
                         String convert2 = NumberFormat.getInstance().format(convert);
@@ -270,13 +250,10 @@ public class CalCalculator extends AppCompatActivity  {
 
                 }
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
-
         et_number2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -284,7 +261,7 @@ public class CalCalculator extends AppCompatActivity  {
                 et_number2.setText("");
             }
         });
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////숫자입력끝//////////////////////////////////////////////////////////////
 
         //////////////////////////키보드 고정///////////////////////////////////////
         InputMethodManager imm = (InputMethodManager)
@@ -293,26 +270,12 @@ public class CalCalculator extends AppCompatActivity  {
                 InputMethodManager.SHOW_IMPLICIT);
        ////////////////////////////////////////////////////////////////////////////////
 
-
-//        //다이얼로그 속 이미지뷰가 나오는 곳. // 동일방식이라 바꿈.
-//        for(int i=0; i<22; i++){
-////            Glide.with(this).load(iv_nationflag[i]).into(image[i]);
-//            image[i] = iv_nationflag[i];
-//            text[i] = cur_nm[i];
-//        }
-
-
-
-        dialog_arraylist = new ArrayList<>();
-        for(int i=0;i<22;i++)
-        {
-            Map<String, Object> itemMap = new HashMap<>();
-            itemMap.put(TAG_IMAGE, iv_nationflag[i]);
-            itemMap.put(TAG_TEXT, cur_nm[i]);
-            dialog_arraylist.add(itemMap);
+        //다이얼로그 리사이클러뷰
+        for(int i=0; i<22; i++){
+            dialog_arraylist.add(new CalAlertVO(cur_nm[i],iv_nationflag[i]));
         }
 
-    }/////////////oncreate
+    }////////////////////////////////////////oncreate//////////////////////////////////////////////////////////
 
     //뒤로가기 화살표
     @Override
@@ -326,10 +289,11 @@ public class CalCalculator extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-    //리스튜뷰 보여주기
+    //한국을 클릭하면
     public void clickNationKorea(View view) {
         firstshowAlert();
     }
+    //미국을 클릭하면
     public void clickNationOther(View view) {
         secondshowAlert1();
     }
@@ -341,36 +305,26 @@ public class CalCalculator extends AppCompatActivity  {
         View view = inflater.inflate(R.layout.calcaulator_dialog, null);
         builder.setView(view);
 
-        final ListView listview = (ListView)view.findViewById(R.id.listview_alterdialog_list);
+        //다이얼로그의 커스텀뷰를 listview와 연결
+        final ListView listview = view.findViewById(R.id.listview_alterdialog_list);
         final AlertDialog dialog = builder.create();
 
-
-        //심플어댑터를 쓰지 말고 어댑터를 이용해서 글라이드를 사용해서 32dp를 하는것을 목표로 해보자.
-        SimpleAdapter simpleAdapter = new SimpleAdapter(CalCalculator.this, dialog_arraylist,
-                R.layout.calculator_dialog_itemlist,
-                new String[]{TAG_IMAGE, TAG_TEXT},
-                new int[]{R.id.iv_nation_selection_alert, R.id.tv_nation_selection_alert});
-
-        listview.setAdapter(simpleAdapter);
-
+        CalDialogAdapter calDialogAdapter = new CalDialogAdapter(dialog_arraylist,this);
+        listview.setAdapter(calDialogAdapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                iv_CompareNation1.setImageResource(image[position]);
                 Glide.with(CalCalculator.this).load(iv_nationflag[position]).into(iv_CompareNation1);
                 tv_name.setText(cur_nm[position]);
                 tv_currency.setText(JsonExchangeRate.cur_unit[position]);
                 nationPostionUp = position;
                 et_number.setText("");
                 et_number2.setText("");
-
                 dialog.dismiss();
             }
         });
-
-       // dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
@@ -382,15 +336,12 @@ public class CalCalculator extends AppCompatActivity  {
         View view = inflater.inflate(R.layout.calcaulator_dialog, null);
         builder.setView(view);
 
-        final ListView listview = (ListView)view.findViewById(R.id.listview_alterdialog_list);
+        final ListView listview = view.findViewById(R.id.listview_alterdialog_list);
         final AlertDialog dialog = builder.create();
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(CalCalculator.this, dialog_arraylist,
-                R.layout.calculator_dialog_itemlist,
-                new String[]{TAG_IMAGE, TAG_TEXT},
-                new int[]{R.id.iv_nation_selection_alert, R.id.tv_nation_selection_alert});
+        CalDialogAdapter calDialogAdapter = new CalDialogAdapter(dialog_arraylist,this);
+        listview.setAdapter(calDialogAdapter);
 
-        listview.setAdapter(simpleAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -398,23 +349,15 @@ public class CalCalculator extends AppCompatActivity  {
                 Glide.with(CalCalculator.this).load(iv_nationflag[position]).into(iv_CompareNation2);
                 tv_name2.setText(cur_nm[position]);
                 tv_currency2.setText(JsonExchangeRate.cur_unit[position]);
-
                 nationPostionDown = position;
-
                 et_number.setText("");
                 et_number2.setText("");
                 dialog.dismiss();
             }
         });
-
-        // dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
-
-
-
-
 }
 
 

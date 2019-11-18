@@ -13,15 +13,13 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 public class CalDialogAdapter extends BaseAdapter {
-    LayoutInflater inflater;
+
     ArrayList<CalAlertVO> arraylist;
     Context context;
 
-    public CalDialogAdapter(LayoutInflater inflater, ArrayList<CalAlertVO> arraylist, Context context) {
-        this.inflater = inflater;
+    public CalDialogAdapter(ArrayList<CalAlertVO> arraylist, Context context) {
         this.arraylist = arraylist;
         this.context = context;
-
     }
 
     @Override
@@ -42,10 +40,12 @@ public class CalDialogAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         if(view==null){
-            view = inflater.inflate(R.layout.calculator_dialog_itemlist,null);
+            view = LayoutInflater.from(context).inflate(R.layout.calculator_dialog_itemlist,null);
+//            view = inflater.inflate(R.layout.calculator_dialog_itemlist,null);
         }
 
         CalAlertVO cal_alertdialog = arraylist.get(position);
+
         ImageView iv = view.findViewById(R.id.iv_nation_selection_alert);
         TextView tv = view.findViewById(R.id.tv_nation_selection_alert);
 

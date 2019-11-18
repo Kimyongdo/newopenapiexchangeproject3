@@ -3,6 +3,7 @@ package com.example.newopenapiexchangeproject3;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +16,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 
 public class NoteAdapter extends RecyclerView.Adapter{
     Context context;
 
-    ArrayList<NoteVO> exmapleFull;
+    //notelist는 NoteText에 있음.
+    ArrayList<NoteVO> testlist;
 
 
-    public NoteAdapter(Context context) {
+    public NoteAdapter(Context context, ArrayList<NoteVO>testlist) {
         this.context = context;
-        exmapleFull = new ArrayList<>(notelist);
+        this.testlist= testlist;
     }
 
     @NonNull
@@ -57,7 +60,22 @@ public class NoteAdapter extends RecyclerView.Adapter{
         return notelist.size();
     }
 
-
+    public void filter(String text){
+        text = text.toLowerCase(Locale.getDefault());
+        Log.d("tagggg",text);
+        //notelist.clear();
+        if(text.length()==0){
+            testlist.addAll(notelist);
+        }else{
+            for(NoteVO noteVO : notelist){
+                String name = noteVO.getNoteTitle();//제목
+                if(name.toLowerCase().contains(text)){
+                    testlist.add(noteVO);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 
 
     class NoteVH extends RecyclerView.ViewHolder{

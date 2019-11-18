@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
@@ -65,6 +66,7 @@ public class NoteMain extends AppCompatActivity {
     String ReTitle;
     String ReContent;
 
+    ArrayList<NoteVO> testlist = new ArrayList<>();
 
     //플로팅버튼
     FloatingActionMenu fab;
@@ -171,8 +173,10 @@ public class NoteMain extends AppCompatActivity {
         //노트 연결화면 준비중.
 
 
+
+
         noteRecycler = findViewById(R.id.note_recycler);
-        noteAdapter = new NoteAdapter(this);
+        noteAdapter = new NoteAdapter(this,testlist);
         noteRecycler.setAdapter(noteAdapter);
 
 
@@ -206,12 +210,12 @@ public class NoteMain extends AppCompatActivity {
                         @Override
                         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-
                         }
-
                         @Override
                         public void afterTextChanged(Editable editable) {
-
+                            String str = editable.toString();
+                            noteAdapter.filter(str);
+                            Log.d("strxxxxxxxxxx",str);
                         }
                     });
 
@@ -223,9 +227,6 @@ public class NoteMain extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
-
-
-
 
     public void Dataload(){
         try {
