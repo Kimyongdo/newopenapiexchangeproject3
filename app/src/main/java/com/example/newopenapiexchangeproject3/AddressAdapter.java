@@ -46,16 +46,8 @@ public class AddressAdapter extends BaseAdapter {
         TextView phoneName= view.findViewById(R.id.phonebook_name);
         TextView phoneNumber = view.findViewById(R.id.phonebook_callnumber);
 
-//        if(addressVO.getName()==null || addressVO.getPhone()==null){
-//            phoneName.setText("");
-//            phoneNumber.setText("");
-//        }else{
-            phoneName.setText(addressVO.getName());
-            phoneNumber.setText(addressVO.getPhone());
-//        }
-
-
-
+        phoneName.setText(addressVO.getName());
+        phoneNumber.setText(addressVO.getPhone());
         return view;
     }
 }

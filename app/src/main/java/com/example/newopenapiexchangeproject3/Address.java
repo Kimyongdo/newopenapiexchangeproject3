@@ -147,7 +147,8 @@ public class Address extends AppCompatActivity {
                         namelist.set(0,"");
                     }
                     //초성 java파일을 가져와서. 이름배열에 해당하는 text가 있다면 추가하기.
-                    String choName = HangulUtils.getHangulInitialSound(namelist.get(i), text);
+                    //굳이 따로 namelist를 안만들어도 되었던거 같은데 ㅋㅋ...
+                    String choName = HangulUtils.getHangulInitialSound(dataListSearch.get(i).getName(), text);
                     //문자의 text가 하나라도 써져있다면 이에 해당하는 itemlist를 추가.
                     if(choName.indexOf(text)>=0){
                         dataList.add(dataListSearch.get(i));

@@ -60,6 +60,7 @@ public class NoteText extends AppCompatActivity {
     String et_content_reader;
 
     static ArrayList<NoteVO> notelist = new ArrayList<>();
+    static ArrayList<NoteVO> testlist = new ArrayList<>();
 
     InputMethodManager imm;
     int save;

@@ -56,17 +56,10 @@ import java.util.Map;
 
 import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
+import static com.example.newopenapiexchangeproject3.NoteText.testlist;
 
 public class NoteMain extends AppCompatActivity {
 
-    //노트검색
-    String texture;
-
-    //수정 뒤 노트내용
-    String ReTitle;
-    String ReContent;
-
-    ArrayList<NoteVO> testlist = new ArrayList<>();
 
     //플로팅버튼
     FloatingActionMenu fab;
@@ -87,6 +80,9 @@ public class NoteMain extends AppCompatActivity {
 
     boolean isDarkmode = true;
     Switch actionview;
+
+    String str;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,21 +172,28 @@ public class NoteMain extends AppCompatActivity {
 
 
         noteRecycler = findViewById(R.id.note_recycler);
-        noteAdapter = new NoteAdapter(this,testlist);
+        noteAdapter = new NoteAdapter(this);
         noteRecycler.setAdapter(noteAdapter);
 
 
         //데이터스를 로드.
         if(nicknumber!=0.0){
-            NoteLoadFromDB();   //DB데이터 로드
+           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함. 
+            NoteLoadFromDB();
+            testlist.addAll(notelist);
         }else{
             Dataload();   //휴대폰 내부 데이터 로드
+            testlist.addAll(notelist);
         }
+
+
         noteAdapter.notifyDataSetChanged();
     }//////////////////////////////////////////////////////////oncreate///////////////////////////////////////////////////
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+//        notesearch = findViewById(R.id.et_note_search);
+
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.search,menu);
         final MenuItem menuitem = menu.findItem(R.id.menu_action);
@@ -213,9 +216,8 @@ public class NoteMain extends AppCompatActivity {
                         }
                         @Override
                         public void afterTextChanged(Editable editable) {
-                            String str = editable.toString();
-                            noteAdapter.filter(str);
-                            Log.d("strxxxxxxxxxx",str);
+                             str = actionVeiwEditText.getText().toString();
+                            search(str);
                         }
                     });
 
@@ -226,6 +228,30 @@ public class NoteMain extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    public void search(String text){
+        Log.d("TAAAAAGGGG",str+"");
+        //기본적으로 보이는 arraylist를 지우고
+        notelist.clear();
+        if(text.length()==0){
+            //edittext에 아무것도 없다면 기존datalist에 이를 복사한 datlistSearch를 넣어주고
+            notelist.addAll(testlist);
+            Log.d("testlist.size",testlist.size()+""); //아니 왜 안되다가 갑자기 또 되는거지..
+        }else{
+
+            for(int i=0; i<testlist.size(); i++){
+                String choName = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteTitle(), text); //제목
+                String choContent = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteContent(), text); //내용
+                //문자의 text가 하나라도 써져있다면 이에 해당하는 itemlist를 추가.
+                if(choName.indexOf(text)>=0 || choContent.indexOf(text)>=0){
+                    notelist.add(testlist.get(i));
+                }
+            }
+        }
+
+        noteAdapter.notifyDataSetChanged();
     }
 
     public void Dataload(){

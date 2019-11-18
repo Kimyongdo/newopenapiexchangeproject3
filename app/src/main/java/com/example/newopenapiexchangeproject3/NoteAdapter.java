@@ -23,13 +23,9 @@ import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 public class NoteAdapter extends RecyclerView.Adapter{
     Context context;
 
-    //notelist는 NoteText에 있음.
-    ArrayList<NoteVO> testlist;
 
-
-    public NoteAdapter(Context context, ArrayList<NoteVO>testlist) {
+    public NoteAdapter(Context context) {
         this.context = context;
-        this.testlist= testlist;
     }
 
     @NonNull
@@ -60,22 +56,22 @@ public class NoteAdapter extends RecyclerView.Adapter{
         return notelist.size();
     }
 
-    public void filter(String text){
-        text = text.toLowerCase(Locale.getDefault());
-        Log.d("tagggg",text);
-        //notelist.clear();
-        if(text.length()==0){
-            testlist.addAll(notelist);
-        }else{
-            for(NoteVO noteVO : notelist){
-                String name = noteVO.getNoteTitle();//제목
-                if(name.toLowerCase().contains(text)){
-                    testlist.add(noteVO);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
+//    public void filter(String text){
+//        text = text.toLowerCase(Locale.getDefault());
+//        Log.d("tagggg",text);
+//        //notelist.clear();
+//        if(text.length()==0){
+//            testlist.addAll(notelist);
+//        }else{
+//            for(NoteVO noteVO : notelist){
+//                String name = noteVO.getNoteTitle();//제목
+//                if(name.toLowerCase().contains(text)){
+//                    testlist.add(noteVO);
+//                }
+//            }
+//        }
+//        notifyDataSetChanged();
+//    }
 
 
     class NoteVH extends RecyclerView.ViewHolder{
