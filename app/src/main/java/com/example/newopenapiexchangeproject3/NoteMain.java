@@ -178,7 +178,7 @@ public class NoteMain extends AppCompatActivity {
 
         //데이터스를 로드.
         if(nicknumber!=0.0){
-           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함. 
+           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함.
             NoteLoadFromDB();
             testlist.addAll(notelist);
         }else{
