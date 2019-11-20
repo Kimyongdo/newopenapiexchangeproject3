@@ -8,24 +8,47 @@
     >
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <TextView
         android:layout_marginTop="10dp"
         android:id="@+id/tv_note_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="10dp"
-        android:text="제목줄"
+        android:text="시간"
+        android:layout_toRightOf="@+id/noteCheckbox"
         />
 
-    <TextView
-        android:layout_marginTop="4dp"
-        android:id="@+id/tv_note_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14dp"
-        android:textStyle="bold"
-        android:text="제목줄"
-        />
+
+
+     <net.igenius.customcheckbox.CustomCheckBox
+            android:id="@+id/noteCheckbox"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="10dp"
+
+            />
+
+        <TextView
+            android:layout_marginTop="4dp"
+            android:id="@+id/tv_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:text="제목줄"
+            android:layout_toRightOf="@+id/noteCheckbox"
+            android:layout_below="@+id/tv_note_time"
+
+            />
+
+
 
     <TextView
         android:layout_marginTop="4dp"
@@ -33,16 +56,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="내용"
-        />
+        android:layout_toRightOf="@+id/noteCheckbox"
+        android:layout_below="@+id/tv_note_title"
 
+        />
 
     <View
         android:id="@+id/line2"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@id/update_tv_date"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="5dp"
-        android:background="#747474" />
+        android:background="#747474"
+        android:layout_below="@+id/tv_note_content"
+        />
+
+    </RelativeLayout>
 
 </LinearLayout>

@@ -39,6 +39,7 @@ public class UpdateMain extends AppCompatActivity {
         //툴바
         Toolbar toolbar;
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("공지사항");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

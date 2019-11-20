@@ -22,18 +22,12 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 import static com.example.newopenapiexchangeproject3.JsonExchangeRate.cur_nm;
 import static com.example.newopenapiexchangeproject3.JsonExchangeRate.iv_nationflag;

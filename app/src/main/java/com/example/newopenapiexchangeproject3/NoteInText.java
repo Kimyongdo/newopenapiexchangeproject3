@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.core.view.GravityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -178,12 +179,6 @@ public class NoteInText extends AppCompatActivity {
         imm.hideSoftInputFromWindow(et_content_second.getWindowToken(),0);
         Toast.makeText(NoteInText.this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
         //리사이클러뷰에 변환됨을 바로 보여줄 수 있음.
-//        Intent intent1 = getIntent();
-//        intent1.putExtra("title", et_title_reader_second);
-//        intent1.putExtra("content",et_content_reader_second);
-//        intent1.putExtra("number",number);
-//        NoteInText.this.setResult(RESULT_OK,intent1);
-
 
         //여기서 db를 바꾸는 메소드를 써야할듯
         if (nicknumber !=0.0) {
@@ -374,5 +369,13 @@ public class NoteInText extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, NoteMain.class);
+        startActivity(intent);
+        finish();
     }
 }

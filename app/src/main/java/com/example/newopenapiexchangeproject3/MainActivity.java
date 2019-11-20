@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -107,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true); //벡터이미지 관련코드
         setContentView(R.layout.activity_main);
 
+
+
+
         /////////////////////volley 라이브러리 생성//////////////////////////////
         if(AddHelper.requestQueue == null) {
             AddHelper.requestQueue = Volley.newRequestQueue(this);
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navi);
         navigationView.setItemIconTintList(null); //네비게이션 아이콘 보임.
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("환율");
         setSupportActionBar(toolbar);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name,R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle); //화살표모양 누르면 navi소환
@@ -161,42 +166,56 @@ public class MainActivity extends AppCompatActivity {
 
         //////////////////////////////////카카오톡 로그인 네비게이션뷰 연결/////////////////////////////////////////////////////
 
+
+        ///////퍼미션-전화번호부------여기도 아니네 퍼미션 위치 모아서 한번에 해야하는데 어디서 해애햐지??////////
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ //sdk version이 마시멜로우보다 높은 겨우
+            int chekcedPersmission =checkSelfPermission(Manifest.permission.READ_CONTACTS);
+            if(chekcedPersmission== PackageManager.PERMISSION_DENIED){ //처음에 거부되어있다면
+                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},431); //허가여부 다이얼로그 확인.
+            }
+        }
+
+
+
         ///////////////////////////////////////////////다크 테마////////////////////////////////////////////////////////////////////
-        Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
-            }
-        }
-        actionview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) { //처음엔 true로 시작한다.
-                if(isDarkmode==b){
-                    AppCompatDelegate.setDefaultNightMode((AppCompatDelegate.MODE_NIGHT_YES));
-                    SharedPreferences preferences =MainActivity.this.getSharedPreferences("switch",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("switchman",true);
-                    editor.commit();
-                }else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    SharedPreferences preferences =MainActivity.this.getSharedPreferences("switch",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("switchman",false);
-                    editor.commit();
-                }
-            }         //토글버튼을 이용할 때는 ChangeListner를 사용해야함, click을 하면 두번 눌러야 한번 작동이 됨.
-        });
-
-
-        SharedPreferences sharedPreferences = getSharedPreferences("switch",MODE_PRIVATE);
-        if(sharedPreferences!=null){
-            boolean trueman = sharedPreferences.getBoolean("switchman",true);
-            if(trueman){
-                actionview.setChecked(true);
-            }else{
-                actionview.setChecked(false);
-            }
-        }
+//        Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//                actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
+//            }
+//        }
+//
+//
+//        actionview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) { //처음엔 true로 시작한다.
+//                if(isDarkmode==b){
+//                    AppCompatDelegate.setDefaultNightMode((AppCompatDelegate.MODE_NIGHT_YES));
+//                    SharedPreferences preferences =MainActivity.this.getSharedPreferences("switch",MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = preferences.edit();
+//                    editor.putBoolean("switchman",true);
+//                    editor.commit();
+//                }else{
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                    SharedPreferences preferences =MainActivity.this.getSharedPreferences("switch",MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = preferences.edit();
+//                    editor.putBoolean("switchman",false);
+//                    editor.commit();
+//                }
+//            }         //토글버튼을 이용할 때는 ChangeListner를 사용해야함, click을 하면 두번 눌러야 한번 작동이 됨.
+//        });
+//
+//
+//        SharedPreferences sharedPreferences = getSharedPreferences("switch",MODE_PRIVATE);
+//        if(sharedPreferences!=null){
+//            boolean trueman = sharedPreferences.getBoolean("switchman",true);
+//            if(trueman){
+//                actionview.setChecked(true);
+//            }else{
+//                actionview.setChecked(false);
+//            }
+//        }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Dataload();
@@ -209,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch (item.getItemId()){
                     case R.id.menu_note :
                         Intent intent = new Intent(MainActivity.this,NoteMain.class);
@@ -256,9 +276,31 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(this).load(R.drawable.user).into(navUserimage);
         }
 
+
+
+
+
         //업데이트 기능 - 끝쪽에 놔야 작동을- 대기시간이 필요한듯.
         UpdateDataLoad();
     }///////////////////////////////////////////////////onCreate//////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 431:
+                if(grantResults.length>0){ //0보다 커야 main에서 오류뜨지 않고 잘 크게 됨. 여기서 다 쓸어넣자.
+                    if(grantResults[0]==PackageManager.PERMISSION_DENIED){
+                        Toast.makeText(this, "주소록 기능 사용 제한", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(this, "주소록 사용 가능", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                }
+
+        }
+    }
 
     class MyRunnable implements Runnable{
 

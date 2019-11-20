@@ -22,15 +22,15 @@
         </androidx.appcompat.widget.Toolbar>
 
 
-
-
         <!--                              본문영역                                    -->
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
+
                 <androidx.recyclerview.widget.RecyclerView
+
                     android:id="@+id/note_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

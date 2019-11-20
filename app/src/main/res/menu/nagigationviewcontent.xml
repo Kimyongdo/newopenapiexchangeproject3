@@ -5,23 +5,23 @@
 
     <item
         android:id="@+id/address"
-        android:icon="@drawable/notebook5"
+        android:icon="@drawable/phonebook"
         android:title="주소록"
         />
     
 
     <item
         android:id="@+id/menu_note"
-        android:icon="@drawable/notebook5"
+        android:icon="@drawable/notepad"
         android:title="노트북"
         />
 
 
-    <item
-        android:id="@+id/nav_switch"
-        app:actionLayout="@layout/z_draktheme"
-        android:icon="@drawable/moon4"
-        android:title="다크 테마" />
+<!--    <item-->
+<!--        android:id="@+id/nav_switch"-->
+<!--        app:actionLayout="@layout/z_draktheme"-->
+<!--        android:icon="@drawable/moon4"-->
+<!--        android:title="다크 테마" />-->
 
 
     <!--    구분선 만들고 그 안에 넣으면 됨 -->
@@ -29,11 +29,8 @@
         <menu>
             <item android:id="@+id/updateIcon"
                 android:title="업데이트"
+                android:icon="@drawable/notice"
                 />
-            <item android:id="@+id/login"
-                android:title="뭘 넣을까"
-                />
-
         </menu>
     </item>
 

@@ -22,6 +22,9 @@
         android:layout_height="wrap_content"
         android:text="로그아웃"
         android:onClick="kakao_logout"
+        android:layout_below="@+id/kakao_custom_login"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
         />
     <com.kakao.usermgmt.LoginButton
         android:id="@+id/com_kakao_login"

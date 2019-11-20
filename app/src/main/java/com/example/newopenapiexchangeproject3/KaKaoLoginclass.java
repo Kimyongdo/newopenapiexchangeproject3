@@ -56,14 +56,13 @@ public class KaKaoLoginclass extends AppCompatActivity {
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
             public void onCompleteLogout() {
+
                 Intent intent = getIntent();
                 intent.putExtra("logout",123);
                 intent.putExtra("logoutNickname","Anonymous");
-                intent.putExtra("logoutImage",R.drawable.a01_arabemirates);
+                intent.putExtra("logoutImage",R.drawable.user);
                 KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
                 Toast.makeText(KaKaoLoginclass.this, "로그아웃 완료", Toast.LENGTH_SHORT).show();
-                finish();
-
             }
         });
     }
@@ -116,6 +115,7 @@ public class KaKaoLoginclass extends AppCompatActivity {
                     KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
 
                     Toast.makeText(KaKaoLoginclass.this, "로그인 완료", Toast.LENGTH_SHORT).show();
+                    //바로 인텐트하고 finish 하면 스레드로 인해 적용이 바로 안됨.
                 }
 
 //여기다가 Toast를 하는 경우 mainThread와 인터넷 Thread의 차이로 null이 생성된다.

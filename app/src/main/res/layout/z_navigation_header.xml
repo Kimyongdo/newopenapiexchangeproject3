@@ -13,7 +13,7 @@
         android:id="@+id/iv_header"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/user2"
+        android:src="@drawable/user"
         android:layout_margin="8dp">
     </de.hdodenhof.circleimageview.CircleImageView>
 

@@ -34,7 +34,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     implementation 'dev.dworks.libs:volleyplus:+'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
-
+    implementation group: 'com.kakao.sdk', name: 'newtone', version: '6.0.1'
     ////////////////////////////////////카카오톡/////////////////////////////////////////
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 //

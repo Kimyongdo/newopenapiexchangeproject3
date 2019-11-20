@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class Address extends AppCompatActivity {
      ListView mListview;
     AddressAdapter addressAdapter;
 
+    ImageView imageView;
     int i=0; //while문 돌리기
     String number;//전화번호
     String name;//이름
@@ -46,13 +48,13 @@ public class Address extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.address);
         mListview = findViewById(R.id.phonelistview);
-
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ //sdk version이 마시멜로우보다 높은 겨우
-            int chekcedPersmission =checkSelfPermission(Manifest.permission.READ_CONTACTS);
-            if(chekcedPersmission== PackageManager.PERMISSION_DENIED){ //처음에 거부되어있다면
-                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},10); //허가여부 다이얼로그 확인.
+        imageView = findViewById(R.id.arrow);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
-        }
+        });
 
         Cursor c = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null,
@@ -93,6 +95,7 @@ public class Address extends AppCompatActivity {
 
         }
         c.close();
+
         addressAdapter = new AddressAdapter(this, dataList);
         mListview.setAdapter(addressAdapter);
 
@@ -161,19 +164,6 @@ public class Address extends AppCompatActivity {
         addressAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case 10:
-                if(grantResults[0]==PackageManager.PERMISSION_DENIED){
-                    Toast.makeText(this, "주소록 기능 사용 제한", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(this, "주소록 사용 가능", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
-    }
 
 }
 

@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,8 @@ import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
+
+import net.igenius.customcheckbox.CustomCheckBox;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,6 +64,10 @@ import static com.example.newopenapiexchangeproject3.NoteText.testlist;
 
 public class NoteMain extends AppCompatActivity {
 
+    //체크박스
+    CustomCheckBox customCheckBox;
+    LinearLayout NoteLinearlayout;
+    static boolean ischecked =false;
 
     //플로팅버튼
     FloatingActionMenu fab;
@@ -90,11 +98,16 @@ public class NoteMain extends AppCompatActivity {
         setContentView(R.layout.note_main);
 
 
+//        //커스텀
+//        customCheckBox = findViewById(R.id.noteCheckbox);
+
+
         ///////////////////////////네비게이션 뷰 및 플로팅 버튼 연결하기 ///////////////////////////////////////
         drawerLayout = findViewById(R.id.layout_drawer);
         navigationView = findViewById(R.id.navi);
         navigationView.setItemIconTintList(null); //네비게이션 아이콘 보임.
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("노트");
         setSupportActionBar(toolbar);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name,R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle); //화살표모양 누르면 navi소환
@@ -111,38 +124,37 @@ public class NoteMain extends AppCompatActivity {
 
 
         ///////////////////////////////////////////////다크 테마////////////////////////////////////////////////////////////////////
-        Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
-        actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
-        actionview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) { //처음엔 true로 시작한다.
-                if(isDarkmode==b){
-                    AppCompatDelegate.setDefaultNightMode((AppCompatDelegate.MODE_NIGHT_YES));
-                    SharedPreferences preferences =NoteMain.this.getSharedPreferences("switch",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("switchman",true);
-                    editor.commit();
-                }else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    SharedPreferences preferences =NoteMain.this.getSharedPreferences("switch",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("switchman",false);
-                    editor.commit();
-                }
-            }         //토글버튼을 이용할 때는 ChangeListner를 사용해야함, click을 하면 두번 눌러야 한번 작동이 됨.
-        });
-
-        SharedPreferences sharedPreferences = getSharedPreferences("switch",MODE_PRIVATE);
-        if(sharedPreferences!=null){
-            boolean trueman = sharedPreferences.getBoolean("switchman",true);
-            if(trueman){
-                actionview.setChecked(true);
-            }else{
-                actionview.setChecked(false);
-            }
-        }
+//        Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
+//        actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
+//        actionview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) { //처음엔 true로 시작한다.
+//                if(isDarkmode==b){
+//                    AppCompatDelegate.setDefaultNightMode((AppCompatDelegate.MODE_NIGHT_YES));
+//                    SharedPreferences preferences =NoteMain.this.getSharedPreferences("switch",MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = preferences.edit();
+//                    editor.putBoolean("switchman",true);
+//                    editor.commit();
+//                }else{
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                    SharedPreferences preferences =NoteMain.this.getSharedPreferences("switch",MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = preferences.edit();
+//                    editor.putBoolean("switchman",false);
+//                    editor.commit();
+//                }
+//            }         //토글버튼을 이용할 때는 ChangeListner를 사용해야함, click을 하면 두번 눌러야 한번 작동이 됨.
+//        });
+//
+//        SharedPreferences sharedPreferences = getSharedPreferences("switch",MODE_PRIVATE);
+//        if(sharedPreferences!=null){
+//            boolean trueman = sharedPreferences.getBoolean("switchman",true);
+//            if(trueman){
+//                actionview.setChecked(true);
+//            }else{
+//                actionview.setChecked(false);
+//            }
+//        }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
         /////////////////////////////////////////네비게이션//////////////////////////////////////////////////////////////////
@@ -154,36 +166,36 @@ public class NoteMain extends AppCompatActivity {
                         Intent intent = new Intent(NoteMain.this,NoteMain.class);
                         startActivity(intent);
                         drawerLayout.closeDrawer(navigationView); //클 릭 후 네비뷰 닫힘
+                        finish();
                         break;
                     case R.id.updateIcon:
                         Intent intent0 = new Intent(NoteMain.this, UpdateMain.class);
                         startActivity(intent0);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
-
+                        break;
+                    case R.id.address:
+                        Intent intent1 = new Intent(NoteMain.this,Address.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        startActivity(intent1);
+                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        break;
                 }
-
                 return false;
             }
         });
-
-        //노트 연결화면 준비중.
-
-
-
-
         noteRecycler = findViewById(R.id.note_recycler);
         noteAdapter = new NoteAdapter(this);
         noteRecycler.setAdapter(noteAdapter);
 
 
+
         //데이터스를 로드.
         if(nicknumber!=0.0){
-           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함. 
-            NoteLoadFromDB();
-            testlist.addAll(notelist);
+           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함.
+            NoteLoadFromDB(); //여기서 notelist는 완성임. --> 돋보기를 누른다고 한다면
+
         }else{
             Dataload();   //휴대폰 내부 데이터 로드
-            testlist.addAll(notelist);
+
         }
 
 
@@ -192,44 +204,21 @@ public class NoteMain extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        notesearch = findViewById(R.id.et_note_search);
-
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.search,menu);
-        final MenuItem menuitem = menu.findItem(R.id.menu_action);
-        View v = menuitem.getActionView(); //레이아웃을 찾아줘
-        final EditText actionVeiwEditText;
-        actionVeiwEditText = v.findViewById(R.id.actionview_et); //레이아웃에 있는 editText를 차아줘
-        actionVeiwEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) { //i는 actionID의 값
-                if(i== EditorInfo.IME_ACTION_SEARCH) {//actionid가 에디터정보 중 서치버튼이냐?
-                    actionVeiwEditText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        }
-                        @Override
-                        public void afterTextChanged(Editable editable) {
-                             str = actionVeiwEditText.getText().toString();
-                            search(str);
-                        }
-                    });
-
-                    menuitem.collapseActionView(); //collapse 다시 무너뜨려라 = 닫쳐라. //이거 안 쓰면 내용이 그대로 남아있음.
-
-                }
-                return true;//return false를 true로 바꿔라.
-            }
-        });
+        getMenuInflater().inflate(R.menu.search, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int n = item.getItemId();
+        switch (n){
+            case R.id.menu_action:
+                Intent intent = new Intent(NoteMain.this,NoteSearching.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void search(String text){
         Log.d("TAAAAAGGGG",str+"");
@@ -278,12 +267,14 @@ public class NoteMain extends AppCompatActivity {
     }
 
     public void clickCalculator2(View view) {
+        fab.close(true); //자동으로 닫히도록.
         Intent intent = new Intent(this, CalCalculator.class);
         startActivity(intent);
     }
 
 
     public void clicktext2(View view) {
+        fab.close(true); //자동으로 닫히도록.
         Intent intent = new Intent(this, NoteText.class);
         startActivity(intent);
     }
@@ -316,7 +307,7 @@ public class NoteMain extends AppCompatActivity {
                     }
 
                 }
-
+                testlist.addAll(notelist);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -330,4 +321,17 @@ public class NoteMain extends AppCompatActivity {
         //요청큐에 요청객체 추가
         requestQueue.add(jsonArrayRequest);
     }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else if(fab.isOpened()) {
+            fab.close(true);
+        }else{
+            finish(); //뒤로가기 누른 경우 앱을 종료.
+            super.onBackPressed();
+        }
+    }
+
 }

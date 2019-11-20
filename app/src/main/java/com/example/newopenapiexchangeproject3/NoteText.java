@@ -3,6 +3,7 @@ package com.example.newopenapiexchangeproject3;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
@@ -86,13 +87,11 @@ public class NoteText extends AppCompatActivity {
         ivCemeraImage = findViewById(R.id.iv_camareaImage);
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ //sdk version이 마시멜로우보다 높은 겨우
-            int chekcedPersmission =checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE); //Write쓰면 Read권한도 동시에 발현
-
-            if(chekcedPersmission== PackageManager.PERMISSION_DENIED){ //처음에 거부되어있다면
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){ //처음에 거부되어있다면
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},10); //허가여부 다이얼로그 확인.
             }
-
         }
+
 
         //카메라 이미지 선택시.
         ivCamera.setOnClickListener(new View.OnClickListener() {
@@ -284,6 +283,7 @@ public class NoteText extends AppCompatActivity {
         switch (requestCode){
             case 10:
                 if(grantResults[0]==PackageManager.PERMISSION_DENIED){
+                    ivCamera=null;
                     Toast.makeText(this, "카메라 기능 사용 제한", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(this, "카메라 사용 가능", Toast.LENGTH_SHORT).show();

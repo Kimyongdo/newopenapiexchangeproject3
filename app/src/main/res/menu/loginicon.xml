@@ -4,8 +4,7 @@
 
     <item
         android:id="@+id/menu_lock"
-        android:title="Search"
-        android:icon="@drawable/lock2"
+        android:title="login"
         app:showAsAction="always"
         />
 
