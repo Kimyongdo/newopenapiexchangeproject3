@@ -21,9 +21,10 @@
         android:id="@+id/content"
         app:rb_color="#121212"
         app:rb_radius="40dp"
-        app:rb_rippleAmount="1"
-        app:rb_duration="1000"
-        app:rb_scale="100">
+        app:rb_rippleAmount="6"
+        app:rb_duration="2500"
+        app:rb_scale="4">
+
 
     <LinearLayout
         android:id="@+id/Linear_cardview_content_NS"
