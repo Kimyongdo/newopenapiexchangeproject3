@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
 import static com.example.newopenapiexchangeproject3.NoteMain.noteAdapter;
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
+import static com.example.newopenapiexchangeproject3.NoteText.searchlist;
 import static com.example.newopenapiexchangeproject3.NoteText.testlist;
 
 public class NoteSearching extends AppCompatActivity {
@@ -62,6 +63,7 @@ public class NoteSearching extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                noteEditText.setText("");
                 finish();
             }
         });
@@ -69,27 +71,36 @@ public class NoteSearching extends AppCompatActivity {
         noteEditText = findViewById(R.id.note_search2);
         notesearchlistview = findViewById(R.id.notesearchlistview2);
 
-        notelistcopy.clear(); //clear쓴 이유는 onCreate할때마다 notelist가 copy버전에 계속 추가되서 list분량이 들어남;
         notelistcopy.addAll(notelist);
-        testlistcopy.clear();
-        testlistcopy.addAll(testlist);
+        testlistcopy.addAll(notelist);
 
-        noteSearchAdapter = new NoteSearchAdapter(this,notelistcopy);
+        noteSearchAdapter = new NoteSearchAdapter(this,testlistcopy);
         notesearchlistview.setAdapter(noteSearchAdapter);
+        notesearchlistview.setVisibility(View.INVISIBLE);
+//
+//
+//        notelistcopy.clear(); //clear쓴 이유는 onCreate할때마다 notelist가 copy버전에 계속 추가되서 list분량이 들어남; -> notelist를 쓰지 말고 다른걸 쓰자.
+//        noteSearchAdapter.notifyDataSetChanged();
 
+//
+//        testlistcopy.clear();
+//        noteSearchAdapter.notifyDataSetChanged();
+//        testlistcopy.addAll(searchlist);
+
+
+
+        //recylerview main에서 아이템클릭리스너로 전체 잡기. -> 체크박스도 여기서 바꾸면 되겠다 adapter에서 하나씩 바꾸려다가는 힘드니까.
         notesearchlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //리스튜뷰에 보이는 숫자를 나타냄 3 4 5
                 noteSearchAdapter.getItem(i);
-                //복사한 datalistSearch(전체) 중 그에 속한 번호를 알려줌  5라면 전체중에서 몇번일까?
-                Log.d("tttttttttttttttttttttt", notelistcopy.size()+"");
-                Log.d("tttttttttttttttttttttt", notelist.size()+"");
-                int actualPostion=testlistcopy.indexOf(noteSearchAdapter.getItem(i));
-                Toast.makeText(NoteSearching.this, actualPostion+"", Toast.LENGTH_SHORT).show(); //현위치 <- 가장 문제가 되는거
-                Toast.makeText(NoteSearching.this, notelistcopy.size()+"", Toast.LENGTH_SHORT).show();//지금 보여주는 량
-                Toast.makeText(NoteSearching.this, notelist.size()+"", Toast.LENGTH_SHORT).show();//전체량
-                Toast.makeText(NoteSearching.this, testlistcopy.size()+"", Toast.LENGTH_SHORT).show();
+                int actualPostion=notelistcopy.indexOf(noteSearchAdapter.getItem(i));
+                Toast.makeText(NoteSearching.this, actualPostion+"", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(NoteSearching.this, NoteInText.class); //이거랑 왜 noteintext와 연동되는지 모르겠음.. ---- 근데 일단 작동은 함..
+                intent.putExtra("number2",actualPostion);
+                intent.putExtra("searchingToken",555); //필터 된 후의 내용이 오류가 뜸.
+                startActivity(intent);
+
             }
         });
 
@@ -114,21 +125,35 @@ public class NoteSearching extends AppCompatActivity {
     public void search(String text){
         Log.d("TAAAAAGGGG",str+"");
         //adapter에 추가한 list를 기반으로하고 이를 복제한 list로 바꾸면서 보여지는 것.
-        notelistcopy.clear();
+        notesearchlistview.setVisibility(View.VISIBLE);
+        testlistcopy.clear();
         if(text.length()==0){
-            notelistcopy.addAll(testlistcopy);
+            testlistcopy.addAll(notelistcopy);
         }else{
 
-            for(int i=0; i<testlistcopy.size(); i++){
-                String choName = HangulUtils.getHangulInitialSound(testlistcopy.get(i).getNoteTitle(), text); //제목
-                String choContent = HangulUtils.getHangulInitialSound(testlistcopy.get(i).getNoteContent(), text); //내용
+            for(int i=0; i<notelistcopy.size(); i++){
+                String choName = HangulUtils.getHangulInitialSound(notelistcopy.get(i).getNoteTitle(), text); //제목
+                String choContent = HangulUtils.getHangulInitialSound(notelistcopy.get(i).getNoteContent(), text); //내용
                 //문자의 text가 하나라도 써져있다면 이에 해당하는 itemlist를 추가.
                 if(choName.indexOf(text)>=0 || choContent.indexOf(text)>=0){
-                    notelistcopy.add(testlistcopy.get(i));
+                    testlistcopy.add(notelistcopy.get(i));
                 }
+//                if(notelistcopy.get(i).getNoteTitle().contains(text) || notelistcopy.get(i).getNoteContent().contains(text)){
+//                    testlistcopy.add(notelistcopy.get(i)); //계속 오류나는 이유가 필터를 써서 notelist의 개수가 줄어드는데 그걸 notelist에 number에 intent하려고하니 오류남.
+//                }
+
             }
         }
 
         noteSearchAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        noteEditText.setText("");
+        finish(); //노트 수정하고 돋보기로 들어오면 계속 문제가 listview가 늘어나는 문제가 생기거나 원본인 notelist에 add를 했기에 검색 후 바로 뒤로 돌아가면
+                  //그대로 notelist에 필터된 정보만 입력됨 -> 이를 피하기 위해서 뒤로가기 누르는 행위를 할 시 ""를 통해 notelist를 addall시킴.
+                //이거 한글클래스 쓰면서 자동으로 해결해주는 듯..
     }
 }

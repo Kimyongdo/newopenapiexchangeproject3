@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
@@ -28,12 +29,18 @@ import com.android.volley.toolbox.Volley;
 
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
+import static com.example.newopenapiexchangeproject3.NoteRubbish.rubbishlist;
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 
 public class NoteAdapter extends RecyclerView.Adapter{
@@ -77,15 +84,12 @@ public class NoteAdapter extends RecyclerView.Adapter{
         TextView NoteDate;
         TextView NoteTitle;
         TextView NoteContent;
-        CustomCheckBox customCheckBox;
-        boolean ischehcked = false;
+
 
         LinearLayout NoteLinearlayout;
         public NoteVH(@NonNull View itemView) {
             super(itemView);
 
-
-            customCheckBox = itemView.findViewById(R.id.noteCheckbox);
 
 
             NoteDate = itemView.findViewById(R.id.tv_note_time);
@@ -100,8 +104,9 @@ public class NoteAdapter extends RecyclerView.Adapter{
                     int number = getAdapterPosition();
                     Intent intent = new Intent(context, NoteInText.class);
                     intent.putExtra("number",number);
-                    ((Activity)context).startActivityForResult(intent,100); //이것도 필요 없을 듯
-                    ((Activity)context).finish();
+                    context.startActivity(intent);
+//                    ((Activity)context).startActivityForResult(intent,100); //이것도 필요 없을 듯
+//                    ((Activity)context).finish();
                     //리사이클러뷰는 no place이므로 이를 받아주는 main에서 onResult를 행해야함.
                     //100은 임의의 수로 나중에 FIANL로 상수로 바꿔주어야한다.
 
@@ -121,13 +126,17 @@ public class NoteAdapter extends RecyclerView.Adapter{
                             //로그인회원이라면
                             if(nicknumber!=0.0){
                                 DeleteDateDB();
+                                rubbishlist.add(new NoteRubbishVO(notelist.get(longPosition).getNoteDate(),notelist.get(longPosition).getNoteTitle(),notelist.get(longPosition).getNoteContent()));
+                                NoteRubbishupdate();
+
+
                                 notelist.remove(longPosition); //이렇게해도 문제가 없음.
                                 notifyDataSetChanged();
                             }else{
                                 notelist.remove(longPosition);
                                 notifyDataSetChanged();
                             }
-
+                            Toast.makeText(context, "삭제 되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -186,4 +195,40 @@ public class NoteAdapter extends RecyclerView.Adapter{
     }
 
 
+    //지운 후 지운파일이 휴지통에 저장되도록.
+    public void NoteRubbishupdate(){
+
+        final String noetime = rubbishlist.get(longPosition).getRubbishDate();
+        final String title = rubbishlist.get(longPosition).getRubbishTitle();
+        final String content = rubbishlist.get(longPosition).getRubbishContent();
+        String serverurl = "http://chocojoa123.dothome.co.kr/Exchange/NoteRubbish.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> datas = new HashMap<>();
+
+                datas.put("number",nicknumber+"");
+                datas.put("time",noetime);
+                datas.put("title",title);
+                datas.put("content",content); //서버에 저장.
+                return datas;
+            }
+        };//stringRequest
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
+
+    }
 }

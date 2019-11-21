@@ -107,11 +107,14 @@ public class KaKaoLoginclass extends AppCompatActivity {
                     String nickname = userProfile.getNickname();
                     String nickimage = userProfile.getProfileImagePath();
 
+                    String dologout = "Logout";
+
                     Intent intent = getIntent();
                     intent.putExtra("login",124);
                     intent.putExtra("nicknumber",nicknumber);
                     intent.putExtra("nickname",nickname);
                     intent.putExtra("nicknameimage",nickimage);
+                    intent.putExtra("dologout",dologout);
                     KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
 
                     Toast.makeText(KaKaoLoginclass.this, "로그인 완료", Toast.LENGTH_SHORT).show();

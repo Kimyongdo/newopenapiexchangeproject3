@@ -76,6 +76,9 @@ public class NoteInText extends AppCompatActivity {
 
 
     int number; //리사이클러뷰 각 몇번 째인지 확인가능.
+    int number2; //NoteSearchingToekn
+    int token;
+
     int save;//세이브했는지 확인
 
 
@@ -91,13 +94,25 @@ public class NoteInText extends AppCompatActivity {
         final Intent intent = getIntent();
         number = intent.getIntExtra("number",0); //item뷰 선택시의 위치값
 
+//        Toast.makeText(this, number+"", Toast.LENGTH_SHORT).show(); //아무것도 안받으면 값은 초기값인 0을 의미함.
+        final Intent intent1 = getIntent();
+        number2= intent1.getIntExtra("number2",0);
+        token = intent1.getIntExtra("searchingToken",0);
+
+//        Toast.makeText(this, number2+"", Toast.LENGTH_SHORT).show();
+
         iv_done_second = findViewById(R.id.iv_updateNote_Second_done);
         et_title_second = findViewById(R.id.et_note_second_title);
         et_content_second = findViewById(R.id.et_note_second_content);
 
         //처음 받아온 기존 내용을 보여줘야함.
-        et_title_second.setText(notelist.get(number).getNoteTitle());
-        et_content_second.setText(notelist.get(number).getNoteContent());
+        if(token==555){
+            et_title_second.setText(notelist.get(number2).getNoteTitle());
+            et_content_second.setText(notelist.get(number2).getNoteContent());
+        }else{
+            et_title_second.setText(notelist.get(number).getNoteTitle());
+            et_content_second.setText(notelist.get(number).getNoteContent());
+        }
 
         //페이지를 열마자마자 받은 글씨 개수
         beforeEtTitle = et_title_second.length();

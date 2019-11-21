@@ -59,6 +59,7 @@ import static com.example.newopenapiexchangeproject3.GlobalTime.date2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.dateFormat2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.newstime2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.timedifferent;
+import static com.example.newopenapiexchangeproject3.NoteRubbish.rubbishlist;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayC1;
 import static com.example.newopenapiexchangeproject3.WeatherJSon.todayweather;
 
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     String kNickname;
     String kNickimage;
     String logoutNickname;
+    String doLogout;
     int logoutImage;
     int logoutcheckout;
     int logincheckin;
@@ -245,6 +247,11 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent1);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                         break;
+                    case R.id.rubbish:
+                        Intent intent2 = new Intent(MainActivity.this,NoteRubbish.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        startActivity(intent2);
+                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        break;
                 }
                 return false;
             }
@@ -266,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
             navUserimage = headerView.findViewById(R.id.iv_header);
             navUsername.setText(kakaodatas.get(0).getLoginNickname()+"님"); //유저이름+"님"
             Glide.with(this).load(kakaodatas.get(0).getLoginNickimage()).into(navUserimage);
+
         }
         //로그아웃
         else if(kakaodatas.get(0).getLogoutnumber()==123){
@@ -318,12 +326,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //actionbar 붙이는 곳
+    //oncreatemenu를 지우고 onpreapre+invaild 쓰면 바뀔때마다 적용됨.
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    protected void onResume() {
+        super.onResume();
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //메뉴에서 가져올 인플레이터이므로 layout이 아닌 Menu
         inflater.inflate(R.menu.loginicon, menu);
-        return super.onCreateOptionsMenu(menu);
+        if(nicknumber!=0.0){
+            menu.getItem(0).setTitle("LOGOUT");
+        }
+        return super.onPrepareOptionsMenu(menu);
+
     }
 
     @Override
@@ -338,6 +356,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    //카카오톡에서 보낸 정보 받는 곳.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -355,12 +375,15 @@ public class MainActivity extends AppCompatActivity {
                     //로그인,로그아웃 임의토큰
                     logincheckin = data.getIntExtra("login",0);
                     logoutcheckout  = data.getIntExtra("logout",0);
+                    doLogout=data.getStringExtra("dologout");
 
                     //카카오톡 프로필 이미지 사진 나옴.
 
                      headerView = navigationView.getHeaderView(0);
                      navUsername = headerView.findViewById(R.id.tv_navi_header_name);
                      navUserimage = headerView.findViewById(R.id.iv_header);
+
+
 
                     //로그인
                     if(logincheckin==124){
@@ -371,6 +394,7 @@ public class MainActivity extends AppCompatActivity {
                     else if(logoutcheckout==123){
                         Glide.with(this).load(logoutImage).into(navUserimage);
                         navUsername.setText(logoutNickname+"님"); //유저이름+"님"
+
                     }
 
                     kakaodatas.add(0,new kakaoVO(kNickname,kNickimage,logincheckin,logoutNickname,logoutImage,logoutcheckout));
@@ -412,6 +436,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void DataSaveRubbish(){
+        try {
+            File file = new File(getFilesDir(),"rubbish");
+            FileOutputStream fos  = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(rubbishlist); //현재의 datas를 저장.
+            oos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

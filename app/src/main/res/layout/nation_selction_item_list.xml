@@ -13,6 +13,17 @@
 
 
 
+    <com.skyfishjy.library.RippleBackground
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/content"
+        app:rb_color="#121212"
+        app:rb_radius="40dp"
+        app:rb_rippleAmount="1"
+        app:rb_duration="1000"
+        app:rb_scale="100">
 
     <LinearLayout
         android:id="@+id/Linear_cardview_content_NS"
@@ -20,6 +31,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
+
+
 
 <!--        <net.igenius.customcheckbox.CustomCheckBox-->
 <!--            android:id="@+id/checkbox_cardview"-->
@@ -50,5 +64,6 @@
         />
 
     </LinearLayout>
+    </com.skyfishjy.library.RippleBackground>
 
 </androidx.cardview.widget.CardView>

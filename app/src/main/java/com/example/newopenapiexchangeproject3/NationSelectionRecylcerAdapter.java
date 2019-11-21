@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.skyfishjy.library.RippleBackground;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -120,7 +121,7 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
         LinearLayout Linear_cardview_content_NS;
         CardView cardviewlayoutroot_second;
         RelativeLayout Relativelayout_cardview_title;
-
+        final RippleBackground rippleBackground;
 
         public VH2(@NonNull View itemView) {
             super(itemView);
@@ -131,6 +132,7 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
             cardviewlayoutroot_second = itemView.findViewById(R.id.cardviewlayoutroot_second);
             Relativelayout_cardview_title = itemView.findViewById(R.id.Relativelayout_cardview_title);
 
+            rippleBackground=(RippleBackground)itemView.findViewById(R.id.content);
 
 
             Linear_cardview_content_NS.setOnClickListener(new View.OnClickListener() {
@@ -142,9 +144,10 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
                     if(a!=RecyclerView.NO_POSITION){  //이 코드를 추가해야 recyclerview ArrayoutofBounds의 발생을 막을 수 있다.
                         for(int i=0; i<NSdata.size(); i++) {
                             if (a == i) {
-                                Toast.makeText(context, a+"성공적으로 추가하였습니다.", Toast.LENGTH_SHORT).show();
-                                Animation anim = AnimationUtils.loadAnimation(context,R.anim.bounce);
-                                cardviewlayoutroot_second.startAnimation(anim);
+                                Toast.makeText(context, "성공적으로 추가하였습니다.", Toast.LENGTH_SHORT).show();
+//                                Animation anim = AnimationUtils.loadAnimation(context,R.anim.bounce);
+//                                iv_NationSeleciton.startAnimation(anim);
+                                rippleBackground.startRippleAnimation();
 
                                 datas.add(new Itemlist(cur_nm[a],cur_unit[a],kftc_deal_bas_r[a],iv_nationflag[a]
                                        ,newstime2,dateFormat2[a].format(date2),

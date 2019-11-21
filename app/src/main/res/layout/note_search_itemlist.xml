@@ -7,7 +7,6 @@
     android:id="@+id/NoteLinearLayout2"
     >
 
-
     <TextView
         android:layout_marginTop="10dp"
         android:id="@+id/tv_note_time2"
@@ -42,7 +41,7 @@
         android:layout_height="0.5dp"
         android:layout_below="@id/update_tv_date"
         android:layout_centerVertical="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="6dp"
         android:background="#747474" />
 
 </LinearLayout>

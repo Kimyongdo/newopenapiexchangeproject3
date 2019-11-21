@@ -14,21 +14,21 @@ import static com.example.newopenapiexchangeproject3.NoteText.notelist;
 
 public class NoteSearchAdapter extends BaseAdapter {
     Context context;
-    ArrayList<NoteVO> notelistcopy;
+    ArrayList<NoteVO> testlistcopy;
 
     public NoteSearchAdapter(Context context, ArrayList<NoteVO> notelistcopy) {
         this.context = context;
-        this.notelistcopy = notelistcopy;
+        this.testlistcopy = notelistcopy;
     }
 
     @Override
     public int getCount() {
-        return notelistcopy.size();
+        return testlistcopy.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return notelistcopy.get(i);
+        return testlistcopy.get(i);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class NoteSearchAdapter extends BaseAdapter {
         if(view==null){
             view = LayoutInflater.from(context).inflate(R.layout.note_search_itemlist,viewGroup,false);
         }
-        NoteVO noteVO = notelistcopy.get(i);
+        NoteVO noteVO = testlistcopy.get(i);
         TextView notetime = view.findViewById(R.id.tv_note_time2);
         TextView notetitle = view.findViewById(R.id.tv_note_title2);
         TextView noteContent = view.findViewById(R.id.tv_note_content2);

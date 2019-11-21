@@ -27,6 +27,11 @@
     <!--    구분선 만들고 그 안에 넣으면 됨 -->
     <item android:title="">
         <menu>
+            <item android:id="@+id/rubbish"
+                android:title="휴지통"
+                android:icon="@drawable/rubbish"
+                />
+
             <item android:id="@+id/updateIcon"
                 android:title="업데이트"
                 android:icon="@drawable/notice"

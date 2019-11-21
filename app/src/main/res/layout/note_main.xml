@@ -125,6 +125,7 @@
                     android:layout_height="24dp"
                     android:src="@drawable/text"
                     app:fab_colorNormal="#41AF39"
+                    app:fab_colorPressed="#41AF39"
                     app:fab_size="mini"
                     app:fab_label="텍스트 노트"
                     android:onClick="clicktext2"

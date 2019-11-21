@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -51,20 +52,25 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
+import static com.example.newopenapiexchangeproject3.NoteRubbish.rubbishlist;
 import static com.example.newopenapiexchangeproject3.NoteText.notelist;
+import static com.example.newopenapiexchangeproject3.NoteText.searchlist;
 import static com.example.newopenapiexchangeproject3.NoteText.testlist;
 
 public class NoteMain extends AppCompatActivity {
 
     //체크박스
+    CheckBox checkbox;
     CustomCheckBox customCheckBox;
     LinearLayout NoteLinearlayout;
     static boolean ischecked =false;
@@ -97,9 +103,6 @@ public class NoteMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_main);
 
-
-//        //커스텀
-//        customCheckBox = findViewById(R.id.noteCheckbox);
 
 
         ///////////////////////////네비게이션 뷰 및 플로팅 버튼 연결하기 ///////////////////////////////////////
@@ -166,7 +169,7 @@ public class NoteMain extends AppCompatActivity {
                         Intent intent = new Intent(NoteMain.this,NoteMain.class);
                         startActivity(intent);
                         drawerLayout.closeDrawer(navigationView); //클 릭 후 네비뷰 닫힘
-                        finish();
+                        finish(); //자기가 자기꺼 갈 때 중복되면 이상하니까.
                         break;
                     case R.id.updateIcon:
                         Intent intent0 = new Intent(NoteMain.this, UpdateMain.class);
@@ -178,6 +181,12 @@ public class NoteMain extends AppCompatActivity {
                         startActivity(intent1);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                         break;
+                    case R.id.rubbish:
+                        Intent intent2 = new Intent(NoteMain.this,NoteRubbish.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        startActivity(intent2);
+                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        break;
+
                 }
                 return false;
             }
@@ -187,10 +196,9 @@ public class NoteMain extends AppCompatActivity {
         noteRecycler.setAdapter(noteAdapter);
 
 
-
         //데이터스를 로드.
         if(nicknumber!=0.0){
-           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함.
+           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함(수정완료)
             NoteLoadFromDB(); //여기서 notelist는 완성임. --> 돋보기를 누른다고 한다면
 
         }else{
@@ -220,28 +228,30 @@ public class NoteMain extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void search(String text){
-        Log.d("TAAAAAGGGG",str+"");
-        //기본적으로 보이는 arraylist를 지우고
-        notelist.clear();
-        if(text.length()==0){
-            //edittext에 아무것도 없다면 기존datalist에 이를 복사한 datlistSearch를 넣어주고
-            notelist.addAll(testlist);
-            Log.d("testlist.size",testlist.size()+""); //아니 왜 안되다가 갑자기 또 되는거지..
-        }else{
+//    public void search(String text){
+//        Log.d("TAAAAAGGGG",str+"");
+//        //기본적으로 보이는 arraylist를 지우고
+//        notelist.clear();
+//        if(text.length()==0){
+//            //edittext에 아무것도 없다면 기존datalist에 이를 복사한 datlistSearch를 넣어주고
+//            notelist.addAll(testlist);
+//            Log.d("testlist.size",testlist.size()+""); //아니 왜 안되다가 갑자기 또 되는거지..
+//        }else{
+//
+//            for(int i=0; i<testlist.size(); i++){
+//                String choName = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteTitle(), text); //제목
+//                String choContent = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteContent(), text); //내용
+//                //문자의 text가 하나라도 써져있다면 이에 해당하는 itemlist를 추가.
+//                if(choName.indexOf(text)>=0 || choContent.indexOf(text)>=0){
+//                    notelist.add(testlist.get(i));
+//                }
+//            }
+//        }
+//
+//        noteAdapter.notifyDataSetChanged();
+//    }
 
-            for(int i=0; i<testlist.size(); i++){
-                String choName = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteTitle(), text); //제목
-                String choContent = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteContent(), text); //내용
-                //문자의 text가 하나라도 써져있다면 이에 해당하는 itemlist를 추가.
-                if(choName.indexOf(text)>=0 || choContent.indexOf(text)>=0){
-                    notelist.add(testlist.get(i));
-                }
-            }
-        }
 
-        noteAdapter.notifyDataSetChanged();
-    }
 
     public void Dataload(){
         try {
@@ -298,6 +308,7 @@ public class NoteMain extends AppCompatActivity {
 
                         if(number.equals(nicknumber+"")){ //배열을 돌리면서 db number와 카카오 아이디가 같으면 그것만 추가하도록.
                             notelist.add(0,new NoteVO(time, title, content)); //첫 글씨를 쓴 것을 저장하는 만큼 문제 없음.
+                            searchlist.add(0,new NoteVO(time, title, content)); //첫 글씨를 쓴 것을 저장하는 만큼 문제 없음
                             //noteAdapter.notifyItemInserted(0);
                             noteAdapter.notifyDataSetChanged();
                         }
@@ -307,7 +318,7 @@ public class NoteMain extends AppCompatActivity {
                     }
 
                 }
-                testlist.addAll(notelist);
+
             }
         }, new Response.ErrorListener() {
             @Override

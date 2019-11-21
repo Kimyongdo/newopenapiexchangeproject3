@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +35,13 @@ import static com.example.newopenapiexchangeproject3.GlobalTime.timeZone2;
 import static com.example.newopenapiexchangeproject3.GlobalTime.timedifferent;
 
 public class NationIntent extends AppCompatActivity {
+
+    TextView tvExhcangeName;
+    TextView tvTime;
+    TextView tvWeather;
+    TextView newsNote;
+
+
 
     ImageView iv_D_Nationflag;
     TextView tv_D_NationName;
@@ -76,8 +85,22 @@ public class NationIntent extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        TextView tvTime;
+        TextView tvWeather;
+        TextView newsNote;
+        //맨 위 이름
 
+        AssetManager assetManager = getAssets();
+        Typeface typeface = Typeface.createFromAsset(assetManager,"Fonts/lottemart.ttf");
 
+        tvExhcangeName = findViewById(R.id.exchagne_note);
+        tvTime = findViewById(R.id.timenote);
+        tvWeather = findViewById(R.id.weather_note);
+        newsNote = findViewById(R.id.new_note);
+        tvExhcangeName.setTypeface(typeface);
+        tvTime.setTypeface(typeface);
+        tvWeather.setTypeface(typeface);
+        newsNote.setTypeface(typeface);
 
            //환율
             iv_D_Nationflag = findViewById(R.id.iv_D_Nationflag);
@@ -110,21 +133,28 @@ public class NationIntent extends AppCompatActivity {
         //환율
         Glide.with(this).load(JsonExchangeRate.iv_nationflag[i]).into(iv_D_Nationflag);
         tv_D_NationName.setText(JsonExchangeRate.cur_nm[i]);
+        tv_D_NationName.setTypeface(typeface);
         tv_D_NationMoeny.setText(JsonExchangeRate.cur_unit[i]);
+        tv_D_NationMoeny.setTypeface(typeface);
         tv_D_NationExchange.setText(JsonExchangeRate.kftc_deal_bas_r[i]);
+        tv_D_NationExchange.setTypeface(typeface);
 
         //시간
         TimeThread timeThread = new TimeThread();
         timeThread.start();
 
         tv_D_NationGlobalTime.setText(dateFormat2[i].format(GlobalTime.date2));
+        tv_D_NationGlobalTime.setTypeface(typeface);
         tv_D_NationNowTime.setText(GlobalTime.newstime2);
+        tv_D_NationNowTime.setTypeface(typeface);
         tv_D_NationNowTimeDifferent.setText(timedifferent[i]);
 
         //날씨
         Glide.with(this).load(WeatherJSon.todayIcon[i]).into(iv_D_NationWehaterImage);
         tv_D_NationCountry.setText(WeatherJSon.todayNation[i]);
+        tv_D_NationCountry.setTypeface(typeface);
         tv_D_NationCity.setText(WeatherJSon.todayCity[i]);
+        tv_D_NationCity.setTypeface(typeface);
         tv_D_NationTemp.setText(WeatherJSon.todayC1[i]);
         tv_D_WeatherCondition.setText(WeatherJSon.todayweather[i]);
         tv_D_WeatherWind.setText(WeatherJSon.todaywind[i]);
@@ -132,9 +162,11 @@ public class NationIntent extends AppCompatActivity {
 
        //뉴스
         tv_newtitle1.setText(SearchNaverJson1.newstitle[i][0]);
+        tv_newtitle1.setTypeface(typeface);
         tv_newtitle2.setText(SearchNaverJson1.newstitle[i][1]);
+        tv_newtitle2.setTypeface(typeface);
         tv_newtitle3.setText(SearchNaverJson1.newstitle[i][2]);
-
+        tv_newtitle3.setTypeface(typeface);
 
 
         //뉴스 URL

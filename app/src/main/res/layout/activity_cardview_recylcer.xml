@@ -12,7 +12,6 @@
     android:id="@+id/cardviewlayoutroot"
     android:layout_margin="8dp"
     style="@style/AppTheme.cardview"
-
     >
 
 
@@ -29,6 +28,7 @@
         android:layout_height="130dp"
         >
 
+
         <ImageView
             android:id="@+id/iv_flag"
             android:layout_width="70dp"
@@ -43,10 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="국가이름"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_toRightOf="@+id/iv_flag"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="25dp"
 
             />
 
@@ -54,11 +54,12 @@
             android:id="@+id/tv_dollar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="25dp"
             android:layout_toRightOf="@+id/iv_flag"
             android:text="통화종류"
             android:textSize="12dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
             android:layout_below="@id/tv_nation_name"
             />
 
@@ -67,11 +68,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="기준환율"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_toRightOf="@+id/iv_flag"
-            android:layout_marginTop="50sp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="25dp"
             android:layout_alignBottom="@+id/iv_flag"
             />
 
@@ -143,6 +144,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
             />
 
         <TextView
@@ -175,6 +177,5 @@
 
 
     </LinearLayout>
-
 
 </androidx.cardview.widget.CardView>

@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.newopenapiexchangeproject3.MainActivity.nicknumber;
+import static com.example.newopenapiexchangeproject3.NoteRubbish.rubbishlist;
 
 public class NoteText extends AppCompatActivity {
 
@@ -62,6 +63,8 @@ public class NoteText extends AppCompatActivity {
 
     static ArrayList<NoteVO> notelist = new ArrayList<>();
     static ArrayList<NoteVO> testlist = new ArrayList<>();
+    static ArrayList<NoteVO> searchlist = new ArrayList<>(); //멍청한짓인지 나도 안다.
+
 
     InputMethodManager imm;
     int save;
@@ -138,8 +141,6 @@ public class NoteText extends AppCompatActivity {
                 afterEtTitle = et_title.length();
                 afterEtContent = et_content.length();
 
-                Log.d("number", et_title_reader.length()+"");//인2a라고 했을 경우 length 3으로 변환되서 나옴.
-
                 //edittext비어있는 경우를 아기 위해 mathces를 이용
                 //모두 비어있는 경우
                 if(afterEtTitle==0 && afterEtContent==0){
@@ -154,6 +155,7 @@ public class NoteText extends AppCompatActivity {
                     noelistGroup();
                 }
 
+//                    finish(); 너무 빠르게 넘어가서 적용이 안됨 -> Thread 맨 끝에 해도 마찬가지임.
 
             }
         });
