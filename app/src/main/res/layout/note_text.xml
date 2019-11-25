@@ -8,7 +8,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:weightSum="100"
-    tools:context=".NoteText">
+    tools:context="exchange.example.newopenapiexchangeproject3.NoteText">
 
     <RelativeLayout
         android:id="@+id/note_relayivelayout"
@@ -27,12 +27,25 @@
             android:layout_alignParentRight="true"
             android:clickable="true"
             />
+
         <ImageView
             android:id="@+id/iv_updateNote_first_done"
             android:layout_width="18sp"
             android:layout_height="18sp"
             android:clickable="true"
-            android:src="@drawable/tick1" />
+            android:src="@drawable/tick1"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/iv_updateNote_first_done2"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:clickable="true"
+            android:src="@drawable/leftarrow"
+            android:visibility="visible"
+            />
+
     </RelativeLayout>
 
 

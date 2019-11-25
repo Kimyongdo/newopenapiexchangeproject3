@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/content"
-        app:rb_color="#121212"
+        app:rb_color="#8C8C8C"
         app:rb_radius="40dp"
         app:rb_rippleAmount="6"
         app:rb_duration="2500"

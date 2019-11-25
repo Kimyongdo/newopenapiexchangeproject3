@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="exchange.example.newopenapiexchangeproject3.NewsPaper"
+    android:orientation="vertical"
+    android:layout_margin="16dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/et_newspaper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="뉴스 검색"
+            android:maxLines="1"
+            android:ems="11"
+            />
+
+        <Button
+            android:id="@+id/newsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색"
+            android:onClick="clickNewsBtn"
+            />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/newsLayoutGone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/nosearch"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/glass"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            />
+        <TextView
+            android:id="@+id/tv_newsSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="다른 검색을 시도해 보세요"
+            android:gravity="center"
+            android:layout_below="@+id/nosearch"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="검색 내용과 일치하는 뉴스를 찾지 못 했습니다."
+            android:gravity="center"
+            android:layout_below="@+id/tv_newsSearch"
+            android:layout_marginTop="10dp"
+            />
+
+</RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="10dp"
+        android:id="@+id/paperRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+
+
+</LinearLayout>

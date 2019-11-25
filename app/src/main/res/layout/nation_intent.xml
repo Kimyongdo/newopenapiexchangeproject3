@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NationIntent.NationIntent">
+    tools:context="exchange.example.newopenapiexchangeproject3.NationIntent.NationIntent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -124,16 +124,6 @@
         />
 
 
-        <View
-            android:id="@+id/line2"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#121212"
-            android:layout_below="@+id/tv_D_NationNowTime"
-            android:layout_marginTop="10dp"
-            />
-
-
         <TextView
             android:id="@+id/tv_D_NationNowTimeDifferent2"
             android:layout_width="wrap_content"
@@ -141,7 +131,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/tv_D_NationNowTime"
             android:layout_alignBottom="@+id/tv_D_NationGlobalTime"
-            android:text="한국과"
+            android:text=""
             android:textSize="18sp" />
 
     <TextView
@@ -151,7 +141,7 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/tv_D_NationNowTime"
         android:layout_alignBottom="@+id/tv_D_NationNowTime"
-        android:text="시간차이"
+        android:text=""
         android:layout_marginTop="1dp"
         android:textSize="22sp" />
 
@@ -161,7 +151,7 @@
         android:id="@+id/tv_D_NationNowTimeDifferent_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="시간차이"
+        android:text=""
         android:textSize="18sp"
         android:layout_marginTop="100dp"
         android:layout_toRightOf="@id/tv_D_NationNowTimeDifferent"
@@ -169,6 +159,25 @@
         android:layout_marginLeft="2dp"
         />
 
+
+        <TextView
+            android:id="@+id/tv_D_timesubstract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재한국시간"
+            android:textSize="18sp"
+            android:layout_below="@+id/tv_D_NationNowTimeDifferent_note"
+            android:layout_marginTop="5dp"
+            />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#121212"
+            android:layout_below="@+id/tv_D_timesubstract"
+            android:layout_marginTop="10dp"
+            />
 
     <TextView
         android:layout_marginTop="20dp"
