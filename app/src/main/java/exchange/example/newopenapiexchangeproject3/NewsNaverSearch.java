@@ -25,13 +25,13 @@ import java.util.Map;
 import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsAdapter;
 import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsDatas;
 import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsLayoutGone;
-import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsLink;
-import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsPaperRecylcer;
+import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsLinks;
 
 
 public class NewsNaverSearch {
 
     static int contatin;
+    static String newsNumber="10"; //기본은 10개
 
      static void NewSearching(String keyword){
         final String clientId ="rlPAa31qpMfyxB0oWzu9";
@@ -50,7 +50,9 @@ public class NewsNaverSearch {
         }
 
         //Volley는 비동기방식이라서 큐방식. 들어오는게 중구난방.
-        String NAVERURL = "https://openapi.naver.com/v1/search/news?query="+keyword+"&display=10&start=1&sort=sim"; //keywrod로 문자 그대로 받아도 오류 생김.
+        String NAVERURL = "https://openapi.naver.com/v1/search/news?query="+keyword+
+                "&display="+100+
+                "&start=1&sort=sim"; //keywrod로 문자 그대로 받아도 오류 생김.
 
         StringRequest postRequest = new StringRequest(Request.Method.GET, NAVERURL,
                 new Response.Listener<String>() {
@@ -66,11 +68,15 @@ public class NewsNaverSearch {
 
                         newsLayoutGone.setVisibility(View.GONE);
                         newsDatas.clear();
-                        newsLink.clear();
+                        newsLinks.clear();
                         newsAdapter.notifyDataSetChanged();
 
                         for(int i=0; i<searchApi.getItems().size(); i++){
                             String newsTitle = searchApi.getItems().get(i).getTitle(); //이 0번은 한 기사의 첫번쨰를 의미함.
+                            String newsLink = searchApi.getItems().get(i).getLink();
+                            String time  = searchApi.getItems().get(i).getPubDate();
+
+                            //뉴스기사 html 특징 제거.
                             newsTitle = newsTitle.replaceAll("<b>", "");
                             newsTitle = newsTitle.replaceAll("</b>", "");    //파싱 후 나   오는 <b> </b>를 제거하기.
                             newsTitle = newsTitle.replaceAll("&quot;", "\"");
@@ -78,19 +84,10 @@ public class NewsNaverSearch {
                             newsTitle = newsTitle.replaceAll("&lt;", "<");
                             newsTitle = newsTitle.replaceAll("&gt", ">");
 
-                            String time  = searchApi.getItems().get(i).getPubDate();
-                            newsLink.add(searchApi.getItems().get(i).getLink());
+                            newsLinks.add(newsLink);
                             newsDatas.add(new NewsSearchVO(newsTitle,time+""));
                         }
 
-                        Log.d("linklink",newsLink.get(0));
-                        Log.d("linklink",newsLink.get(1));
-                        Log.d("linklink",newsLink.get(2));
-                        Log.d("linklink",newsLink.get(3));
-                        Log.d("linklink",newsLink.get(4));
-                        Log.d("linklink",newsLink.get(5));
-                        Log.d("linklink",newsLink.get(6));
-                        Log.d("linklink",newsLink.get(7));
 
 
                         //데이터가 없다면 없다고 이미지를 뜨게 해야함.
@@ -116,17 +113,16 @@ public class NewsNaverSearch {
                                     }
                                 }
 
+                                //뉴스 링크도 제거해주어야한다.
                                 if(contatin>=2){ //제목의 키워드가 두개가 같다면 제거.
                                     newsDatas.remove(k);
+                                    newsAdapter.notifyItemRemoved(k);
+                                    newsLinks.remove(k);
                                     newsAdapter.notifyItemRemoved(k);
                                     k--; //중간에 제거를 하면 모든 배열이 왼쪽으로 한칸 이동하는데 k--;가 없다면 k의 순서도 배열에 맞게 한칸 왼쪽으로 이동할 필요가 있음.
                                 }
                             }
                         }
-
-                            //여기다가 클릭리스너를 달아야 오류가 없을텐데 흐.
-
-
 
                             newsAdapter.notifyDataSetChanged();
 

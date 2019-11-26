@@ -306,7 +306,7 @@ public class NoteText extends AppCompatActivity {
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(NoteText.this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NoteText.this, "변경되지 않았습니다..", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(NoteText.this, NoteMain.class);
                         startActivity(intent);
                         finish();

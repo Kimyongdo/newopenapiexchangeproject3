@@ -259,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
         ////////////////////////////////////////////카카오 기능//////////////////////////////////////////////////
         getHashKey();
         DataloadKakao();
+        KeywordDataload();
 
         if(kakaodatas.size()==0) return;
             //로그인
@@ -492,6 +493,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void KeywordDataload(){
+        try {
+            File file = new File(getFilesDir(),"tt.tmp");
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            NewsPaper.keywodsDatas = (ArrayList<NewsKeywordVO>) ois.readObject();  //앱 꺼도 새롭게 저장한 파일이 있음을 파악함.
+            ois.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
 
     //계산기로 이동
@@ -549,6 +568,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "no"+"", Toast.LENGTH_SHORT).show();
         }
+
+
+
 
       ////////////////////  //지우지 마시길.. /////////////////////
         //다시 한번 메소드를 집어넣음 안넣으니까 실시간 반영이 불가/능함.

@@ -2,6 +2,7 @@ package exchange.example.newopenapiexchangeproject3;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,11 +66,12 @@ public class NewsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int a = getAdapterPosition();
-                    Toast.makeText(context, a+"", Toast.LENGTH_SHORT).show();
-                    String newsurl1 = NewsPaper.newsLink.get(a);
+
+                    String newsurl1 = NewsPaper.newsLinks.get(a);
                     Intent intent = new Intent(context, newsWebview.class);
                     intent.putExtra("Link",newsurl1);
                     context.startActivity(intent);
+
                 }
             });
         }

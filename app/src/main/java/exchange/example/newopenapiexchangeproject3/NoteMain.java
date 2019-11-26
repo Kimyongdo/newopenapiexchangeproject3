@@ -170,6 +170,8 @@ public class NoteMain extends AppCompatActivity {
                 return false;
             }
         });
+
+
         noteRecycler = findViewById(R.id.note_recycler);
         noteAdapter = new NoteAdapter(this);
         noteRecycler.setAdapter(noteAdapter);
