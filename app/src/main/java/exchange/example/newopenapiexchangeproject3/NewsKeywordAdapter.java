@@ -3,6 +3,10 @@ package exchange.example.newopenapiexchangeproject3;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newopenapiexchangeproject3.R;
@@ -24,10 +29,12 @@ import java.util.ArrayList;
 
 import static exchange.example.newopenapiexchangeproject3.NewsPaper.keywodsDatas;
 import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsAdapter;
+import static exchange.example.newopenapiexchangeproject3.NewsPaper.newsKeywordAdapter;
 
 public class NewsKeywordAdapter extends RecyclerView.Adapter {
     Context context;
     ArrayList<NewsKeywordVO> keywords;
+    ArrayList<NewsKeywordVO> keywordsCopy = new ArrayList<>();
 
     public NewsKeywordAdapter(Context context, ArrayList<NewsKeywordVO> keywords) {
         this.context = context;
@@ -60,27 +67,46 @@ public class NewsKeywordAdapter extends RecyclerView.Adapter {
         TextView keyWord;
         LinearLayout LinearKeyword;
 
+
         public KeyWordVH(@NonNull View itemView) {
             super(itemView);
 
+
+//            keywordsCopy.addAll(keywords);//복사버전
             keyWord = itemView.findViewById(R.id.tv_keyword);
+
             LinearKeyword = itemView.findViewById(R.id.Linear_keyword);
-            LinearKeyword.setOnClickListener(new View.OnClickListener() {
+
+
+            keyWord.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String keyWordReader = keyWord.getText().toString();
+
+                    int a= getAdapterPosition();
+                    String keyWordReader = keywords.get(a).getKeywrod();
+                   //여기서 녹색판별하고 다 흰색
+                    keyWord.setTextColor(Color.parseColor("#47C83E"));
+                    for(int i=0; i<keywords.size(); i++){
+
+                    }
+
+
+
+                    //다시 녹색으로
+
+
                     NewsNaverSearch.NewSearching(keyWordReader);
-                    newsAdapter.notifyDataSetChanged();
+                    newsAdapter.notifyDataSetChanged(); //뉴스기사
+                    newsKeywordAdapter.notifyDataSetChanged(); //키워드
                     Toast.makeText(context, keyWordReader+" 검색완료", Toast.LENGTH_SHORT).show();
                 }
             });
 
 
-            LinearKeyword.setOnLongClickListener(new View.OnLongClickListener() {
+            keyWord.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     final int a = getAdapterPosition();
-                    Toast.makeText(context, a+"", Toast.LENGTH_SHORT).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("키워드를 제거하시겠습니까?");
                     builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -100,18 +126,15 @@ public class NewsKeywordAdapter extends RecyclerView.Adapter {
                     });
                     builder.create();
                     builder.show();
-
-
-
                     return true; //롱클릭과 일반클릭 구별하기.
-
-
                 }
 
 
             });
         }
     }
+
+
     public void KeyWordDataSave(){
         try {
             File file = new File(context.getFilesDir(),"keylist");

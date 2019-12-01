@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="exchange.example.newopenapiexchangeproject3.SelectNation"
+    tools:context="exchange.example.newopenapiexchangeproject3.NationSelectNation"
     android:orientation="vertical"
     >
 

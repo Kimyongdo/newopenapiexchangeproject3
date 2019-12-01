@@ -40,7 +40,7 @@ public class NewsPaper extends AppCompatActivity {
     //키워드 리사이클러뷰
     RecyclerView paperRecycler2;
     public static  ArrayList<NewsKeywordVO> keywodsDatas = new ArrayList<>();
-    NewsKeywordAdapter newsKeywordAdapter;
+    static NewsKeywordAdapter newsKeywordAdapter;
 
     //설정탭
     EditText addtext;
@@ -85,7 +85,7 @@ public class NewsPaper extends AppCompatActivity {
         paperRecycler2.setAdapter(newsKeywordAdapter);
 
 
-        newsKeywordAdapter.notifyDataSetChanged();
+//        newsKeywordAdapter.notifyDataSetChanged();
 
     //뒤로가기 끝내기.
         iv_arrow.setOnClickListener(new View.OnClickListener() {
@@ -131,8 +131,6 @@ public class NewsPaper extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String textR = addtext.getText().toString();
                 keywodsDatas.add(new NewsKeywordVO(textR));
-//                DataSave(); 여기 가능했음
-                newsKeywordAdapter.notifyDataSetChanged();
 
 
                 for(int i=0; i<keywodsDatas.size(); i++){
@@ -140,13 +138,12 @@ public class NewsPaper extends AppCompatActivity {
                         if(keywodsDatas.get(k).getKeywrod().equals(keywodsDatas.get(i).getKeywrod())){
                             Toast.makeText(NewsPaper.this, "중복된 키워드입니다.", Toast.LENGTH_SHORT).show();
                             keywodsDatas.remove(keywodsDatas.size()-1);
-                            newsKeywordAdapter.notifyItemRemoved(keywodsDatas.size()-1);
                             i--; //중복 만들 때 되면 꼭 이거 만들어서 이전으로 돌리기 이거 안쓰면 outarray 뜬다.
                         }
                     }
                 }
-
-
+                DataSave();
+                newsKeywordAdapter.notifyDataSetChanged();//add remove 한번에.
             }
         });
 
@@ -159,7 +156,7 @@ public class NewsPaper extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        DataSave();
+//        DataSave();
 
     }
 

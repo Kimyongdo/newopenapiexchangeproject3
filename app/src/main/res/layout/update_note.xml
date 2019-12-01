@@ -27,11 +27,13 @@
         >
 
         <TextView
+            android:id="@+id/tv_updateNote_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="공지사항"
-            android:textSize="24sp"
+            android:text="제목줄"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:textSize="24sp"
             />
 
         <TextView
@@ -61,16 +63,7 @@
         android:layout_marginLeft="16dp"
         >
 
-        <TextView
-            android:id="@+id/tv_updateNote_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="제목줄"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="5dp"
-            android:textSize="20sp"
 
-            />
 
         <TextView
             android:id="@+id/tv_UpdateNote_content"
@@ -81,6 +74,7 @@
             android:layout_marginTop="10dp"
             android:textSize="14sp"
             />
+
     </LinearLayout>
 
 

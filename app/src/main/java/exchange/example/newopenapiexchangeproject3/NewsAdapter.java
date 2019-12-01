@@ -66,7 +66,6 @@ public class NewsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int a = getAdapterPosition();
-
                     String newsurl1 = NewsPaper.newsLinks.get(a);
                     Intent intent = new Intent(context, newsWebview.class);
                     intent.putExtra("Link",newsurl1);

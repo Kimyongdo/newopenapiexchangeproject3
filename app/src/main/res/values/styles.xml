@@ -7,9 +7,9 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/cardview_dark_background</item>
         <item name="colorPrimaryDark">@color/cardview_dark_background</item>
-        <item name="colorAccent">@color/colorRed</item>
+        <item name="colorAccent">@color/colorGreen</item>
         <item name="android:windowBackground">@color/cardview_dark_background</item>
-        <item name="switchStyle">@color/colorRed</item>
+        <item name="switchStyle">@color/colorGreen</item>
         <item name="android:textColor">@color/colordark_text</item>
     </style>
 
@@ -36,5 +36,13 @@
         <item name="colorControlNormal">@color/colordark_text</item>
     </style>
 
+
+<!--    네비게이션 선택했을 때의 색상변경 -->
+    <style name="ThemeOverlay.AppCompat.navTheme">
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/colorWhite</item>
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@color/colorGreen</item>
+    </style>
 
 </resources>

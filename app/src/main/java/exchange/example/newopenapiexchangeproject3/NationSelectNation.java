@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class SelectNation extends AppCompatActivity {
+public class NationSelectNation extends AppCompatActivity {
     //대량의 데이터에 필요한
     static ExchangeMoney[] exchangeMonies;
     static String[] cur_nm_2 = new String[22];
@@ -45,6 +45,7 @@ public class SelectNation extends AppCompatActivity {
 
         //툴바내용
         toolbar = findViewById(R.id.toolbar_nationSelection);
+        toolbar.setTitle("국가 선택");
         setSupportActionBar(toolbar);
 
         //대량의데이터

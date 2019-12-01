@@ -1,20 +1,24 @@
 package exchange.example.newopenapiexchangeproject3;
 
-public class kakaoVO {
+import java.io.Serializable;
+
+public class kakaoVO implements Serializable {
     private String loginNickname;
     private String loginNickimage;
     private int logintnumber;
     private String logoutNickname;
     private int logoutNickimage;
     private int logoutnumber;
+    private long nicknumber;
 
-    public kakaoVO(String loginNickname, String loginNickimage, int logintnumber, String logoutNickname, int logoutNickimage, int logoutnumber) {
+    public kakaoVO(String loginNickname, String loginNickimage, int logintnumber, String logoutNickname, int logoutNickimage, int logoutnumber, long nicknumber) {
         this.loginNickname = loginNickname;
         this.loginNickimage = loginNickimage;
         this.logintnumber = logintnumber;
         this.logoutNickname = logoutNickname;
         this.logoutNickimage = logoutNickimage;
         this.logoutnumber = logoutnumber;
+        this.nicknumber = nicknumber;
     }
 
     public String getLoginNickname() {
@@ -63,5 +67,13 @@ public class kakaoVO {
 
     public void setLogoutnumber(int logoutnumber) {
         this.logoutnumber = logoutnumber;
+    }
+
+    public long getNicknumber() {
+        return nicknumber;
+    }
+
+    public void setNicknumber(long nicknumber) {
+        this.nicknumber = nicknumber;
     }
 }

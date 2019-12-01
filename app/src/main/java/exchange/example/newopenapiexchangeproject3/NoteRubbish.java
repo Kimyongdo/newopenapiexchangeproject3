@@ -87,12 +87,16 @@ public class NoteRubbish extends AppCompatActivity {
                         startActivity(intent1);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                         break;
-
                     case R.id.rubbish:
                         Intent intent2 = new Intent(NoteRubbish.this,NoteRubbish.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
                         startActivity(intent2);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                         finish(); //자기꺼 일 떄는 닫히도록.
+                        break;
+                    case R.id.newsSearch:
+                        Intent intent3 = new Intent(NoteRubbish.this,NewsPaper.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        startActivity(intent3);
+                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                         break;
 
                 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import static exchange.example.newopenapiexchangeproject3.MainActivity.kakaodatas;
 import static exchange.example.newopenapiexchangeproject3.MainActivity.nicknumber;
 import static exchange.example.newopenapiexchangeproject3.NoteText.notelist;
 import static exchange.example.newopenapiexchangeproject3.NoteText.searchlist;
@@ -105,40 +107,6 @@ public class NoteMain extends AppCompatActivity {
         Glide.with(this).load(R.drawable.text).into(fabbtn_text);
 
 
-        ///////////////////////////////////////////////다크 테마////////////////////////////////////////////////////////////////////
-//        Menu menu = navigationView.getMenu(); //네비게이션의 메뉴부분을 가져오고,
-//        actionview= (Switch)menu.findItem(R.id.nav_switch).getActionView().findViewById(R.id.otoSwitch); // 그 중 switch에 해당하는 아이디를 가져온다.
-//        actionview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) { //처음엔 true로 시작한다.
-//                if(isDarkmode==b){
-//                    AppCompatDelegate.setDefaultNightMode((AppCompatDelegate.MODE_NIGHT_YES));
-//                    SharedPreferences preferences =NoteMain.this.getSharedPreferences("switch",MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    editor.putBoolean("switchman",true);
-//                    editor.commit();
-//                }else{
-//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//                    SharedPreferences preferences =NoteMain.this.getSharedPreferences("switch",MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    editor.putBoolean("switchman",false);
-//                    editor.commit();
-//                }
-//            }         //토글버튼을 이용할 때는 ChangeListner를 사용해야함, click을 하면 두번 눌러야 한번 작동이 됨.
-//        });
-//
-//        SharedPreferences sharedPreferences = getSharedPreferences("switch",MODE_PRIVATE);
-//        if(sharedPreferences!=null){
-//            boolean trueman = sharedPreferences.getBoolean("switchman",true);
-//            if(trueman){
-//                actionview.setChecked(true);
-//            }else{
-//                actionview.setChecked(false);
-//            }
-//        }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
         /////////////////////////////////////////네비게이션//////////////////////////////////////////////////////////////////
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -165,6 +133,11 @@ public class NoteMain extends AppCompatActivity {
                         startActivity(intent2);
                         drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
                         break;
+                    case R.id.newsSearch:
+                        Intent intent3 = new Intent(NoteMain.this,NewsPaper.class); //뉴스
+                        startActivity(intent3);
+                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        break;
 
                 }
                 return false;
@@ -176,9 +149,10 @@ public class NoteMain extends AppCompatActivity {
         noteAdapter = new NoteAdapter(this);
         noteRecycler.setAdapter(noteAdapter);
 
-
+        nicknumber=kakaodatas.get(0).getNicknumber(); //static 공부 부족, 여기서 다시 한번 써놓으니 인식함.
         //데이터스를 로드.
         if(nicknumber!=0.0){
+            Log.d("닉넘버2",nicknumber+"");
            //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함(수정완료)
             NoteLoadFromDB(); //여기서 notelist는 완성임. --> 돋보기를 누른다고 한다면
 
@@ -209,30 +183,6 @@ public class NoteMain extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void search(String text){
-//        Log.d("TAAAAAGGGG",str+"");
-//        //기본적으로 보이는 arraylist를 지우고
-//        notelist.clear();
-//        if(text.length()==0){
-//            //edittext에 아무것도 없다면 기존datalist에 이를 복사한 datlistSearch를 넣어주고
-//            notelist.addAll(testlist);
-//            Log.d("testlist.size",testlist.size()+""); //아니 왜 안되다가 갑자기 또 되는거지..
-//        }else{
-//
-//            for(int i=0; i<testlist.size(); i++){
-//                String choName = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteTitle(), text); //제목
-//                String choContent = HangulUtils.getHangulInitialSound(testlist.get(i).getNoteContent(), text); //내용
-//                //문자의 text가 하나라도 써져있다면 이에 해당하는 itemlist를 추가.
-//                if(choName.indexOf(text)>=0 || choContent.indexOf(text)>=0){
-//                    notelist.add(testlist.get(i));
-//                }
-//            }
-//        }
-//
-//        noteAdapter.notifyDataSetChanged();
-//    }
-
-
 
     public void Dataload(){
         try {
@@ -253,7 +203,7 @@ public class NoteMain extends AppCompatActivity {
 
     public void ClikNationSelction2(View view) {
         fab.close(true); //자동으로 닫히도록.
-        Intent intent = new Intent(this, SelectNation.class);
+        Intent intent = new Intent(this, NationSelectNation.class);
         startActivity(intent);
     }
 

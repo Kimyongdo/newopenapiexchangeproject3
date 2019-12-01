@@ -1,10 +1,12 @@
 package exchange.example.newopenapiexchangeproject3;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.newopenapiexchangeproject3.R;
@@ -28,6 +30,7 @@ public class UpdateNote extends AppCompatActivity {
         //툴바
         Toolbar toolbar;
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("공지사항");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -56,4 +59,16 @@ public class UpdateNote extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home :{
+                Intent intent = new Intent(this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
 }

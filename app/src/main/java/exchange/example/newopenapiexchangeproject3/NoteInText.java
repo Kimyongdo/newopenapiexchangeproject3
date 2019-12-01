@@ -51,7 +51,7 @@ import static exchange.example.newopenapiexchangeproject3.NoteText.notelist;
 
 public class NoteInText extends AppCompatActivity {
 
-    //<두번째 textnote>
+    //<두번째 textnote - 보통 수정하려고 할 때 >
 
 
     ImageView iv_done_second;
@@ -241,7 +241,8 @@ public class NoteInText extends AppCompatActivity {
         et_title_reader_second = et_title_second.getText().toString();
         et_content_reader_second= et_content_second.getText().toString();
         save=911; //저장토큰
-        notelist.set(number,new NoteVO(GlobalTime.noetime,et_title_reader_second, et_content_reader_second)); //여기서 바뀜.
+        //여기서 날짜가. 새롭게 받아들이는거라 문제가 되는 듯.
+        notelist.set(number,new NoteVO(notelist.get(number).getNoteDate(),et_title_reader_second, et_content_reader_second)); //여기서 바뀜.
         noteAdapter.notifyDataSetChanged();
         //키보드 내리기
         imm.hideSoftInputFromWindow(et_title_second.getWindowToken(),0);

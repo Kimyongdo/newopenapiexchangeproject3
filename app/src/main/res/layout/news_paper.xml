@@ -48,15 +48,24 @@
             android:onClick="clickNewsBtn"
             />
 
-        <ImageView
+        <at.markushi.ui.CircleButton
             android:layout_alignParentRight="true"
             android:id="@+id/newsSetting"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/settingsss"
+            android:src="@drawable/plus"
             android:layout_centerVertical="true"
-            android:onClick="clickSetting"
-            />
+            android:onClick="clickSetting" />
+
+<!--        <ImageView-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:id="@+id/newsSetting"-->
+<!--            android:layout_width="25dp"-->
+<!--            android:layout_height="25dp"-->
+<!--            android:src="@drawable/plus"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:onClick="clickSetting"-->
+<!--            />-->
 
 
     </RelativeLayout>

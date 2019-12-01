@@ -31,6 +31,7 @@ import java.util.TimeZone;
 
 import static exchange.example.newopenapiexchangeproject3.MainActivity.datas;
 
+
 public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
 
     ArrayList<Itemlist_nation> NSdata;
@@ -153,9 +154,16 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
                                 datas.add(new Itemlist(JsonExchangeRate.cur_nm[a], JsonExchangeRate.cur_unit[a], JsonExchangeRate.kftc_deal_bas_r[a], JsonExchangeRate.iv_nationflag[a]
                                         , GlobalTime.newstime2, GlobalTime.dateFormat2[a].format(GlobalTime.date2),
                                         WeatherJSon.todayC1[a], WeatherJSon.todayweather[a], GlobalTime.timedifferent[a]
+
                                 ));
-                                MainActivity.recyclerAdapter.notifyDataSetChanged();
+
+//                                datasCopy.add(new Itemlist(JsonExchangeRate.cur_nm[a], JsonExchangeRate.cur_unit[a], JsonExchangeRate.kftc_deal_bas_r[a], JsonExchangeRate.iv_nationflag[a]
+//                                        , GlobalTime.newstime2, GlobalTime.dateFormat2[a].format(GlobalTime.date2),
+//                                        WeatherJSon.todayC1[a], WeatherJSon.todayweather[a], GlobalTime.timedifferent[a]
+//
+//                                ));
                                 DataSave();
+                                MainActivity.recyclerAdapter.notifyDataSetChanged();
                             }//추가 된 상태
                         }
 
@@ -164,15 +172,31 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
                     //추가를 한 후에 중복제거하기.
                     //확인해봤으나 누르는 속도가 너무 빨라서 datas의 size의 변경을 따라까지 못 함.
 
-//                    for(int k=0; k<datas.size(); k++){ //1번칸일때
+//                    for(int k=0; k<datasCopy.size(); k++){ //1번칸일때
 //                        for(int j=0; j<k; j++){ //0번 칸
-//                            if(datas.get(k).getCur_nm().equals(datas.get(j).getCur_nm())){ //0번과 1번칸을 비교
+//                            if(datasCopy.get(j).getCur_nm().equals(datasCopy.get(k).getCur_nm())){ //0번과 1번칸을 비교
 //                                Toast.makeText(context, "이미 추가되어있습니다.", Toast.LENGTH_SHORT).show();
-//                                datas.remove(k); //add했을때 맨 마지막에 추가된 것을 제거.
+//                                datasCopy.remove(k); //add했을때 맨 마지막에 추가된 것을 제거.
+//                                k--; //제거하고 한발짝 뒤로 옮김.
+//                                DataSave();
+//                                MainActivity.recyclerAdapter.notifyItemRemoved(k);
 //                            }
 //                        }
 //                    }
-//                    MainActivity.recyclerAdapter.notifyItemRemoved(k);
+
+//                    for(int k=0; k<datas.size(); k++){ //1번칸일때
+//                        for(int j=0; j<k; j++){ //0번 칸
+//                            if(datas.get(j).getCur_nm().equals(datas.get(k).getCur_nm())){ //0번과 1번칸을 비교
+//                                Toast.makeText(context, "이미 추가되어있습니다.", Toast.LENGTH_SHORT).show();
+//                                datas.remove(k); //add했을때 맨 마지막에 추가된 것을 제거.
+//                                k--; //제거하고 한발짝 뒤로 옮김.
+//                                DataSave();
+//                                MainActivity.recyclerAdapter.notifyItemRemoved(k);
+//                            }
+//                        }
+//                    }
+
+
                 }
             });
         }

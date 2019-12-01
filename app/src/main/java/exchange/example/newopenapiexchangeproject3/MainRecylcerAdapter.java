@@ -2,6 +2,7 @@ package exchange.example.newopenapiexchangeproject3;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +29,18 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import static exchange.example.newopenapiexchangeproject3.MainActivity.datas;
+
 
 //https://stackoverflow.com/questions/35500322/expand-and-collapse-cardview/54156690#54156690 카드뷰 느는건 참고하도록 하자
-public class RecylcerAdapter extends RecyclerView.Adapter {
+public class MainRecylcerAdapter extends RecyclerView.Adapter {
 
-    ArrayList<Itemlist> datas;
+    ArrayList<Itemlist> datasCopy;
     Context context;
 
 
-    public RecylcerAdapter(ArrayList<Itemlist> datas, Context context) {
-        this.datas = datas;
+    public MainRecylcerAdapter(ArrayList<Itemlist> datasCopy, Context context) {
+        this.datasCopy = datasCopy;
         this.context = context;
     }
 
@@ -64,7 +67,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
         final VH vh = (VH)holder;
-        final Itemlist itemlist = datas.get(position);  //itemlist가 화물칸마다 position으로 연결
+        final Itemlist itemlist = datasCopy.get(position);  //itemlist가 화물칸마다 position으로 연결
 
         //환율
         vh.flag_name.setText(itemlist.getCur_nm());
@@ -88,7 +91,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return datasCopy.size();
     }
 
     //XML 위치 연결
@@ -141,7 +144,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
 
 
             //시간
-             TodayC = itemView.findViewById(R.id.tv_TodayC);
+            TodayC = itemView.findViewById(R.id.tv_TodayC);
             WeatherConditon = itemView.findViewById(R.id.tv_WeahterCondtion);
             newtime_diffet = itemView.findViewById(R.id.cardview_news_dattime_different);
 
@@ -157,9 +160,11 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     int a= getAdapterPosition();
+                    a=a%22;
+                    Log.d("선택번호",a+"");
                     SearchNaverJson1 searchNaverJson1 = new SearchNaverJson1(); //여기로 하나로 고정해도 괜찮지 않을까?? 11060916
                     for(int i=0; i<22; i++){
-                        switch (datas.get(a).getCur_unit()){ //
+                        switch (datasCopy.get(a).getCur_unit()){ //
                             case "AED"://아랍에미리트 디르함cardview_news_dattime_global
                                 searchNaverJson1.searching("아랍에미리트",0);
                                 Intent intent0 = new Intent(context, NationIntent.class);
@@ -219,7 +224,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                                 break;
                             case "DKK"://덴마크
                                 searchNaverJson1.searching("덴마크",6);
-                                 intent0 = new Intent(context, NationIntent.class);
+                                intent0 = new Intent(context, NationIntent.class);
                                 intent0.putExtra("i",6);
                                 intent0.putExtra("name","Denmark");
                                 intent0.putExtra("time","Europe/Copenhagen");
@@ -292,7 +297,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                             case "MYR"://말레이지아
                                 searchNaverJson1.searching("말레이지아",14);
                                 intent0 = new Intent(context, NationIntent.class);
-                                intent0.putExtra("i",1);
+                                intent0.putExtra("i",14);
                                 intent0.putExtra("name","Malaysia");
                                 intent0.putExtra("time","Asia/Kuala_Lumpur");
                                 intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -375,10 +380,10 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     int position = getLayoutPosition();
                     if(position!=RecyclerView.NO_POSITION){
-                        if(datas.size()==0) return;
-                        datas.remove(position);
+                        if(datasCopy.size()==0) return;
+                        datasCopy.remove(position);
                         notifyItemRemoved(position);
-                        DataSave();
+                        DataSave2();
                     }
 
                 }
@@ -388,7 +393,7 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
 
 
 
-    public void DataSave(){
+    public void DataSave2(){
         try {
             File file = new File(context.getFilesDir(),"t.tmp");
             FileOutputStream fos  = new FileOutputStream(file);
@@ -401,4 +406,5 @@ public class RecylcerAdapter extends RecyclerView.Adapter {
             e.printStackTrace();
         }
     }
+
 }

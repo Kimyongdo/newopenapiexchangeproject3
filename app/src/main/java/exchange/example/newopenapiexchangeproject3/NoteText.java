@@ -128,10 +128,6 @@ public class NoteText extends AppCompatActivity {
         beforeEtTitle = et_title.length();
         beforeEtContent = et_content.length();
 
-        Log.d("before",beforeEtContent+"");
-        Log.d("before",beforeEtTitle+"");
-
-
 
         et_title.addTextChangedListener(new TextWatcher() {
             @Override
@@ -215,7 +211,8 @@ public class NoteText extends AppCompatActivity {
     //확인 눌렀을 경우 반복되는 메소드 압축함.
     public void noelistGroup(){
         //여기서는 이거 add하나만으로도 변경가능했음.
-        notelist.add(0,new NoteVO(GlobalTime.noetime,et_title_reader, et_content_reader));
+        notelist.add(0,new NoteVO(GlobalTime.noetime,et_title_reader, et_content_reader)); //가장 먼저. 했는데도 흠.
+        
         save=911; //저장토큰 토큰 기본값을 0으로 주면 안됨. int 초기값 자체가 0
         imm.hideSoftInputFromWindow(et_title.getWindowToken(),0);
         imm.hideSoftInputFromWindow(et_content.getWindowToken(),0);

@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
 
-    <stroke android:color="#BDBDBD" android:width="1dp"/>
+    <stroke android:color="@color/colorGreen" android:width="1dp"/>
     <corners android:radius="4dp"/>
 
 <!--    일단 만들기는 했으나 기존에 그냥 숫자만 있는게 더 깔끔해보임..-->

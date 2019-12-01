@@ -3,6 +3,7 @@ package exchange.example.newopenapiexchangeproject3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -101,9 +102,9 @@ public class KaKaoLoginclass extends AppCompatActivity {
                 public void onSuccess(UserProfile userProfile) {
                     //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                //    Log.e("UserProfile", userProfile.getNickname());
-                //    Log.e("UserProfile", userProfile.getThumbnailImagePath());
-                //    Log.e("UserProfile", userProfile.getId() + "");
+                    //    Log.e("UserProfile", userProfile.getNickname());
+                    //    Log.e("UserProfile", userProfile.getThumbnailImagePath());
+                    //    Log.e("UserProfile", userProfile.getId() + "");
                     long nicknumber = userProfile.getId(); //카톡 고유번호
                     String nickname = userProfile.getNickname(); //이름
                     String nickimage = userProfile.getProfileImagePath(); //이미지
@@ -119,6 +120,7 @@ public class KaKaoLoginclass extends AppCompatActivity {
                     KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
 
                     Toast.makeText(KaKaoLoginclass.this, "로그인 완료", Toast.LENGTH_SHORT).show();
+
                     //바로 인텐트하고 finish 하면 스레드로 인해 적용이 바로 안됨.
                 }
 

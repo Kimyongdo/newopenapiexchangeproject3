@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -65,14 +66,25 @@ public class NoteSearching extends AppCompatActivity {
 //        testlistcopy.addAll(searchlist);
 
 
-
+//키패드에 있는 엔터키를 눌렀을 때 반응하도록.
+        noteEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode== KeyEvent.KEYCODE_ENTER)  ){
+                    String keywrod = null;
+                    keywrod = noteEditText.getText().toString();
+                    NewsNaverSearch.NewSearching(keywrod);
+                    return  true;
+                }
+                return false;
+            }
+        });
         //recylerview main에서 아이템클릭리스너로 전체 잡기. -> 체크박스도 여기서 바꾸면 되겠다 adapter에서 하나씩 바꾸려다가는 힘드니까.
         notesearchlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 noteSearchAdapter.getItem(i);
                 int actualPostion=notelistcopy.indexOf(noteSearchAdapter.getItem(i));
-                Toast.makeText(NoteSearching.this, actualPostion+"", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(NoteSearching.this, NoteInText.class); //이거랑 왜 noteintext와 연동되는지 모르겠음.. ---- 근데 일단 작동은 함..
                 intent.putExtra("number2",actualPostion);
                 intent.putExtra("searchingToken",555); //필터 된 후의 내용이 오류가 뜸.
@@ -100,7 +112,6 @@ public class NoteSearching extends AppCompatActivity {
 
 
     public void search(String text){
-        Log.d("TAAAAAGGGG",str+"");
         //adapter에 추가한 list를 기반으로하고 이를 복제한 list로 바꾸면서 보여지는 것.
         notesearchlistview.setVisibility(View.VISIBLE);
         testlistcopy.clear();

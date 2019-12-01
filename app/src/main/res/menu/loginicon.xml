@@ -6,6 +6,7 @@
         android:id="@+id/menu_lock"
         android:title="login"
         app:showAsAction="always"
+        
         />
 
 </menu>

@@ -317,6 +317,7 @@ public class CalCalculator extends AppCompatActivity  {
                 dialog.dismiss();
             }
         });
+
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
