@@ -85,10 +85,10 @@ public class NewsKeywordAdapter extends RecyclerView.Adapter {
                     int a= getAdapterPosition();
                     String keyWordReader = keywords.get(a).getKeywrod();
                    //여기서 녹색판별하고 다 흰색
-                    keyWord.setTextColor(Color.parseColor("#47C83E"));
-                    for(int i=0; i<keywords.size(); i++){
-
-                    }
+//                    keyWord.setTextColor(Color.parseColor("#47C83E"));
+//                    for(int i=0; i<keywords.size(); i++){
+//
+//                    }
 
 
 

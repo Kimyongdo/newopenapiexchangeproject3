@@ -149,7 +149,9 @@ public class NoteMain extends AppCompatActivity {
         noteAdapter = new NoteAdapter(this);
         noteRecycler.setAdapter(noteAdapter);
 
-        nicknumber=kakaodatas.get(0).getNicknumber(); //static 공부 부족, 여기서 다시 한번 써놓으니 인식함.
+        if(nicknumber!=0){ //비로그인시 팅김.
+            nicknumber=kakaodatas.get(0).getNicknumber(); //static 공부 부족, 여기서 다시 한번 써놓으니 인식함.
+        }
         //데이터스를 로드.
         if(nicknumber!=0.0){
             Log.d("닉넘버2",nicknumber+"");

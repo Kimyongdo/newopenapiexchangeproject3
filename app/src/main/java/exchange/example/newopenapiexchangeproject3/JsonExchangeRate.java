@@ -34,7 +34,7 @@ public class JsonExchangeRate {
         String mykey = "2u3tcj729pppDBhULM3oFrRI7iRfkGlQ";
         String url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?"
                 +"authkey="+mykey        //인증키
-                +"&searchdate="+20191122  //날짜               주말에 null 값으로 변화되서 아무것도 나오지 않음.. 흠..... 대책이 필요함.
+                +"&searchdate="+dateStr  //날짜               주말에 null 값으로 변화되서 아무것도 나오지 않음.. 흠..... 대책이 필요함.
                 +"&data=AP01";           //(성공==AP01
         StringRequest request = new StringRequest(             //Volley 라이브러리
                 Request.Method.GET,
