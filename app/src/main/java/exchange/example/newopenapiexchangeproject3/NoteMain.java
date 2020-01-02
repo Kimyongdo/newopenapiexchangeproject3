@@ -149,20 +149,17 @@ public class NoteMain extends AppCompatActivity {
         noteAdapter = new NoteAdapter(this);
         noteRecycler.setAdapter(noteAdapter);
 
+        nicknumber=kakaodatas.get(0).getNicknumber(); //static 공부 부족, 여기서 다시 한번 써놓으니 인식함.
+        //데이터스를 로드.
+        if(nicknumber!=0.0){
+            Log.d("닉넘버2",nicknumber+"");
+           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함(수정완료)
+            NoteLoadFromDB(); //여기서 notelist는 완성임. --> 돋보기를 누른다고 한다면
 
+        }else{
+            Dataload();   //휴대폰 내부 데이터 로드
 
-        //여기 문제임
-//        nicknumber=kakaodatas.get(0).getNicknumber(); //static 공부 부족, 여기서 다시 한번 써놓으니 인식함.
-//        //데이터스를 로드.
-//        if(nicknumber!=0.0){
-//            Log.d("닉넘버2",nicknumber+"");
-//           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함(수정완료)
-//            NoteLoadFromDB(); //여기서 notelist는 완성임. --> 돋보기를 누른다고 한다면
-//
-//        }else{
-//            Dataload();   //휴대폰 내부 데이터 로드
-//
-//        }
+        }
 
 
         noteAdapter.notifyDataSetChanged();
