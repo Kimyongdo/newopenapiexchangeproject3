@@ -3,7 +3,6 @@
     package="com.example.newopenapiexchangeproject3">
 
     <uses-permission android:name="android.permission.INTERNET" />
-<!--    여기 퍼미션을 안줘서 문제가 생긴건가.?-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -34,7 +33,7 @@
         <activity
             android:name="exchange.example.newopenapiexchangeproject3.CalCalculator"
             android:windowSoftInputMode="stateAlwaysVisible" />
-        <activity android:name="exchange.example.newopenapiexchangeproject3.NationIntent.NationIntent" />
+        <activity android:name="exchange.example.newopenapiexchangeproject3.NationIntent" />
         <activity android:name="exchange.example.newopenapiexchangeproject3.newsWebview" />
         <activity android:name="exchange.example.newopenapiexchangeproject3.NationSelectNation" />
         <activity android:name="exchange.example.newopenapiexchangeproject3.MainActivity">

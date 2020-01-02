@@ -1,8 +1,4 @@
-package exchange.example.newopenapiexchangeproject3.NationIntent;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+package exchange.example.newopenapiexchangeproject3;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -13,15 +9,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import exchange.example.newopenapiexchangeproject3.JsonExchangeRate;
-import exchange.example.newopenapiexchangeproject3.GlobalTime;
-import exchange.example.newopenapiexchangeproject3.MainActivity;
-import com.example.newopenapiexchangeproject3.R;
-import exchange.example.newopenapiexchangeproject3.SearchNaverJson1;
-import exchange.example.newopenapiexchangeproject3.WeatherJSon;
-import exchange.example.newopenapiexchangeproject3.newsWebview;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
+import com.example.newopenapiexchangeproject3.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +26,6 @@ import static exchange.example.newopenapiexchangeproject3.GlobalTime.newstime2;
 import static exchange.example.newopenapiexchangeproject3.GlobalTime.sdf2;
 import static exchange.example.newopenapiexchangeproject3.GlobalTime.timeSubstract;
 import static exchange.example.newopenapiexchangeproject3.GlobalTime.timeZone2;
-import static exchange.example.newopenapiexchangeproject3.GlobalTime.timedifferent;
 
 public class NationIntent extends AppCompatActivity {
 
@@ -65,16 +57,16 @@ public class NationIntent extends AppCompatActivity {
 
     int i;
     String NationTime;
+    String NationName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nation_intent);
 
-
-
+        //인텐트받기.
         Intent intent = getIntent();
-        String NationName = intent.getStringExtra("name");
+        NationName = intent.getStringExtra("name");
         NationTime = intent.getStringExtra("time");
         i = intent.getIntExtra("i",0);
 
@@ -88,8 +80,8 @@ public class NationIntent extends AppCompatActivity {
         TextView tvTime;
         TextView tvWeather;
         TextView newsNote;
-        //맨 위 이름
 
+        //폰트변경
         AssetManager assetManager = getAssets();
         Typeface typeface = Typeface.createFromAsset(assetManager,"Fonts/lottemart.ttf");
 
@@ -111,8 +103,7 @@ public class NationIntent extends AppCompatActivity {
             //시간
             tv_D_NationGlobalTime = findViewById(R.id.tv_D_NationGlobalTime);
             tv_D_NationNowTime = findViewById(R.id.tv_D_NationNowTime);
-            //tv_D_NationNowTimeDifferent = findViewById(R.id.tv_D_NationNowTimeDifferent);
-              tv_D_timedifferentSubtract = findViewById(R.id.tv_D_timesubstract);
+            tv_D_timedifferentSubtract = findViewById(R.id.tv_D_timesubstract);
 
             //날씨
             iv_D_NationWehaterImage = findViewById(R.id.iv_D_NationWeahterImage);
@@ -132,12 +123,12 @@ public class NationIntent extends AppCompatActivity {
 
         //정보받기
         //환율
-        Glide.with(this).load(JsonExchangeRate.iv_nationflag[i]).into(iv_D_Nationflag);
-        tv_D_NationName.setText(JsonExchangeRate.cur_nm[i]);
+        Glide.with(this).load(JsonExchangeRate.iv_nationflag.get(i)).into(iv_D_Nationflag);
+        tv_D_NationName.setText(JsonExchangeRate.cur_nm.get(i));
         tv_D_NationName.setTypeface(typeface);
-        tv_D_NationMoeny.setText(JsonExchangeRate.cur_unit[i]);
+        tv_D_NationMoeny.setText(JsonExchangeRate.cur_unit.get(i));
         tv_D_NationMoeny.setTypeface(typeface);
-        tv_D_NationExchange.setText(JsonExchangeRate.kftc_deal_bas_r[i]);
+        tv_D_NationExchange.setText(JsonExchangeRate.kftc_deal_bas_r.get(i));
         tv_D_NationExchange.setTypeface(typeface);
 
         //시간
@@ -148,7 +139,6 @@ public class NationIntent extends AppCompatActivity {
         tv_D_NationGlobalTime.setTypeface(typeface);
         tv_D_NationNowTime.setText(GlobalTime.newstime2);
         tv_D_NationNowTime.setTypeface(typeface);
-       // tv_D_NationNowTimeDifferent.setText(timedifferent[i]);
         tv_D_timedifferentSubtract.setTypeface(typeface);
         tv_D_timedifferentSubtract.setText(timeSubstract[i]);
 
@@ -221,29 +211,19 @@ public class NationIntent extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
-//
-//    @Override
-//    public void onBackPressed() {
-//        //뒤로가기 누르면 계속 원래 페이지를 보여준다. 그래서 우선 intent를 시킴. 임시방편임.
-//        super.onBackPressed();
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//        finish();
-//    }
-
 
     @Override
     protected void onPause() {
         super.onPause();
         TimeThread timeThread = new TimeThread();
-        timeThread.interrupt(); //이거 좀 더 공부해봐야할듯  stop과 interrupt 상태표시
+        timeThread.interrupt();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         TimeThread timeThread = new TimeThread();
-        timeThread.interrupt(); //이거 좀 더 공부해봐야할듯  stop과 interrupt 상태표시
+        timeThread.interrupt();
     }
 
     class TimeThread extends Thread{
@@ -267,6 +247,7 @@ public class NationIntent extends AppCompatActivity {
                     }
                 });
 
+                //1초마다 보이도록
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

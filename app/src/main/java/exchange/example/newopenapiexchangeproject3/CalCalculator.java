@@ -30,6 +30,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.kftc_deal_bas_r;
+
 public class CalCalculator extends AppCompatActivity  {
 
     //리스트뷰
@@ -122,8 +124,8 @@ public class CalCalculator extends AppCompatActivity  {
                         }
 
                         //String으로 받아왔을 경우 ,와 . 를 제거해줌.
-                        String KftcUp = JsonExchangeRate.kftc_deal_bas_r[nationPostionUp];
-                        String KftcDown = JsonExchangeRate.kftc_deal_bas_r[nationPostionDown];
+                        String KftcUp = kftc_deal_bas_r.get(nationPostionUp);
+                        String KftcDown = kftc_deal_bas_r.get(nationPostionDown);
 
                         KftcUp = KftcUp.replace(",", "");
 //                        KftcUp = KftcUp.replace(".", ""); //.까지 지우면 숫자가 훨씬 더 커지니까 여기서 변경
@@ -206,8 +208,8 @@ public class CalCalculator extends AppCompatActivity  {
                             et_number2.setText(result2);
                             et_number2.setSelection(result2.length());
                         }
-                        String KftcUp = JsonExchangeRate.kftc_deal_bas_r[nationPostionUp];
-                        String KftcDown = JsonExchangeRate.kftc_deal_bas_r[nationPostionDown];
+                        String KftcUp = kftc_deal_bas_r.get(nationPostionUp);
+                        String KftcDown = kftc_deal_bas_r.get(nationPostionDown);
 
                         //여기에 숫자가 있는 상황 EX) 1,062.09라면
                         KftcUp = KftcUp.replace(",", "");
@@ -263,8 +265,8 @@ public class CalCalculator extends AppCompatActivity  {
        ////////////////////////////////////////////////////////////////////////////////
 
         //다이얼로그 리사이클러뷰
-        for(int i=0; i<22; i++){
-            dialog_arraylist.add(new CalAlertVO(JsonExchangeRate.cur_nm[i], JsonExchangeRate.iv_nationflag[i]));
+        for(int i=0; i<JsonExchangeRate.cur_unit.size(); i++){
+            dialog_arraylist.add(new CalAlertVO(JsonExchangeRate.cur_nm.get(i), JsonExchangeRate.iv_nationflag.get(i)));
         }
 
     }////////////////////////////////////////oncreate//////////////////////////////////////////////////////////
@@ -308,9 +310,9 @@ public class CalCalculator extends AppCompatActivity  {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Glide.with(CalCalculator.this).load(JsonExchangeRate.iv_nationflag[position]).into(iv_CompareNation1);
-                tv_name.setText(JsonExchangeRate.cur_nm[position]);
-                tv_currency.setText(JsonExchangeRate.cur_unit[position]);
+                Glide.with(CalCalculator.this).load(JsonExchangeRate.iv_nationflag.get(position)).into(iv_CompareNation1);
+                tv_name.setText(JsonExchangeRate.cur_nm.get(position));
+                tv_currency.setText(JsonExchangeRate.cur_unit.get(position));
                 nationPostionUp = position;
                 et_number.setText("");
                 et_number2.setText("");
@@ -339,9 +341,9 @@ public class CalCalculator extends AppCompatActivity  {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Glide.with(CalCalculator.this).load(JsonExchangeRate.iv_nationflag[position]).into(iv_CompareNation2);
-                tv_name2.setText(JsonExchangeRate.cur_nm[position]);
-                tv_currency2.setText(JsonExchangeRate.cur_unit[position]);
+                Glide.with(CalCalculator.this).load(JsonExchangeRate.iv_nationflag.get(position)).into(iv_CompareNation2);
+                tv_name2.setText(JsonExchangeRate.cur_nm.get(position));
+                tv_currency2.setText(JsonExchangeRate.cur_unit.get(position));
                 nationPostionDown = position;
                 et_number.setText("");
                 et_number2.setText("");

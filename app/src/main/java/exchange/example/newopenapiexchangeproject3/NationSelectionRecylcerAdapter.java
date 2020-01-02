@@ -72,7 +72,7 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        for(int i=0; i<22; i++){
+        for(int i=0; i<JsonExchangeRate.cur_unit.size(); i++){
             date[i] = new Date();
             dateFormat[i] = new SimpleDateFormat("yy-MM-dd a hh:mm"); //그 나라 시간.
             timeZone[i]  = TimeZone.getTimeZone("Asia/Dubai"); //그 나라 표준시
@@ -82,8 +82,8 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
         }
 
         //중복체크 위한 자료
-        for(int a=0; a<22; a++){
-            OverlapNsdata.add(new Itemlist(JsonExchangeRate.cur_nm[a], JsonExchangeRate.cur_unit[a], JsonExchangeRate.kftc_deal_bas_r[a], JsonExchangeRate.iv_nationflag[a]
+        for(int a=0; a<JsonExchangeRate.cur_unit.size(); a++){
+            OverlapNsdata.add(new Itemlist(JsonExchangeRate.cur_nm.get(a), JsonExchangeRate.cur_unit.get(a), JsonExchangeRate.kftc_deal_bas_r.get(a), JsonExchangeRate.iv_nationflag.get(a)
                     , GlobalTime.newstime2, GlobalTime.dateFormat2[a].format(GlobalTime.date2),
                     WeatherJSon.todayC1[a], WeatherJSon.todayweather[a], GlobalTime.timedifferent[a]
             ));
@@ -140,7 +140,7 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     int a = getAdapterPosition(); //내가 선택한 숫자가 나옴.
 
-                    a=a%22;                   //이렇게 하면 ArrayoutofBounds을 잘 막을 수 있음.
+                    a=a%JsonExchangeRate.cur_unit.size();                   //이렇게 하면 ArrayoutofBounds을 잘 막을 수 있음.
                     if(a!=RecyclerView.NO_POSITION){  //이 코드를 추가해야 recyclerview ArrayoutofBounds의 발생을 막을 수 있다.
                         for(int i=0; i<NSdata.size(); i++) { //datas와 같은 크기.
                             if (a == i) { //22번 돌면서 a와 같은게 있다면
@@ -151,7 +151,7 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
 
 
                                 Toast.makeText(context, "성공적으로 추가하였습니다.", Toast.LENGTH_SHORT).show();
-                                datas.add(new Itemlist(JsonExchangeRate.cur_nm[a], JsonExchangeRate.cur_unit[a], JsonExchangeRate.kftc_deal_bas_r[a], JsonExchangeRate.iv_nationflag[a]
+                                datas.add(new Itemlist(JsonExchangeRate.cur_nm.get(a), JsonExchangeRate.cur_unit.get(a), JsonExchangeRate.kftc_deal_bas_r.get(a), JsonExchangeRate.iv_nationflag.get(a)
                                         , GlobalTime.newstime2, GlobalTime.dateFormat2[a].format(GlobalTime.date2),
                                         WeatherJSon.todayC1[a], WeatherJSon.todayweather[a], GlobalTime.timedifferent[a]
 

@@ -13,18 +13,18 @@ import java.util.Map;
 public class WeatherJSon {
 
     //이걸로 확인중
-    public static String[] todayCity = new String[22];
-    public static String[] todayNation= new String[22];
-    public static String[] todayIcon= new String[22];
-    public static String[]  todayC1= new String[22];
-    public static String[] todayweather = new String[22];
-    public static String[] todayIcon1= new String[22];
-    public static double[] todayF= new double[22];
-    public static int[] todayC= new int[22];
-    public static double[] todaywind1= new double[22];
-    public static String[] todaywind= new String[22];
-    public static double[] todayHum1= new double[22];
-    public static String[] todayHum= new String[22];
+     static String[] todayCity = new String[23];
+     static String[] todayNation= new String[23];
+     static String[] todayIcon= new String[23];
+     static String[]  todayC1= new String[23];
+     static String[] todayweather = new String[23];
+     static String[] todayIcon1= new String[23];
+     static double[] todayF= new double[23];
+     static int[] todayC= new int[23];
+     static double[] todaywind1= new double[23];
+     static String[] todaywind= new String[23];
+     static double[] todayHum1= new double[23];
+     static String[] todayHum= new String[23];
 
     static void WatherSendRequest(int cityid, final int q){
 
@@ -44,10 +44,9 @@ public class WeatherJSon {
                         Gson gson = new Gson();
                         int i;
                         WeatherJson weatherJson = gson.fromJson(response, WeatherJson.class); //Json 문서가 [ 로 시작하면 바로 배열부터 시작하는것이니 []로 시작해서 꺼내준다.
-                        if (weatherJson != null) { //먼저 숫자를 배정하는거지
+                        if (weatherJson != null) { //먼저 숫자를 배정하는거지 null 아닐경우까지 계속 돌림.
 
                             todayweather[q] = weatherJson.getWeather().get(0).getMain(); //오늘 날씨  //하나밖에 없으니까.
-
                             todayCity[q] = weatherJson.getName(); //서울  //0일때는 되고 k일때 되는거보면 우선적으로 값을 넣는게 맞아.
                             todayNation[q] = weatherJson.getSys().getCountry(); //대한민국
                             todayIcon1[q] = weatherJson.getWeather().get(0).getIcon(); //아이콘
@@ -59,8 +58,6 @@ public class WeatherJSon {
                             todaywind[q] = todaywind1[q] + "";
                             todayHum1[q] = weatherJson.getMain().getHumidity();
                             todayHum[q] = todayHum1[q] + "";
-
-
                         }
                     }
                 },

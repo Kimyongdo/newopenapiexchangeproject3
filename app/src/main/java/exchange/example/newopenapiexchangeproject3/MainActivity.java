@@ -25,7 +25,6 @@ import android.os.Bundle;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,16 +36,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.toolbox.Volley;
-
 import com.bumptech.glide.Glide;
 import com.example.newopenapiexchangeproject3.R;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
-import com.skyfishjy.library.RippleBackground;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,11 +52,19 @@ import java.io.ObjectOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGIN;
+import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGOUT;
+
 
 public class MainActivity extends AppCompatActivity {
-    String str;
+
+    //https://openweathermap.org/api/hourly-forecast 날씨 - json뷰로 도시 id추가 가능
+
+    //퍼미션
+    public static final int PHONEPERMISSION = 431;
+    public static final int KAKAOREUSLT = 333;
+
     //국가선택
     Context context;
     EditText et_nation_title;
@@ -94,14 +97,11 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     static NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
-    Toolbar toolbar;                                     //toolbar import시 appcompat->setsupport 가능해짐.
+    Toolbar toolbar;
     RecyclerView recyclerView;
 
     public static ArrayList<Itemlist> datas =new ArrayList<>();
     ArrayList<Itemlist> datasCopy =new ArrayList<>();
-
-
-
 
     static ArrayList<kakaoVO> kakaodatas  = new ArrayList<>();
     static MainRecylcerAdapter recyclerAdapter;
@@ -117,11 +117,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context=this;
 
-
-        //Log.d("nicknumber",nicknumber+"");//0나오는걸 확인
         if(nicknumber!=0){
             nicknumber=kakaodatas.get(0).getNicknumber();
-            Log.d("닉넘버",kakaodatas.get(0).getNicknumber()+"");
         }
 
         /////////////////////volley 라이브러리 생성//////////////////////////////
@@ -129,8 +126,7 @@ public class MainActivity extends AppCompatActivity {
             AddHelper.requestQueue = Volley.newRequestQueue(this);
         }
 
-        //이걸 주석으로 해도 I/Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
-
+        //환율, 시간, 날씨 api thread - MainThread와 같이 처리.
         Thread t = new Thread(){
             @Override
             public void run() {
@@ -141,29 +137,9 @@ public class MainActivity extends AppCompatActivity {
         t.start();
         try {
             t.join();
-            Log.d("threadsss","sssssss");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.d("threadsss","string");
-
-
-
-
-//        JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
-//        jsonExchangeRate.sendRequest();
-//
-//
-//        WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
-//        weahterCallMethod.WeahterCallMethod();
-//        //대량의 데이터 - 시간
-//        GlobalTime globalTime = new GlobalTime();
-//        globalTime.globaltime();
-//        globalTime.koreantime();
-//        globalTime.Notetime();
-        /////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
         //플로팅 버튼 외부 터치시 끝나도록.
         fab = findViewById(R.id.flaotingActionButton);
@@ -171,14 +147,13 @@ public class MainActivity extends AppCompatActivity {
         fabbtn_world = findViewById(R.id.menu_item_world);
         fabbtn_cal = findViewById(R.id.menu_item_calculator);
         fabbtn_text = findViewById(R.id.menu_item_text);
-        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world); //navigation item은 px상관없이 작게 들어가는데 비해 fab 속 이미지는 glide을 통해서 들어가야 사이즈 조절이 알맞게 가능함. wrap -> 24dp
+        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world);
         Glide.with(this).load(R.drawable.calculator1).into(fabbtn_cal);
         Glide.with(this).load(R.drawable.text).into(fabbtn_text);
 
         //레이아웃 연결
         drawerLayout = findViewById(R.id.layout_drawer);
         navigationView = findViewById(R.id.navi);
-
         navigationView.setItemIconTintList(null); //네비게이션 아이콘 보임.
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("환율");
@@ -188,34 +163,19 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState(); //화살표모양->삼선모양
 
 
-
-        //////////////////////////////////카카오톡 로그인 네비게이션뷰 연결/////////////////////////////////////////////////////
-
-
-        ///////퍼미션-전화번호부------여기도 아니네 퍼미션 위치 모아서 한번에 해야하는데 어디서 해애햐지??////////
-
+        //주소록 퍼미션 만들기.
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ //sdk version이 마시멜로우보다 높은 겨우
             int chekcedPersmission =checkSelfPermission(Manifest.permission.READ_CONTACTS);
             if(chekcedPersmission== PackageManager.PERMISSION_DENIED){ //처음에 거부되어있다면
-                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},431); //허가여부 다이얼로그 확인.
+                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},PHONEPERMISSION); //허가여부 다이얼로그 확인.
             }
         }
 
-
-        Dataload();//datas가 나오겠지. 스태틱이라서 꼬인게 아닐까 싶기도함. //datacopy가 나옴.
-        //Log.d("image3",datasCopy.get(0).getNationimage()+""); //여기선 값이 나오는데 -> 저장한 값은 잘 나왔음을 의미함.
-
-        //UpdateDataLoad();
-        //Log.d("image4",datasCopy.get(0).getNationimage()+""); //여기선 0이 나옴. 그러니까 에러가 남.
-
-        //리싸이클러 연결하기 - onCreate에서만 보임.
+        Dataload();
+        //리싸이클러 연결하기
         recyclerView = findViewById(R.id.recyclerview);
         recyclerAdapter = new MainRecylcerAdapter(datasCopy,this);
         recyclerView.setAdapter(recyclerAdapter);
-
-//        Log.d("image1",datasCopy.get(0).getNationimage()+"");
-//        Log.d("image2",R.drawable.a02_australia+"");
-
 
         /////////////////////////////////////////네비게이션//////////////////////////////////////////////////////////////////
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -231,36 +191,34 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.updateIcon:
                         Intent intent0 = new Intent(MainActivity.this, UpdateMain.class);
                         startActivity(intent0);
-                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        drawerLayout.closeDrawer(navigationView);
                         break;
                     case R.id.address:
-                        Intent intent1 = new Intent(MainActivity.this,Address.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        Intent intent1 = new Intent(MainActivity.this,Address.class);
                         startActivity(intent1);
-                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        drawerLayout.closeDrawer(navigationView);
                         break;
                     case R.id.rubbish:
-                        Intent intent2 = new Intent(MainActivity.this,NoteRubbish.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        Intent intent2 = new Intent(MainActivity.this,NoteRubbish.class);
                         startActivity(intent2);
-                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        drawerLayout.closeDrawer(navigationView);
                         break;
                     case R.id.newsSearch:
-                        Intent intent3 = new Intent(MainActivity.this,NewsPaper.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
+                        Intent intent3 = new Intent(MainActivity.this,NewsPaper.class);
                         startActivity(intent3);
-                        drawerLayout.closeDrawer(navigationView); //클릭 후 네비뷰 닫힘
+                        drawerLayout.closeDrawer(navigationView);
                         break;
                 }
                 return false;
             }
         });
 
-
-
         ///////////////////////////////////////새로고침 기능////////////////////////////////////////////////////////
         swipeRefreshLayout = findViewById(R.id.layout_refresh);
-        swiperefresh();
+        swiperefresh();//드래그시 이 함수 호출
 
         ////////////////////////////////////////////카카오 기능//////////////////////////////////////////////////
-        getHashKey();
+        //getHashKey();오프라인 카카오톡 로그인시 필요한 해시키.
 
         DataloadKakao();
 
@@ -283,23 +241,15 @@ public class MainActivity extends AppCompatActivity {
             navUsername.setText("Anonymous"+"님"); //유저이름+"님
             Glide.with(this).load(R.drawable.user).into(navUserimage);
         }
-
-
-
-
-
-        //업데이트 기능 - 끝쪽에 놔야 작동을- 대기시간이 필요한듯.
-        //UpdateDataLoad(); //와 이게 여기서 오류나는거였네 데이터 null 계속 나오는게.. 여기서 이미지가 안나오는거였네.. 아 찾았다 드디어 찾았네.
-
     }///////////////////////////////////////////////////onCreate//////////////////////////////////////////////////////////////////
 
 
-
+    //주소록 퍼미션 결과
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
-            case 431:
+            case PHONEPERMISSION://PUBLIC STATIC INT
                 if(grantResults.length>0){ //0보다 커야 main에서 오류뜨지 않고 잘 크게 됨. 여기서 다 쓸어넣자.
                     if(grantResults[0]==PackageManager.PERMISSION_DENIED){
                         Toast.makeText(this, "주소록 기능 사용 제한", Toast.LENGTH_SHORT).show();
@@ -308,25 +258,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 }
-
         }
     }
 
+    //Thread 및 자바함수(시간) 모음
     public void MyThread(){
         JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
         jsonExchangeRate.sendRequest();
         WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
         weahterCallMethod.WeahterCallMethod();
-        //대량의 데이터 - 시간
         GlobalTime globalTime = new GlobalTime();
         globalTime.globaltime();
         globalTime.koreantime();
         globalTime.Notetime();
     }
 
-
-
-    //oncreatemenu를 지우고 onpreapre+invaild 쓰면 바뀔때마다 적용됨.
+    //oncreatemenu를 지우고 onpreapre+invaild 쓰면 바뀔때마다 적용됨.(로그인->로그아웃)
     @Override
     protected void onResume() {
         super.onResume();
@@ -335,13 +282,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater(); //메뉴에서 가져올 인플레이터이므로 layout이 아닌 Menu
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.loginicon, menu);
         if(nicknumber!=0.0){
-            menu.getItem(0).setTitle("LOGOUT");
+            menu.getItem(0).setTitle("LOGOUT");//로그인번호 등록이 들어왔다면 Logout표시
         }
         return super.onPrepareOptionsMenu(menu);
-
     }
 
     @Override
@@ -349,20 +295,19 @@ public class MainActivity extends AppCompatActivity {
         int n = item.getItemId();
         switch (n){
             case R.id.menu_lock:
-                Intent intent = new Intent(this, KaKaoLoginclass.class); //여기로 들어가면 로그인 하도록 하고 싶은뎅.
-                startActivityForResult(intent,333);
-
+                Intent intent = new Intent(this, KaKaoLoginclass.class);
+                startActivityForResult(intent,KAKAOREUSLT);
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    //카카오톡에서 보낸 정보 받는 곳.
+    //startActivityForResult(intent,333);에서 보낸 카카오톡 정보 받아오기
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
-            case 333:
+            case KAKAOREUSLT:
                 if(resultCode==RESULT_OK){
                     //로그인 넘버로 판별식 짜야함.
                     nicknumber = data.getLongExtra("nicknumber",0);
@@ -377,26 +322,21 @@ public class MainActivity extends AppCompatActivity {
                     logoutcheckout  = data.getIntExtra("logout",0);
                     doLogout=data.getStringExtra("dologout");
 
-                    //카카오톡 프로필 이미지 사진 나옴.
-
+                    //네비게이션뷰 헤더부분 - 카카오톡 프로필 이미지 사진 나옴.
                     headerView = navigationView.getHeaderView(0);
                     navUsername = headerView.findViewById(R.id.tv_navi_header_name);
                     navUserimage = headerView.findViewById(R.id.iv_header);
 
-
-
                     //로그인
-                    if(logincheckin==124){
+                    if(logincheckin==KAKAOLOGIN){
                         Glide.with(this).load(kNickimage).into(navUserimage);
                         navUsername.setText(kNickname+"님"); //유저이름+"님"
                     }
                     //로그아웃
-                    else if(logoutcheckout==123){
+                    else if(logoutcheckout==KAKAOLOGOUT){
                         Glide.with(this).load(logoutImage).into(navUserimage);
                         navUsername.setText(logoutNickname+"님"); //유저이름+"님"
-
                     }
-
                     kakaodatas.add(0,new kakaoVO(kNickname,kNickimage,logincheckin,logoutNickname,logoutImage,logoutcheckout,nicknumber));
                     DataSaveKakao();
                 }
@@ -404,12 +344,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //카카오톡 로그인 정보 저장
     public void DataSaveKakao(){
         try {
             File file = new File(getFilesDir(),"kakao.tmp");
             FileOutputStream  fos  = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(kakaodatas); //현재의 datas를 저장.
+            oos.writeObject(kakaodatas);
             oos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -418,14 +359,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //카카오톡 로그인 정보 불러오기
     public void DataloadKakao(){
         try {
             File file = new File(getFilesDir(),"kakao.tmp");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            kakaodatas= (ArrayList<kakaoVO>) ois.readObject();  //앱 꺼도 새롭게 저장한 파일이 있음을 파악함.
+            kakaodatas= (ArrayList<kakaoVO>) ois.readObject();
             ois.close();
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -436,97 +377,68 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void DataSaveRubbish(){
-        try {
-            File file = new File(getFilesDir(),"rubbish");
-            FileOutputStream fos  = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(NoteRubbish.rubbishlist); //현재의 datas를 저장.
-            oos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
+    //Pause일때 업데이트 되도록
     @Override
     protected void onPause() {
         super.onPause();
         UpdateDataLoad();
     }
 
+
     public void search(String text){
         //adapter에 추가한 list를 기반으로하고 이를 복제한 list로 바꾸면서 보여지는 것.
         nationSelect.clear();
         nation.notifyDataSetChanged();
-
         if(text.length()==0){
             nationSelect.addAll(nationSelectCopy);
         }else{
-
             for(int i=0; i<nationSelectCopy.size(); i++){
                 String choName = HangulUtils.getHangulInitialSound(nationSelectCopy.get(i).getTv(), text); //제목
                 //문자의 text가 하나라도 써져있다면 이에 해당하는 itemlist를 추가.
                 if(choName.indexOf(text)>=0){
                     nationSelect.add(nationSelectCopy.get(i));
                 }
-//                if(notelistcopy.get(i).getNoteTitle().contains(text) || notelistcopy.get(i).getNoteContent().contains(text)){
-//                    testlistcopy.add(notelistcopy.get(i)); //계속 오류나는 이유가 필터를 써서 notelist의 개수가 줄어드는데 그걸 notelist에 number에 intent하려고하니 오류남.
-//                }
-
             }
         }
-
         nation.notifyDataSetChanged();
     }
-    //////////////////////////////FAB - 국가환율추가로 이동/////////////////////////////////////////////
+
+    //////////////////////////////FAB - 국가선택 - 환율추가로 이동/////////////////////////////////////////////
     public void ClikNationSelction(View view) {
+        //초성으로 찾을 수 있는 기능.
         nationSelect.clear();
         nationSelectCopy.clear();
 
-        for(int i=0; i<22; i++){
-            nationSelect.add(new nationVO(JsonExchangeRate.cur_nm[i], JsonExchangeRate.iv_nationflag[i]));
-        }//정보겟
+        //나라추가
+        for(int i=0; i<JsonExchangeRate.cur_nm.size(); i++){
+            nationSelect.add(new nationVO(JsonExchangeRate.cur_nm.get(i), JsonExchangeRate.iv_nationflag.get(i)));
+        }
         nationSelectCopy.addAll(nationSelect);
-
         fab.close(true); //자동으로 닫히도록.
-//        Intent intent = new Intent(this, NationSelectNation.class);
-//        startActivity(intent);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View view2 = inflater.inflate(R.layout.nation_dialog, null); //view2 레이아웃이 따로 발동 중
+        View view2 = inflater.inflate(R.layout.nation_dialog, null); //R.layout.nation_dialog 실행중
 
         et_nation_title = view2.findViewById(R.id.et_nation_title);
         et_nation_title.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 String str = et_nation_title.getText().toString();
                 search(str);
             }
         });
-
-
-
         builder.setView(view2);
-
         //다이얼로그의 커스텀뷰를 listview와 연결
         final ListView nationlistview = view2.findViewById(R.id.listviewSelct);
         final AlertDialog dialog = builder.create();
-
-
 
         nation = new natioDialongSelctionAdapter(nationSelect,context);
         nationlistview.setAdapter(nation);
@@ -534,15 +446,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int num=nationSelectCopy.indexOf(nation.getItem(position));
-                num=num%22;
+                //num=num%22;
 
-                datasCopy.add(new Itemlist(JsonExchangeRate.cur_nm[num], JsonExchangeRate.cur_unit[num], JsonExchangeRate.kftc_deal_bas_r[num], JsonExchangeRate.iv_nationflag[num]
+                datasCopy.add(new Itemlist(JsonExchangeRate.cur_nm.get(num), JsonExchangeRate.cur_unit.get(num), JsonExchangeRate.kftc_deal_bas_r.get(num), JsonExchangeRate.iv_nationflag.get(num)
                         , GlobalTime.newstime2, GlobalTime.dateFormat2[num].format(GlobalTime.date2),
                         WeatherJSon.todayC1[num], WeatherJSon.todayweather[num], GlobalTime.timedifferent[num]
 
                 ));
-                Log.d("kekekjeDone",JsonExchangeRate.cur_nm[num]+"");//여긴 국가이름이 잘 나오는데.
-                Toast.makeText(MainActivity.this, JsonExchangeRate.cur_nm[num]+" 추가 완료", Toast.LENGTH_SHORT).show();
+                //Log.d("kekekjeDone",JsonExchangeRate.cur_nm[num]+"");//여긴 국가이름이 잘 나오는데.
+                Toast.makeText(MainActivity.this, JsonExchangeRate.cur_nm.get(num)+" 추가 완료", Toast.LENGTH_SHORT).show();
 
                 for(int k=0; k<datasCopy.size(); k++){ //1번칸일때
                         for(int j=0; j<k; j++){ //0번 칸
@@ -559,19 +471,11 @@ public class MainActivity extends AppCompatActivity {
                dialog.dismiss();
             }
         });
-
-
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
-
-
     }
 
-
-
-
-
-    //뒤로가기 버튼을 눌렀을 경우, 네비게이션 화면이 열려있다면  닫혀라
+    //뒤로가기 - 네비게이션뷰 drawlayout, fab
     @Override
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -584,21 +488,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    //이게 뭡니까 왜 저장이 안됩니까 ㅠㅠ
-    @Override
-    protected void onStop() {
-        super.onStop();
-        DataSave();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        DataSave();
-    }
-
-    //load까지 다 했었었네..
+    //환율, 시간, 정보 불러오기
     public void Dataload(){
         try {
             File file = new File(getFilesDir(),"t.tmp");
@@ -613,9 +503,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
+    //환율, 시간, 정보 저장하기
     public void DataSave(){
         try {
             File file = new File(getFilesDir(),"t.tmp");
@@ -630,13 +520,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     //계산기로 이동
     public void clickCalculator(View view) {
         fab.close(true);
         Intent intent = new Intent(this, CalCalculator.class);
         startActivity(intent);
-
     }
 
     //메모장으로 이동
@@ -644,12 +532,7 @@ public class MainActivity extends AppCompatActivity {
         fab.close(true);
         Intent intent = new Intent(this, NoteText.class);
         startActivity(intent);
-
     }
-
-    //
-
-
 
     /////////////////////////////////////////////////////////새로고침기능//////////////////////////////////////////////////////////////
     public void swiperefresh(){
@@ -661,133 +544,118 @@ public class MainActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-    }//refresh
+    }//refres
+
+
 
     public void UpdateDataLoad(){
-
-        if(datasCopy.size()==0){
-            return; //0이여도 할게 없으니까 바로 종료해도 문제 없을 듯
-        }else{
             for(int i=0; i<datasCopy.size(); i++){
-                int k;
-                Log.d("sizesizesize",datasCopy.size()+"");
-                Log.d("sizesizeimage",datasCopy.get(0).getNationimage()+"");
-
-                switch (datasCopy.get(i).getNationimage()){ //여기서는 준비중입니다임.
+                int k=0;
+                switch (datasCopy.get(i).getNationimage()){
                     case R.drawable.a01_arabemirates:
-                        Log.d("sizesize2",datasCopy.get(0).getNationimage()+""); //여기까진 값이 나오는데.
-                        k=0; //숫자를 직접 입력해서 넣으면 OOM이 발생해서 오류가 뜬다.
-                        //시계는 같이 써야 작용한다.SearchNaverJson1를 써야 뉴스의 글씨가 나타난다!!!<----------매우중요.. ㅋㅋ 그럼 왜  static쓴거지 ㅠㅠ
-                        Log.d("sizesize2IK",i+" "+k+" "); //여기까진 값이 나오는데.
                         SetData(i,k);
-
                         break;
                     case R.drawable.a02_australia:
-                        Log.d("sizesize3",datasCopy.get(0).getNationimage()+"");
                         k=1;
                         SetData(i,k);
                         break;
-                    case R.drawable.a03_bahrain:
+                    case R.drawable.a03_1_bahrain:
                         k=2;
                         SetData(i,k);
                         break;
-                    case R.drawable.a04_canada:
+                    case R.drawable.a03_2_brunei:
                         k=3;
                         SetData(i,k);
                         break;
-                    case R.drawable.a05_switzerland:
+                    case R.drawable.a04_canada:
                         k=4;
                         SetData(i,k);
                         break;
-                    case R.drawable.a06_china:
+                    case R.drawable.a05_switzerland:
                         k=5;
                         SetData(i,k);
                         break;
-                    case R.drawable.a07_denmark:
+                    case R.drawable.a06_china:
                         k=6;
                         SetData(i,k);
                         break;
-                    case R.drawable.a08_europeaninion:
+                    case R.drawable.a07_denmark:
                         k=7;
                         SetData(i,k);
                         break;
-                    case R.drawable.a09_unitedkingdom:
+                    case R.drawable.a08_europeaninion:
                         k=8;
                         SetData(i,k);
                         break;
-                    case R.drawable.a10_hongkong:
+                    case R.drawable.a09_unitedkingdom:
                         k=9;
                         SetData(i,k);
                         break;
-                    case R.drawable.a11_indonesia:
+                    case R.drawable.a10_hongkong:
                         k=10;
                         SetData(i,k);
                         break;
-                    case R.drawable.a12_japan:
+                    case R.drawable.a11_indonesia:
                         k=11;
                         SetData(i,k);
                         break;
-                    case R.drawable.a13_korea:
+                    case R.drawable.a12_japan:
                         k=12;
                         SetData(i,k);
                         break;
-                    case R.drawable.a14_kuwait:
+                    case R.drawable.a13_korea:
                         k=13;
                         SetData(i,k);
                         break;
-                    case R.drawable.a15_malaysia:
+                    case R.drawable.a14_kuwait:
                         k=14;
                         SetData(i,k);
                         break;
-                    case R.drawable.a16_norway:
+                    case R.drawable.a15_malaysia:
                         k=15;
                         SetData(i,k);
                         break;
-                    case R.drawable.a17_newzealand:
+                    case R.drawable.a16_norway:
                         k=16;
                         SetData(i,k);
                         break;
-                    case R.drawable.a18_saudiarabia:
+                    case R.drawable.a17_newzealand:
                         k=17;
                         SetData(i,k);
                         break;
-                    case R.drawable.a19_sweden:
+                    case R.drawable.a18_saudiarabia:
                         k=18;
                         SetData(i,k);
                         break;
-                    case R.drawable.a20_singapore:
+                    case R.drawable.a19_sweden:
                         k=19;
                         SetData(i,k);
                         break;
-                    case R.drawable.a21_thailand:
+                    case R.drawable.a20_singapore:
                         k=20;
                         SetData(i,k);
                         break;
-                    case R.drawable.a22_usa:
+                    case R.drawable.a21_thailand:
                         k=21;
+                        SetData(i,k);
+                        break;
+                    case R.drawable.a22_usa:
+                        k=22;
                         SetData(i,k);
                         break;
                 }
 
             }
-            //swipeRefreshLayout.setRefreshing(false);
             DataSave();
-             recyclerAdapter.notifyDataSetChanged(); //이건 필요함.  근데 이거 onCreate에서는 이게 먼저 나오면 오류 아니냐 일단은 주석처리함 이거 다시 풀어야함
+            recyclerAdapter.notifyDataSetChanged();
         }
 
-    }
-
     public void SetData(int i, int k){
-
-        datasCopy.set(i,new Itemlist(JsonExchangeRate.cur_nm[k], JsonExchangeRate.cur_unit[k], JsonExchangeRate.kftc_deal_bas_r[k], JsonExchangeRate.iv_nationflag[k]
+        datasCopy.set(i,new Itemlist(JsonExchangeRate.cur_nm.get(k), JsonExchangeRate.cur_unit.get(k), JsonExchangeRate.kftc_deal_bas_r.get(k), JsonExchangeRate.iv_nationflag.get(k)
                 , GlobalTime.newstime2, GlobalTime.dateFormat2[k].format(GlobalTime.date2),
                 WeatherJSon.todayC1[k], WeatherJSon.todayweather[k], GlobalTime.timedifferent[k]
         ));
-
-        Log.d("kekekje",JsonExchangeRate.cur_nm[0]+""); //이게 null값이 나오네 여기서 null 안나오게 만들어야 자동업데이트가 가능함.
-
     }
-
 
     //카카오톡 해시값
     private void getHashKey(){
@@ -797,7 +665,7 @@ public class MainActivity extends AppCompatActivity {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-                    Log.d("카카오톡 해쉬코드","key_hash="+ Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                   // Log.d("카카오톡 해쉬코드","key_hash="+ Base64.encodeToString(md.digest(), Base64.DEFAULT));
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -812,12 +680,6 @@ public class MainActivity extends AppCompatActivity {
                 (byte)0xFD,(byte)0xE3,(byte)0x45,(byte)0xEE,(byte)0x6E,(byte)0x78,(byte)0xDA,
                 (byte)0x24,(byte)0x27,(byte)0x1D,(byte)0x63,(byte)0xFC,(byte)0x1F
         };
-        Log.e("카카오톡 해쉬코드 구글플레이", Base64.encodeToString(sha1, Base64.NO_WRAP));
-
-
+       // Log.e("카카오톡 해쉬코드 구글플레이", Base64.encodeToString(sha1, Base64.NO_WRAP));
     }
-
-
-
-
 }

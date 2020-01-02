@@ -28,8 +28,9 @@ public class KaKaoLoginclass extends AppCompatActivity {
 
 
     private static final String TAG = "";
+    public static final int KAKAOLOGOUT = 123;
+    public static final int KAKAOLOGIN = 124;
     SessionCallback callback;
-
     Button kakao_custom_login;
     LoginButton com_kakao_login;
 
@@ -41,7 +42,6 @@ public class KaKaoLoginclass extends AppCompatActivity {
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
         requestMe();
-
         kakao_custom_login = findViewById(R.id.kakao_custom_login);
         kakao_custom_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,20 +50,18 @@ public class KaKaoLoginclass extends AppCompatActivity {
             }
         });
         com_kakao_login = findViewById(R.id.com_kakao_login);
-
     }
 
-    //로그아웃 기능은 따로 설정 탭 만들어서 하는게 나을 수 있음. --> 한 로그인 페이지에 넣지 말자.
     public void kakao_logout(View view) {
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
             public void onCompleteLogout() {
                 Intent intent = getIntent();
-                intent.putExtra("logout",123);
-                intent.putExtra("logoutNickname","Anonymous");
-                intent.putExtra("logoutImage",R.drawable.user);
-                intent.putExtra("logoutNumber",5959);
-                KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
+                intent.putExtra("logout",KAKAOLOGOUT);
+                intent.putExtra("logoutNickname","Anonymous");//Anonymous
+                intent.putExtra("logoutImage",R.drawable.user);//유저그림
+                intent.putExtra("logoutNumber",5959);//
+                KaKaoLoginclass.this.setResult(RESULT_OK,intent); //RESULT_OK 전달
                 Toast.makeText(KaKaoLoginclass.this, "로그아웃 완료", Toast.LENGTH_SHORT).show();
             }
         });
@@ -112,28 +110,21 @@ public class KaKaoLoginclass extends AppCompatActivity {
                     String dologout = "Logout";
 
                     Intent intent = getIntent();
-                    intent.putExtra("login",124);
+                    intent.putExtra("login",KAKAOLOGIN);
                     intent.putExtra("nicknumber",nicknumber);
                     intent.putExtra("nickname",nickname);
                     intent.putExtra("nicknameimage",nickimage);
                     intent.putExtra("dologout",dologout);
-                    KaKaoLoginclass.this.setResult(RESULT_OK,intent); //이거 끝에 intent 또 빼먹네
-
+                    KaKaoLoginclass.this.setResult(RESULT_OK,intent);
                     Toast.makeText(KaKaoLoginclass.this, "로그인 완료", Toast.LENGTH_SHORT).show();
-
                     //바로 인텐트하고 finish 하면 스레드로 인해 적용이 바로 안됨.
                 }
-
-//여기다가 Toast를 하는 경우 mainThread와 인터넷 Thread의 차이로 null이 생성된다.
             });
-
 
         }
         // 세션 실패시
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-
-
         }
     }
 
@@ -143,7 +134,6 @@ public class KaKaoLoginclass extends AppCompatActivity {
             @Override
             public void onFailure(ErrorResult errorResult) {
                 Log.e(TAG, "error message=" + errorResult);
-//                super.onFailure(errorResult);
             }
             @Override
             public void onSessionClosed(ErrorResult errorResult) {
@@ -160,9 +150,5 @@ public class KaKaoLoginclass extends AppCompatActivity {
                 Log.e("UserProfile", result.getId() + "");
             }
         });
-
-
     }
-
-
 }

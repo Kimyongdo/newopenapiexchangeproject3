@@ -19,10 +19,9 @@ import java.util.Map;
 
 public class SearchNaverJson1 {
 
-    public  static  String[][] newstitle = new String[22][3];
-    public static  String[][] newsUrl = new String[22][3];
-    public static  String[][] newsContent = new String[22][3];
-    int k;
+     static  String[][] newstitle = new String[23][3];
+     static  String[][] newsUrl = new String[23][3];
+     static  String[][] newsContent = new String[23][3];
 
     public static void searching(String keyword, final int q){
         final String clientId ="rlPAa31qpMfyxB0oWzu9";
@@ -50,7 +49,7 @@ public class SearchNaverJson1 {
                         Gson gson = new Gson();
                         SearchApi searchApi = gson.fromJson(response, SearchApi.class);
 
-                        for (int i = 0; i < searchApi.getItems().size(); i++) {
+                        for (int i = 0; i < searchApi.getItems().size(); i++) { //i는 0 1 2 총 3개, == &display=3&에서 3을 의미함.
                             newstitle[q][i] = searchApi.getItems().get(i).getTitle(); //이 0번은 한 기사의 첫번쨰를 의미함.
                             newstitle[q][i] = newstitle[q][i].replaceAll("<b>", "");
                             newstitle[q][i] = newstitle[q][i].replaceAll("</b>", "");    //파싱 후 나오는 <b> </b>를 제거하기.
