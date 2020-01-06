@@ -35,9 +35,6 @@ import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.kftc_
 public class CalCalculator extends AppCompatActivity  {
 
     //리스트뷰
-    private static final String TAG_TEXT = "text";
-    private static final String TAG_IMAGE = "image";
-
     boolean et1Focus, et2Focus;
 
     DecimalFormat df = new DecimalFormat("###,###.####");
@@ -58,8 +55,8 @@ public class CalCalculator extends AppCompatActivity  {
     TextView tv_name2;
     TextView tv_currency2;
 
-    int nationPostionDown=21; //미국
-    int nationPostionUp=12; //한국
+    int nationPostionDown=22; //미국
+    int nationPostionUp=13; //한국
 
     ArrayList<CalAlertVO> dialog_arraylist = new ArrayList<>();
 
@@ -68,7 +65,7 @@ public class CalCalculator extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calaulator_main);
 
-        //툴바
+        //메뉴의 이름 적용하는 방법
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("환율계산기");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -76,10 +73,10 @@ public class CalCalculator extends AppCompatActivity  {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //뒤로가는 버튼 생성 및 클릭 시 뒤로 가기 됨.
 
         //첫번째 기준 환율
-        tv_name = findViewById(R.id.click_nation_name);
-        iv_CompareNation1=findViewById(R.id.click_nation_flag);
-        et_number=findViewById(R.id.click_nation_et);
-        tv_currency=findViewById(R.id.click_nation_name_currency);
+        tv_name = findViewById(R.id.click_nation_name);//이름
+        iv_CompareNation1=findViewById(R.id.click_nation_flag);//이미지
+        et_number=findViewById(R.id.click_nation_et);//edit_Text
+        tv_currency=findViewById(R.id.click_nation_name_currency);//환율이름
 
 
         //두번째 기준 환율
@@ -113,10 +110,9 @@ public class CalCalculator extends AppCompatActivity  {
 
                 if(et1Focus) {
                     String input = et_number.getText().toString().trim();
-                    //계속 지우기 누르면 끝에는 ""로 나오는데 이걸 double로 파싱할 수 없어서 오류가 나옴 - 튕김.
                     if (!input.equals("")) {
-
                         //소수점 추가코드
+                        //result 처음이 "" 빈공간만 아니라면
                         if (!charSequence.toString().equals(result)) {
                             result = df.format(Long.parseLong(charSequence.toString().replaceAll(",", "")));
                             et_number.setText(result);
@@ -127,13 +123,13 @@ public class CalCalculator extends AppCompatActivity  {
                         String KftcUp = kftc_deal_bas_r.get(nationPostionUp);
                         String KftcDown = kftc_deal_bas_r.get(nationPostionDown);
 
+                        //기존에 있는,를 제거
                         KftcUp = KftcUp.replace(",", "");
 //                        KftcUp = KftcUp.replace(".", ""); //.까지 지우면 숫자가 훨씬 더 커지니까 여기서 변경
                         //1062.09가 나오는 상황
                         double tempup = Double.parseDouble(KftcUp); //double이 .은 허용함
                         tempup = (Math.round(tempup*10)/10.0);
                         //1062.5가 나옴
-
 
                         KftcDown = KftcDown.replace(",", "");
 //                        KftcDown = KftcDown.replace(".", "");
@@ -288,12 +284,10 @@ public class CalCalculator extends AppCompatActivity  {
         firstshowAlert();
     }
     //미국을 클릭하면
-    public void clickNationOther(View view) {
-        secondshowAlert1();
-    }
+    public void clickNationOther(View view) { secondshowAlert(); }
 
+    //다이얼로그에 listview 넣기.
     public void firstshowAlert() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(CalCalculator.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.calcaulator_dialog, null);
@@ -306,10 +300,11 @@ public class CalCalculator extends AppCompatActivity  {
         CalDialogAdapter calDialogAdapter = new CalDialogAdapter(dialog_arraylist,this);
         listview.setAdapter(calDialogAdapter);
 
+        //리스트뷰(국가들) 선택하면
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //그 나라의 데이터로 바꾸기.
                 Glide.with(CalCalculator.this).load(JsonExchangeRate.iv_nationflag.get(position)).into(iv_CompareNation1);
                 tv_name.setText(JsonExchangeRate.cur_nm.get(position));
                 tv_currency.setText(JsonExchangeRate.cur_unit.get(position));
@@ -319,12 +314,11 @@ public class CalCalculator extends AppCompatActivity  {
                 dialog.dismiss();
             }
         });
-
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
-    public void secondshowAlert1() {
+    public void secondshowAlert() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CalCalculator.this);
         LayoutInflater inflater = getLayoutInflater();

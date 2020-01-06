@@ -44,8 +44,8 @@ public class UpdateMain extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         loading();
+        //리사이클러뷰 이용
         UpdateRecyclerView = findViewById(R.id.update_recyclerview);
-
         updateAdapter = new UpdateAdapter(this, updates);
         UpdateRecyclerView.setAdapter(updateAdapter);
 
@@ -70,16 +70,10 @@ public class UpdateMain extends AppCompatActivity {
 
                         updates.add(0,new UpdateVO(title, nickname, content,now));
                         updateAdapter.notifyItemInserted(0);
-
-
-                        Log.d("NUMBER",updates.get(0).getUpdateContent());
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -89,11 +83,11 @@ public class UpdateMain extends AppCompatActivity {
         });
         //실제 요청작업을 수행해주는 요청큐 객체 생성
         RequestQueue requestQueue= Volley.newRequestQueue(this);
-
         //요청큐에 요청객체 추가
         requestQueue.add(jsonArrayRequest);
     }
 
+    //뒤로가기 선택되었을때 보내기.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){

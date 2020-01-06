@@ -171,7 +171,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //데이터로드하기.
         Dataload();
+
         //리싸이클러 연결하기
         recyclerView = findViewById(R.id.recyclerview);
         recyclerAdapter = new MainRecylcerAdapter(datasCopy,this);
@@ -220,11 +222,13 @@ public class MainActivity extends AppCompatActivity {
         ////////////////////////////////////////////카카오 기능//////////////////////////////////////////////////
         //getHashKey();오프라인 카카오톡 로그인시 필요한 해시키.
 
+        //카카오 데이터 함수 호출
         DataloadKakao();
 
         if(kakaodatas.size()==0) return;
             //로그인
-        else if(kakaodatas.get(0).getLogintnumber()==124){
+        //네비게이션의 헤더뷰를 제어하는 코드
+        else if(kakaodatas.get(0).getLogintnumber()==KAKAOLOGIN){
             headerView = navigationView.getHeaderView(0);
             navUsername = headerView.findViewById(R.id.tv_navi_header_name);
             navUserimage = headerView.findViewById(R.id.iv_header);
@@ -234,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //로그아웃
-        else if(kakaodatas.get(0).getLogoutnumber()==123){
+        else if(kakaodatas.get(0).getLogoutnumber()==KAKAOLOGOUT){
             headerView = navigationView.getHeaderView(0);
             navUsername = headerView.findViewById(R.id.tv_navi_header_name);
             navUserimage = headerView.findViewById(R.id.iv_header);
@@ -280,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
+    //Menu 값에 따라 달라지게하기
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -290,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    //Menu 선택 시 이동하게 만들기.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int n = item.getItemId();
@@ -309,7 +315,8 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode){
             case KAKAOREUSLT:
                 if(resultCode==RESULT_OK){
-                    //로그인 넘버로 판별식 짜야함.
+                    //로그인 넘버로 판별식 짜기
+                    //
                     nicknumber = data.getLongExtra("nicknumber",0);
                     //로그인사진
                     kNickname = data.getStringExtra("nickname");
@@ -333,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
                         navUsername.setText(kNickname+"님"); //유저이름+"님"
                     }
                     //로그아웃
-                    else if(logoutcheckout==KAKAOLOGOUT){
+                    else{
                         Glide.with(this).load(logoutImage).into(navUserimage);
                         navUsername.setText(logoutNickname+"님"); //유저이름+"님"
                     }
@@ -403,13 +410,13 @@ public class MainActivity extends AppCompatActivity {
         nation.notifyDataSetChanged();
     }
 
-    //////////////////////////////FAB - 국가선택 - 환율추가로 이동/////////////////////////////////////////////
+    //////////////////////////////나라 선택 다이얼로그 - 초성으로 선택가능 /////////////////////////////////////////////
     public void ClikNationSelction(View view) {
         //초성으로 찾을 수 있는 기능.
         nationSelect.clear();
         nationSelectCopy.clear();
 
-        //나라추가
+        //다이얼로그에 모두 나라 추가.
         for(int i=0; i<JsonExchangeRate.cur_nm.size(); i++){
             nationSelect.add(new nationVO(JsonExchangeRate.cur_nm.get(i), JsonExchangeRate.iv_nationflag.get(i)));
         }
@@ -456,6 +463,7 @@ public class MainActivity extends AppCompatActivity {
                 //Log.d("kekekjeDone",JsonExchangeRate.cur_nm[num]+"");//여긴 국가이름이 잘 나오는데.
                 Toast.makeText(MainActivity.this, JsonExchangeRate.cur_nm.get(num)+" 추가 완료", Toast.LENGTH_SHORT).show();
 
+                //중복허용제거
                 for(int k=0; k<datasCopy.size(); k++){ //1번칸일때
                         for(int j=0; j<k; j++){ //0번 칸
                             if(datasCopy.get(j).getCur_nm().equals(datasCopy.get(k).getCur_nm())){ //0번과 1번칸을 비교
@@ -546,8 +554,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }//refres
 
-
-
+    //for문 두개로 돌릴려고 했으나 datacopy의 이미지 번호가 실제 이미지 번호가 달름.
     public void UpdateDataLoad(){
             for(int i=0; i<datasCopy.size(); i++){
                 int k=0;

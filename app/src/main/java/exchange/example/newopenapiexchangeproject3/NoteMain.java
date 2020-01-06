@@ -43,6 +43,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGIN;
+import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGOUT;
 import static exchange.example.newopenapiexchangeproject3.MainActivity.kakaodatas;
 import static exchange.example.newopenapiexchangeproject3.MainActivity.nicknumber;
 import static exchange.example.newopenapiexchangeproject3.NoteText.notelist;
@@ -143,6 +145,30 @@ public class NoteMain extends AppCompatActivity {
                 return false;
             }
         });
+
+
+        //로그인, 로그아웃 시 네비게이션뷰의 이미지 및 이름 변경
+        MainActivity main = new MainActivity();
+
+        if(kakaodatas.size()==0) return;
+            //로그인
+            //네비게이션의 헤더뷰를 제어하는 코드
+        else if(kakaodatas.get(0).getLogintnumber()==KAKAOLOGIN){
+            main.headerView = navigationView.getHeaderView(0);
+            main.navUsername = main.headerView.findViewById(R.id.tv_navi_header_name);
+            main.navUserimage = main.headerView.findViewById(R.id.iv_header);
+            main.navUsername.setText(kakaodatas.get(0).getLoginNickname()+"님"); //유저이름+"님"
+            Glide.with(this).load(kakaodatas.get(0).getLoginNickimage()).into(main.navUserimage);
+        }
+
+        //로그아웃
+        else if(kakaodatas.get(0).getLogoutnumber()==KAKAOLOGOUT){
+            main.headerView = navigationView.getHeaderView(0);
+            main.navUsername = main.headerView.findViewById(R.id.tv_navi_header_name);
+            main.navUserimage = main.headerView.findViewById(R.id.iv_header);
+            main.navUsername.setText("Anonymous"+"님"); //유저이름+"님
+            Glide.with(this).load(R.drawable.user).into(main.navUserimage);
+        }
 
 
         noteRecycler = findViewById(R.id.note_recycler);

@@ -60,7 +60,7 @@ public class KaKaoLoginclass extends AppCompatActivity {
                 intent.putExtra("logout",KAKAOLOGOUT);
                 intent.putExtra("logoutNickname","Anonymous");//Anonymous
                 intent.putExtra("logoutImage",R.drawable.user);//유저그림
-                intent.putExtra("logoutNumber",5959);//
+                //intent.putExtra("logoutNumber",5959);
                 KaKaoLoginclass.this.setResult(RESULT_OK,intent); //RESULT_OK 전달
                 Toast.makeText(KaKaoLoginclass.this, "로그아웃 완료", Toast.LENGTH_SHORT).show();
             }
