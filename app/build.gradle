@@ -6,11 +6,12 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "exchange.example.newopenapiexchangeproject3"
+//        applicationId "exchange.example.newopenapiexchangeproject3"
+        applicationId "com.exchange.newopenapiexchangeproject3"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
