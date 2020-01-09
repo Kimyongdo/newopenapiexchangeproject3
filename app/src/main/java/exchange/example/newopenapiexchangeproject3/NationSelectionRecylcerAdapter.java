@@ -85,7 +85,7 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
         for(int a=0; a<JsonExchangeRate.cur_unit.size(); a++){
             OverlapNsdata.add(new Itemlist(JsonExchangeRate.cur_nm.get(a), JsonExchangeRate.cur_unit.get(a), JsonExchangeRate.kftc_deal_bas_r.get(a), JsonExchangeRate.iv_nationflag.get(a)
                     , GlobalTime.newstime2, GlobalTime.dateFormat2[a].format(GlobalTime.date2),
-                    WeatherJSon.todayC1[a], WeatherJSon.todayweather[a], GlobalTime.timedifferent[a]
+                    WeatherJSonArray.todayC1[a], WeatherJSonArray.todayweather[a], GlobalTime.timedifferent[a]
             ));
         }
 
@@ -153,13 +153,13 @@ public class NationSelectionRecylcerAdapter extends RecyclerView.Adapter {
                                 Toast.makeText(context, "성공적으로 추가하였습니다.", Toast.LENGTH_SHORT).show();
                                 datas.add(new Itemlist(JsonExchangeRate.cur_nm.get(a), JsonExchangeRate.cur_unit.get(a), JsonExchangeRate.kftc_deal_bas_r.get(a), JsonExchangeRate.iv_nationflag.get(a)
                                         , GlobalTime.newstime2, GlobalTime.dateFormat2[a].format(GlobalTime.date2),
-                                        WeatherJSon.todayC1[a], WeatherJSon.todayweather[a], GlobalTime.timedifferent[a]
+                                        WeatherJSonArray.todayC1[a], WeatherJSonArray.todayweather[a], GlobalTime.timedifferent[a]
 
                                 ));
 
 //                                datasCopy.add(new Itemlist(JsonExchangeRate.cur_nm[a], JsonExchangeRate.cur_unit[a], JsonExchangeRate.kftc_deal_bas_r[a], JsonExchangeRate.iv_nationflag[a]
 //                                        , GlobalTime.newstime2, GlobalTime.dateFormat2[a].format(GlobalTime.date2),
-//                                        WeatherJSon.todayC1[a], WeatherJSon.todayweather[a], GlobalTime.timedifferent[a]
+//                                        WeatherJSonArray.todayC1[a], WeatherJSonArray.todayweather[a], GlobalTime.timedifferent[a]
 //
 //                                ));
                                 DataSave();

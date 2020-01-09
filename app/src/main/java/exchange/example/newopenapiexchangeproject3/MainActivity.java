@@ -25,7 +25,6 @@ import android.os.Bundle;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,6 +52,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.exchangeMonies;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGIN;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGOUT;
 
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context=this;
 
+        //카카오톡 번호
         if(nicknumber!=0){
             nicknumber=kakaodatas.get(0).getNicknumber();
         }
@@ -411,62 +413,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //////////////////////////////나라 선택 다이얼로그 - 초성으로 선택가능 /////////////////////////////////////////////
+
     public void ClikNationSelction(View view) {
-        //초성으로 찾을 수 있는 기능.
-        nationSelect.clear();
-        nationSelectCopy.clear();
+        if(exchangeMonies.length!=0) {
+            //초성으로 찾을 수 있는 기능.
+            nationSelect.clear();
+            nationSelectCopy.clear();
 
-        //다이얼로그에 모두 나라 추가.
-        for(int i=0; i<JsonExchangeRate.cur_nm.size(); i++){
-            nationSelect.add(new nationVO(JsonExchangeRate.cur_nm.get(i), JsonExchangeRate.iv_nationflag.get(i)));
-        }
-        nationSelectCopy.addAll(nationSelect);
-        fab.close(true); //자동으로 닫히도록.
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View view2 = inflater.inflate(R.layout.nation_dialog, null); //R.layout.nation_dialog 실행중
-
-        et_nation_title = view2.findViewById(R.id.et_nation_title);
-        et_nation_title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            //다이얼로그에 모두 나라 추가.
+            for (int i = 0; i < JsonExchangeRate.cur_nm.size(); i++) {
+                nationSelect.add(new nationVO(JsonExchangeRate.cur_nm.get(i), JsonExchangeRate.iv_nationflag.get(i)));
             }
+            nationSelectCopy.addAll(nationSelect);
+            fab.close(true); //자동으로 닫히도록.
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                String str = et_nation_title.getText().toString();
-                search(str);
-            }
-        });
-        builder.setView(view2);
-        //다이얼로그의 커스텀뷰를 listview와 연결
-        final ListView nationlistview = view2.findViewById(R.id.listviewSelct);
-        final AlertDialog dialog = builder.create();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View view2 = inflater.inflate(R.layout.nation_dialog, null); //R.layout.nation_dialog 실행중
 
-        nation = new natioDialongSelctionAdapter(nationSelect,context);
-        nationlistview.setAdapter(nation);
-        nationlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int num=nationSelectCopy.indexOf(nation.getItem(position));
-                //num=num%22;
+            et_nation_title = view2.findViewById(R.id.et_nation_title);
+            et_nation_title.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-                datasCopy.add(new Itemlist(JsonExchangeRate.cur_nm.get(num), JsonExchangeRate.cur_unit.get(num), JsonExchangeRate.kftc_deal_bas_r.get(num), JsonExchangeRate.iv_nationflag.get(num)
-                        , GlobalTime.newstime2, GlobalTime.dateFormat2[num].format(GlobalTime.date2),
-                        WeatherJSon.todayC1[num], WeatherJSon.todayweather[num], GlobalTime.timedifferent[num]
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
-                ));
-                //Log.d("kekekjeDone",JsonExchangeRate.cur_nm[num]+"");//여긴 국가이름이 잘 나오는데.
-                Toast.makeText(MainActivity.this, JsonExchangeRate.cur_nm.get(num)+" 추가 완료", Toast.LENGTH_SHORT).show();
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String str = et_nation_title.getText().toString();
+                    search(str);
+                }
+            });
+            builder.setView(view2);
+            //다이얼로그의 커스텀뷰를 listview와 연결
+            final ListView nationlistview = view2.findViewById(R.id.listviewSelct);
+            final AlertDialog dialog = builder.create();
 
-                //중복허용제거
-                for(int k=0; k<datasCopy.size(); k++){ //1번칸일때
-                        for(int j=0; j<k; j++){ //0번 칸
-                            if(datasCopy.get(j).getCur_nm().equals(datasCopy.get(k).getCur_nm())){ //0번과 1번칸을 비교
+            nation = new natioDialongSelctionAdapter(nationSelect, context);
+            nationlistview.setAdapter(nation);
+            nationlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int num = nationSelectCopy.indexOf(nation.getItem(position));
+                    //num=num%22;
+
+                    datasCopy.add(new Itemlist(JsonExchangeRate.cur_nm.get(num), JsonExchangeRate.cur_unit.get(num), JsonExchangeRate.kftc_deal_bas_r.get(num), JsonExchangeRate.iv_nationflag.get(num)
+                            , GlobalTime.newstime2, GlobalTime.dateFormat2[num].format(GlobalTime.date2),
+                            WeatherJSonArray.todayC1[num], WeatherJSonArray.todayweather[num], GlobalTime.timedifferent[num]
+
+                    ));
+                    //Log.d("kekekjeDone",JsonExchangeRate.cur_nm[num]+"");//여긴 국가이름이 잘 나오는데.
+                    Toast.makeText(MainActivity.this, JsonExchangeRate.cur_nm.get(num) + " 추가 완료", Toast.LENGTH_SHORT).show();
+
+                    //중복허용제거
+                    for (int k = 0; k < datasCopy.size(); k++) { //1번칸일때
+                        for (int j = 0; j < k; j++) { //0번 칸
+                            if (datasCopy.get(j).getCur_nm().equals(datasCopy.get(k).getCur_nm())) { //0번과 1번칸을 비교
                                 Toast.makeText(context, "이미 추가되어있습니다.", Toast.LENGTH_SHORT).show();
                                 datasCopy.remove(k); //add했을때 맨 마지막에 추가된 것을 제거.
                                 k--; //제거하고 한발짝 뒤로 옮김.
@@ -474,13 +479,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                DataSave();
-               recyclerAdapter.notifyDataSetChanged();
-               dialog.dismiss();
-            }
-        });
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+                    DataSave();
+                    recyclerAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            });
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+        }else{
+            Toast.makeText(context, "공휴일에는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //뒤로가기 - 네비게이션뷰 drawlayout, fab
@@ -530,9 +538,13 @@ public class MainActivity extends AppCompatActivity {
 
     //계산기로 이동
     public void clickCalculator(View view) {
-        fab.close(true);
-        Intent intent = new Intent(this, CalCalculator.class);
-        startActivity(intent);
+        if(exchangeMonies.length!=0){
+            fab.close(true);
+            Intent intent = new Intent(this, CalCalculator.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(context, "공휴일에는 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //메모장으로 이동
@@ -540,6 +552,7 @@ public class MainActivity extends AppCompatActivity {
         fab.close(true);
         Intent intent = new Intent(this, NoteText.class);
         startActivity(intent);
+
     }
 
     /////////////////////////////////////////////////////////새로고침기능//////////////////////////////////////////////////////////////
@@ -660,7 +673,7 @@ public class MainActivity extends AppCompatActivity {
     public void SetData(int i, int k){
         datasCopy.set(i,new Itemlist(JsonExchangeRate.cur_nm.get(k), JsonExchangeRate.cur_unit.get(k), JsonExchangeRate.kftc_deal_bas_r.get(k), JsonExchangeRate.iv_nationflag.get(k)
                 , GlobalTime.newstime2, GlobalTime.dateFormat2[k].format(GlobalTime.date2),
-                WeatherJSon.todayC1[k], WeatherJSon.todayweather[k], GlobalTime.timedifferent[k]
+                WeatherJSonArray.todayC1[k], WeatherJSonArray.todayweather[k], GlobalTime.timedifferent[k]
         ));
     }
 

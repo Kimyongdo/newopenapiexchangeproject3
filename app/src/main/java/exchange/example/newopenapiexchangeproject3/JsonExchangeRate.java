@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonExchangeRate {
-  public  static ExchangeMoney[] exchangeMonies;
-
+     public static ExchangeMoney[] exchangeMonies;
      static ArrayList<String> cur_nm=new ArrayList<>();
      static ArrayList<String> cur_unit=new ArrayList<>();
      static ArrayList<String> kftc_deal_bas_r=new ArrayList<>();
@@ -37,7 +36,7 @@ public class JsonExchangeRate {
         String mykey = "2u3tcj729pppDBhULM3oFrRI7iRfkGlQ";
         String url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?"
                 +"authkey="+mykey        //인증키
-                +"&searchdate="+dateStr  //날짜               주말에 null 값으로 변화되서 아무것도 나오지 않음.. 흠..... 대책이 필요함.
+                +"&searchdate="+20201005  //날짜               주말에 null 값으로 변화되서 아무것도 나오지 않음.. 흠..... 대책이 필요함.
                 +"&data=AP01";           //(성공==AP01
         StringRequest request = new StringRequest(             //Volley 라이브러리
                 Request.Method.GET,
@@ -69,9 +68,10 @@ public class JsonExchangeRate {
     //gson-> 정보 가져오기 + 대량의데이터
     public void processResponse(String response){
         Gson gson = new Gson();
-        //int i
         exchangeMonies = gson.fromJson(response, ExchangeMoney[].class); //Json 문서가 [ 로 시작하면 바로 배열부터 시작하는것이니 []로 시작해서 꺼내준다.
-        if(exchangeMonies !=null && exchangeMonies.length!=0){//json 오후에 끊기기 때문에.
+        Log.d("TAGad11", exchangeMonies.length+"");
+        if(exchangeMonies.length!=0){//json 오후에 끊기기 때문에.
+
             for(int i=0; i<exchangeMonies.length; i++){
                 //환율Json
                 cur_nm.add(exchangeMonies[i].getCur_nm());  //나라이름
@@ -79,14 +79,16 @@ public class JsonExchangeRate {
                 kftc_deal_bas_r.add(exchangeMonies[i].getKftc_deal_bas_r()) ; //기준매매환율
                 //환율이미지(안드로이드 내장)
                 iv_nationflag.add(R.drawable.a01_arabemirates +i);       //순서를 통해 나라를 지정함.
-                Log.d("TAGad", exchangeMonies.length+"");
+                //Log.d("TAGad", exchangeMonies.length+"");
             }
         }else{ //공휴일 및 휴일에 값이 0인 경우 - 준비중으로 바꾸어야할 필요가 있음.
+            Log.d("TAGad12", exchangeMonies.length+"");
             for(int k=0; k<exchangeMonies.length; k++){
-                cur_nm.set(k,"준비중입니다.");
-                cur_unit.set(k,"오전 10시에 열립니다.");
-                kftc_deal_bas_r.set(k,"") ;
-                iv_nationflag.set(k,R.drawable.a01_arabemirates +k);
+                cur_nm.add("준비중입니다.");
+                cur_unit.add("오전 10시에 열립니다.");
+                kftc_deal_bas_r.add("") ;
+                iv_nationflag.add(R.drawable.a01_arabemirates +k);
+
             }
 
         }

@@ -30,9 +30,6 @@ import static exchange.example.newopenapiexchangeproject3.GlobalTime.timeZone2;
 public class NationIntent extends AppCompatActivity {
 
     TextView tvExhcangeName;
-    TextView tvTime;
-    TextView tvWeather;
-    TextView newsNote;
 
     ImageView iv_D_Nationflag;
     TextView tv_D_NationName;
@@ -40,7 +37,6 @@ public class NationIntent extends AppCompatActivity {
     TextView tv_D_NationExchange;
     TextView tv_D_NationGlobalTime;
     TextView tv_D_NationNowTime;
-    //TextView tv_D_NationNowTimeDifferent;
     TextView tv_D_timedifferentSubtract;
 
     ImageView iv_D_NationWehaterImage;
@@ -144,15 +140,15 @@ public class NationIntent extends AppCompatActivity {
 
 
         //날씨
-        Glide.with(this).load(WeatherJSon.todayIcon[i]).into(iv_D_NationWehaterImage);
-        tv_D_NationCountry.setText(WeatherJSon.todayNation[i]);
+        Glide.with(this).load(WeatherJSonArray.todayIcon[i]).into(iv_D_NationWehaterImage);
+        tv_D_NationCountry.setText(WeatherJSonArray.todayNation[i]);
         tv_D_NationCountry.setTypeface(typeface);
-        tv_D_NationCity.setText(WeatherJSon.todayCity[i]);
+        tv_D_NationCity.setText(WeatherJSonArray.todayCity[i]);
         tv_D_NationCity.setTypeface(typeface);
-        tv_D_NationTemp.setText(WeatherJSon.todayC1[i]);
-        tv_D_WeatherCondition.setText(WeatherJSon.todayweather[i]);
-        tv_D_WeatherWind.setText(WeatherJSon.todaywind[i]);
-        tv_D_WeatherHumidity.setText(WeatherJSon.todayHum[i]);
+        tv_D_NationTemp.setText(WeatherJSonArray.todayC1[i]);
+        tv_D_WeatherCondition.setText(WeatherJSonArray.todayweather[i]);
+        tv_D_WeatherWind.setText(WeatherJSonArray.todaywind[i]);
+        tv_D_WeatherHumidity.setText(WeatherJSonArray.todayHum[i]);
 
        //뉴스
         tv_newtitle1.setText(SearchNaverJson1.newstitle[i][0]);

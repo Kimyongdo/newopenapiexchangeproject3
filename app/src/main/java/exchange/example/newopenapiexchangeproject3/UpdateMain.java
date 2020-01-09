@@ -51,8 +51,9 @@ public class UpdateMain extends AppCompatActivity {
 
     }//onCreate
 
+    //myphpadmin의 표를 php에서 배열을 json으로 만들어서 바꿔준 다음
     public void loading(){
-        String serverUrl ="http://chocojoa123.dothome.co.kr/Exchange/ExloadPHP.php";
+        String serverUrl ="http://chocojoa123.dothome.co.kr/Exchange/ExloadPHP.php";//여기서 php의 자료들이 json으로 대기중
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, serverUrl, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -61,6 +62,7 @@ public class UpdateMain extends AppCompatActivity {
                 updateAdapter.notifyDataSetChanged();
                 for (int i = 0; i < response.length(); i++) {
                     try {
+                        //json을 받아오는 jsonObject를 사용
                         JSONObject jsonObject = response.getJSONObject(i);
                         int no = Integer.parseInt(jsonObject.getString("no")); //db테이블의 제목이 no라고 하는 것을 가져옴
                         String title = jsonObject.getString("title");     //db테이블의 content 제목에 해당하는 값을 가져옴

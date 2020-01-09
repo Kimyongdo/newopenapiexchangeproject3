@@ -10,13 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.Switch;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,7 +27,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
 
-import net.igenius.customcheckbox.CustomCheckBox;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,40 +49,25 @@ import static exchange.example.newopenapiexchangeproject3.NoteText.searchlist;
 
 public class NoteMain extends AppCompatActivity {
 
-    //체크박스
-    CheckBox checkbox;
-    CustomCheckBox customCheckBox;
-    LinearLayout NoteLinearlayout;
-    static boolean ischecked =false;
-
     //플로팅버튼
     FloatingActionMenu fab;
     FloatingActionButton fabbtn_world;
     FloatingActionButton fabbtn_cal;
     FloatingActionButton fabbtn_text;
 
-
     //레이아웃
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
-    Toolbar toolbar;                                     //toolbar import시 appcompat->setsupport 가능해짐.
+    Toolbar toolbar;
 
     RecyclerView noteRecycler;
-    //어레이리스트는 note에서 저장할떄 만들었으니 거기서 불러오는 걸로 해야할듯?
     static NoteAdapter noteAdapter;
-
-    boolean isDarkmode = true;
-    Switch actionview;
-
-    String str;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_main);
-
 
 
         ///////////////////////////네비게이션 뷰 및 플로팅 버튼 연결하기 ///////////////////////////////////////
@@ -104,7 +86,7 @@ public class NoteMain extends AppCompatActivity {
         fabbtn_world = findViewById(R.id.menu_item_world);
         fabbtn_cal = findViewById(R.id.menu_item_calculator);
         fabbtn_text = findViewById(R.id.menu_item3);
-        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world); //navigation item은 px상관없이 작게 들어가는데 비해 fab 속 이미지는 glide을 통해서 들어가야 사이즈 조절이 알맞게 가능함. wrap -> 24dp
+        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world);
         Glide.with(this).load(R.drawable.calculator1).into(fabbtn_cal);
         Glide.with(this).load(R.drawable.text).into(fabbtn_text);
 
@@ -149,7 +131,6 @@ public class NoteMain extends AppCompatActivity {
 
         //로그인, 로그아웃 시 네비게이션뷰의 이미지 및 이름 변경
         MainActivity main = new MainActivity();
-
         if(kakaodatas.size()==0) return;
             //로그인
             //네비게이션의 헤더뷰를 제어하는 코드
@@ -169,25 +150,19 @@ public class NoteMain extends AppCompatActivity {
             main.navUsername.setText("Anonymous"+"님"); //유저이름+"님
             Glide.with(this).load(R.drawable.user).into(main.navUserimage);
         }
-
-
+        //리사이클러뷰
         noteRecycler = findViewById(R.id.note_recycler);
         noteAdapter = new NoteAdapter(this);
         noteRecycler.setAdapter(noteAdapter);
 
         nicknumber=kakaodatas.get(0).getNicknumber(); //static 공부 부족, 여기서 다시 한번 써놓으니 인식함.
-        //데이터스를 로드.
+        //카카오톡 로그인이 되어있다면
         if(nicknumber!=0.0){
-            Log.d("닉넘버2",nicknumber+"");
-           //DB데이터 로드 //쓰레드인데 바로 데이터를 얻으려고 하니. testlist.size가 0이 나옴.---여기가 또 수정해야함(수정완료)
-            NoteLoadFromDB(); //여기서 notelist는 완성임. --> 돋보기를 누른다고 한다면
-
+            NoteLoadFromDB(); //php->myadminphp내용을 가져온다.
+            //카카오톡 로그인이 되어있지 않다면
         }else{
             Dataload();   //휴대폰 내부 데이터 로드
-
         }
-
-
         noteAdapter.notifyDataSetChanged();
     }//////////////////////////////////////////////////////////oncreate///////////////////////////////////////////////////
 
