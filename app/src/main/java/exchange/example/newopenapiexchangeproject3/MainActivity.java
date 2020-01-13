@@ -560,9 +560,14 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(datasCopy.size()==0) return;
-                UpdateDataLoad();
-                swipeRefreshLayout.setRefreshing(false);
+                //공휴일이거나, 리사이클러뷰 자체에 데이터가 없는 경우 새로고침모양 소멸
+                if(exchangeMonies.length==0 || datasCopy.size()==0){
+                    swipeRefreshLayout.setRefreshing(false);
+                }else {
+                    //평일이거나 데이터가 있따면 업데이트 실행
+                    UpdateDataLoad();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }//refres

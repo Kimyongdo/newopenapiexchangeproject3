@@ -52,6 +52,9 @@ public class UpdateMain extends AppCompatActivity {
     }//onCreate
 
     //myphpadmin의 표를 php에서 배열을 json으로 만들어서 바꿔준 다음
+    //html(index.html -> adminphp.php(내용작성) -> updatephp.php(insert into) -> db에 저장, -> 안드 -> ExloadPHP에서 불러오는 셈.
+    //현 문제점 : 업데이트 내용을 지우기 위해서는 DB에 직접 접속해야한다느 점
+
     public void loading(){
         String serverUrl ="http://chocojoa123.dothome.co.kr/Exchange/ExloadPHP.php";//여기서 php의 자료들이 json으로 대기중
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, serverUrl, null, new Response.Listener<JSONArray>() {
@@ -60,6 +63,7 @@ public class UpdateMain extends AppCompatActivity {
 
                 updates.clear();
                 updateAdapter.notifyDataSetChanged();
+
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         //json을 받아오는 jsonObject를 사용
@@ -69,9 +73,8 @@ public class UpdateMain extends AppCompatActivity {
                         String nickname = jsonObject.getString("name");
                         String content = jsonObject.getString("content");
                         String now = jsonObject.getString("date");
-
-                        updates.add(0,new UpdateVO(title, nickname, content,now));
-                        updateAdapter.notifyItemInserted(0);
+                        updates.add(new UpdateVO(title, nickname, content,now));
+                        updateAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
