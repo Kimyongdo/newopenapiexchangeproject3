@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="exchange.example.newopenapiexchangeproject3.NationIntent.NationIntent">
+   >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -389,7 +389,62 @@
         android:lineSpacingExtra ="5dp"
         />
 
-    </RelativeLayout>
+<!--                                             테이블 차트                -->
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart"
+            android:layout_below="@+id/tv_newstitle3"
+            android:layout_width="400dp"
+            android:layout_height="320dp" />
 
+
+<!--      옆으로 이동  -->
+        <SeekBar
+            android:id="@+id/seekBar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:max="150"
+            android:layout_below="@+id/seekBar1"
+            android:layout_marginTop="2dp"
+            />
+
+<!--        <SeekBar-->
+<!--            android:id="@+id/seekBar1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:max="150"-->
+<!--            android:layout_below="@+id/seekBar2"-->
+<!--            />-->
+
+<!--        더 많은 연도 보기-->
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chart"
+            android:layout_marginTop="2dp"
+            android:max="50"
+            />
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvXMax"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            -->
+<!--    -->
+<!--           -->
+<!--            android:textAppearance="?android:attr/textAppearanceMedium" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvYMax"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignBottom="@+id/seekBar2"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:textAppearance="?android:attr/textAppearanceMedium" />-->
+    </RelativeLayout>
     </ScrollView>
 </LinearLayout>

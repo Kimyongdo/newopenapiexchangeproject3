@@ -25,6 +25,7 @@ import android.os.Bundle;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,10 +51,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.exchangeMonies;
+import static exchange.example.newopenapiexchangeproject3.JsonExchangeRateYear.kftc_deal_bas_r2;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGIN;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGOUT;
 
@@ -62,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
     //https://openweathermap.org/api/hourly-forecast 날씨 - json뷰로 도시 id추가 가능
 
+    //날짜
+
+    static ArrayList<String> CanlenderTime=new ArrayList<>();
     //퍼미션
     public static final int PHONEPERMISSION = 431;
     public static final int KAKAOREUSLT = 333;
@@ -247,6 +255,8 @@ public class MainActivity extends AppCompatActivity {
             navUsername.setText("Anonymous"+"님"); //유저이름+"님
             Glide.with(this).load(R.drawable.user).into(navUserimage);
         }
+
+
     }///////////////////////////////////////////////////onCreate//////////////////////////////////////////////////////////////////
 
 
@@ -271,6 +281,26 @@ public class MainActivity extends AppCompatActivity {
     public void MyThread(){
         JsonExchangeRate jsonExchangeRate = new JsonExchangeRate();
         jsonExchangeRate.sendRequest();
+
+
+        JsonExchangeRateYear jsonExchangeRateYear = new JsonExchangeRateYear();
+        int time=0;
+        //Date date2 = new Date();//오늘날짜
+        CanlenderTime.clear();
+        for(int k=0; k<10; k++){
+            Date date2 = new Date(); //오늘날짜
+            date2.setTime(date2.getTime()-time);//time 전날+전날..반복
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            String dateStr2 = sdf.format(date2);
+            CanlenderTime.add(dateStr2); //달력 날짜를 가져옴
+            time = time+(1000*60*60*24);
+            Log.d("TAG2223",CanlenderTime.get(k));
+            jsonExchangeRateYear.sendRequest(dateStr2);
+
+        }
+
+
+
         WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
         weahterCallMethod.WeahterCallMethod();
         GlobalTime globalTime = new GlobalTime();

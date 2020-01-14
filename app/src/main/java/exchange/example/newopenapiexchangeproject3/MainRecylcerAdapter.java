@@ -134,6 +134,9 @@ public class MainRecylcerAdapter extends RecyclerView.Adapter {
                                 intent0.putExtra("i",0);
                                 intent0.putExtra("name","Arab");
                                 intent0.putExtra("time","Asia/Dubai");
+
+                                //여기서 차트정보를 보내주어야한다.
+
                                 intent0.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //기존 액티비티가 있다면 전부제거하고 호출
                                 context.startActivity(intent0);
                                 break;

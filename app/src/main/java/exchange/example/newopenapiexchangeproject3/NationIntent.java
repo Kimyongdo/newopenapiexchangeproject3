@@ -4,19 +4,32 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.newopenapiexchangeproject3.R;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.EntryXComparator;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -27,7 +40,8 @@ import static exchange.example.newopenapiexchangeproject3.GlobalTime.sdf2;
 import static exchange.example.newopenapiexchangeproject3.GlobalTime.timeSubstract;
 import static exchange.example.newopenapiexchangeproject3.GlobalTime.timeZone2;
 
-public class NationIntent extends AppCompatActivity {
+public class NationIntent extends NationIntentDemoBase implements SeekBar.OnSeekBarChangeListener,
+        OnChartValueSelectedListener {
 
     TextView tvExhcangeName;
 
@@ -55,16 +69,95 @@ public class NationIntent extends AppCompatActivity {
     String NationTime;
     String NationName;
 
+    //차트
+    private LineChart chart;
+    private SeekBar seekBarX, seekBarY;
+//    private TextView tvX, tvY;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nation_intent);
 
-        //인텐트받기.
+        //MainRecyclerAdapter보낸 인텐트 ---->인텐트받기.
         Intent intent = getIntent();
         NationName = intent.getStringExtra("name");
         NationTime = intent.getStringExtra("time");
         i = intent.getIntExtra("i",0);
+
+
+
+//        tvX = findViewById(R.id.tvXMax);
+//        tvY = findViewById(R.id.tvYMax);
+
+        seekBarX = findViewById(R.id.seekBar1);
+        seekBarY = findViewById(R.id.seekBar2);
+
+        seekBarY.setOnSeekBarChangeListener(this);
+        seekBarX.setOnSeekBarChangeListener(this);
+
+        chart = findViewById(R.id.chart);
+        chart.setOnChartValueSelectedListener(this);
+        chart.setDrawGridBackground(false);
+
+        // no description text
+        chart.getDescription().setEnabled(false);
+
+        // enable touch gestures
+        chart.setTouchEnabled(true);
+
+        // enable scaling and dragging
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+
+        // if disabled, scaling can be done on x- and y-axis separately
+        chart.setPinchZoom(true);
+
+        // set an alternative background color
+        // chart.setBackgroundColor(Color.GRAY);
+
+        // create a custom MarkerView (extend MarkerView) and specify the layout
+        // to use for it
+        //클릭했을때 차트의 숫자 표기
+        NationIntentTableView mv = new NationIntentTableView(this, R.layout.custom_marker_view);
+        mv.setChartView(chart); // For bounds control
+        chart.setMarker(mv); // Set the marker to the chart
+
+        XAxis xl = chart.getXAxis();
+        xl.setAvoidFirstLastClipping(true);
+        xl.setAxisMinimum(0f);
+
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setInverted(true);
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        // add data
+        //초기 데이터 위치
+        seekBarX.setProgress(10);
+        seekBarY.setProgress(10);
+
+        // // restrain the maximum scale-out factor
+        // chart.setScaleMinima(3f, 3f);
+        //
+        // // center the view to a specific position inside the chart
+        // chart.centerViewPort(10, 50);
+
+        // get the legend (only possible after setting data)
+        Legend l = chart.getLegend();
+
+        // modify the legend ...
+        l.setForm(Legend.LegendForm.LINE);
+
+        // don't forget to refresh the drawing
+        chart.invalidate();
+
+
+
+
+
 
         //툴바
         Toolbar toolbar;
@@ -131,9 +224,9 @@ public class NationIntent extends AppCompatActivity {
         TimeThread timeThread = new TimeThread();
         timeThread.start();
 
-        tv_D_NationGlobalTime.setText(dateFormat2[i].format(GlobalTime.date2));
+        tv_D_NationGlobalTime.setText(dateFormat2[i].format(date2));
         tv_D_NationGlobalTime.setTypeface(typeface);
-        tv_D_NationNowTime.setText(GlobalTime.newstime2);
+        tv_D_NationNowTime.setText(newstime2);
         tv_D_NationNowTime.setTypeface(typeface);
         tv_D_timedifferentSubtract.setTypeface(typeface);
         tv_D_timedifferentSubtract.setText(timeSubstract[i]);
@@ -194,6 +287,8 @@ public class NationIntent extends AppCompatActivity {
         });
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -203,9 +298,7 @@ public class NationIntent extends AppCompatActivity {
                 finish();
             }
         }
-
         return super.onOptionsItemSelected(item);
-
     }
 
     @Override
@@ -221,6 +314,9 @@ public class NationIntent extends AppCompatActivity {
         TimeThread timeThread = new TimeThread();
         timeThread.interrupt();
     }
+
+
+
 
     class TimeThread extends Thread{
         @Override
@@ -252,4 +348,69 @@ public class NationIntent extends AppCompatActivity {
             }
         }
     }
+
+
+    //////////////////////////////////////////데이터 테이블  라이브러리//////////////////////////////////////////////////
+    private void setData(int count, float range) {
+
+        ArrayList<Entry> entries = new ArrayList<>();
+
+        //여기서 나온 데이터 값이 차트에 찍힌다,
+        //count : 기준날짜부터 현재날짜
+        //x축 : 어디기준 날짜
+        //y축 : 그떄의 환율가격
+
+
+        for (int i = 0; i < count; i++) {
+            float xVal = (float) (Math.random() * range);//그때의 날짜
+            float yVal = (float) (Math.random() * range);//그때의 환율
+            entries.add(new Entry(xVal, yVal));
+        }
+
+        // sort by x-value
+        Collections.sort(entries, new EntryXComparator());
+
+        // create a dataset and give it a type
+        LineDataSet set1 = new LineDataSet(entries, "DataSet 1");
+
+        set1.setLineWidth(1.5f);
+        set1.setCircleRadius(4f);
+
+        // create a data object with the data sets
+        LineData data = new LineData(set1);
+
+        // set data
+        chart.setData(data);
+    }
+
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+//        tvX.setText(String.valueOf(seekBarX.getProgress()));
+//        tvY.setText(String.valueOf(seekBarY.getProgress()));
+
+        setData(seekBarX.getProgress(), seekBarY.getProgress());
+
+        // redraw
+        chart.invalidate();
+    }
+
+    @Override
+    protected void saveToGallery() {
+        saveToGallery(chart, "InvertedLineChartActivity");
+    }
+
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+    }
+    @Override
+    public void onNothingSelected() {}
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {}
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {}
 }
+
