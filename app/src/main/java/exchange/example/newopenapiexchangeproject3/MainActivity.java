@@ -58,7 +58,6 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.exchangeMonies;
-import static exchange.example.newopenapiexchangeproject3.JsonExchangeRateYear.kftc_deal_bas_r2;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGIN;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGOUT;
 
@@ -150,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+
 
         //플로팅 버튼 외부 터치시 끝나도록.
         fab = findViewById(R.id.flaotingActionButton);
@@ -283,23 +285,21 @@ public class MainActivity extends AppCompatActivity {
         jsonExchangeRate.sendRequest();
 
 
-        JsonExchangeRateYear jsonExchangeRateYear = new JsonExchangeRateYear();
+
         int time=0;
         //Date date2 = new Date();//오늘날짜
         CanlenderTime.clear();
-        for(int k=0; k<10; k++){
+        for(int k=0; k<3; k++){
             Date date2 = new Date(); //오늘날짜
             date2.setTime(date2.getTime()-time);//time 전날+전날..반복
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             String dateStr2 = sdf.format(date2);
             CanlenderTime.add(dateStr2); //달력 날짜를 가져옴
             time = time+(1000*60*60*24);
-            Log.d("TAG2223",CanlenderTime.get(k));
-            jsonExchangeRateYear.sendRequest(dateStr2);
+            Log.d("TAG2223",CanlenderTime.get(k));//15 14
 
+            //여기다가 조인써보도록 해보쟈 13을 넣으면 13 13 13이 나옴 ㅠㅠ;;
         }
-
-
 
         WeahterCallMethod  weahterCallMethod= new WeahterCallMethod();
         weahterCallMethod.WeahterCallMethod();
@@ -308,6 +308,8 @@ public class MainActivity extends AppCompatActivity {
         globalTime.koreantime();
         globalTime.Notetime();
     }
+
+
 
     //oncreatemenu를 지우고 onpreapre+invaild 쓰면 바뀔때마다 적용됨.(로그인->로그아웃)
     @Override
