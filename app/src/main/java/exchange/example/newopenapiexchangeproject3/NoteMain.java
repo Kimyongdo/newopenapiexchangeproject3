@@ -86,7 +86,7 @@ public class NoteMain extends AppCompatActivity {
         fabbtn_world = findViewById(R.id.menu_item_world);
         fabbtn_cal = findViewById(R.id.menu_item_calculator);
         fabbtn_text = findViewById(R.id.menu_item3);
-        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world);
+        //Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world);
         Glide.with(this).load(R.drawable.calculator1).into(fabbtn_cal);
         Glide.with(this).load(R.drawable.text).into(fabbtn_text);
 
@@ -202,11 +202,11 @@ public class NoteMain extends AppCompatActivity {
 
     }
 
-    public void ClikNationSelction2(View view) {
-        fab.close(true); //자동으로 닫히도록.
-        Intent intent = new Intent(this, NationSelectNation.class);
-        startActivity(intent);
-    }
+//    public void ClikNationSelction2(View view) {
+//        fab.close(true); //자동으로 닫히도록.
+//        Intent intent = new Intent(this, NationSelectNation.class);
+//        startActivity(intent);
+//    }
 
     public void clickCalculator2(View view) {
         fab.close(true); //자동으로 닫히도록.
