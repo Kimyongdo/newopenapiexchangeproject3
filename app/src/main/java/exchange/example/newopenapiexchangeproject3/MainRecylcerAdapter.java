@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +22,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
+import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.cur_nm;
+import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.exchangeMonies;
 import static exchange.example.newopenapiexchangeproject3.MainActivity.datas;
 
 public class MainRecylcerAdapter extends RecyclerView.Adapter {
@@ -118,7 +123,7 @@ public class MainRecylcerAdapter extends RecyclerView.Adapter {
             cardviewlayoutroot = itemView.findViewById(R.id.cardviewlayoutroot);
             Relativelayout_cardview_title = itemView.findViewById(R.id.Relativelayout_cardview_title);
 
-
+            if(cur_nm.size()!=0){
             Relativelayout_cardview_title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -352,6 +357,10 @@ public class MainRecylcerAdapter extends RecyclerView.Adapter {
 
                 }
             });
+            }
+            else{
+                Toast.makeText(context, "주말에는 준비중입니다.", Toast.LENGTH_SHORT).show();
+            }
 
 
             //////////////////////////////카드뷰 x버튼을 누르면 제거되도록 만드는 기능//////////////////////////////

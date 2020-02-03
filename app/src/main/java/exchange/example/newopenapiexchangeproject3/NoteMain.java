@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import static exchange.example.newopenapiexchangeproject3.JsonExchangeRate.cur_nm;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGIN;
 import static exchange.example.newopenapiexchangeproject3.KaKaoLoginclass.KAKAOLOGOUT;
 import static exchange.example.newopenapiexchangeproject3.MainActivity.kakaodatas;
@@ -86,7 +88,7 @@ public class NoteMain extends AppCompatActivity {
         fabbtn_world = findViewById(R.id.menu_item_world);
         fabbtn_cal = findViewById(R.id.menu_item_calculator);
         fabbtn_text = findViewById(R.id.menu_item3);
-        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world);
+//        Glide.with(this).load(R.drawable.worldwide1).into(fabbtn_world);
         Glide.with(this).load(R.drawable.calculator1).into(fabbtn_cal);
         Glide.with(this).load(R.drawable.text).into(fabbtn_text);
 
@@ -202,16 +204,22 @@ public class NoteMain extends AppCompatActivity {
 
     }
 
-    public void ClikNationSelction2(View view) {
-        fab.close(true); //자동으로 닫히도록.
-        Intent intent = new Intent(this, NationSelectNation.class);
-        startActivity(intent);
-    }
+//    public void ClikNationSelction2(View view) {
+//        fab.close(true); //자동으로 닫히도록.
+//        Intent intent = new Intent(this, NationSelectNation.class);
+//        startActivity(intent);
+//    }
+
 
     public void clickCalculator2(View view) {
-        fab.close(true); //자동으로 닫히도록.
-        Intent intent = new Intent(this, CalCalculator.class);
-        startActivity(intent);
+        if(cur_nm.size()!=0){
+            fab.close(true); //자동으로 닫히도록.
+            Intent intent = new Intent(this, CalCalculator.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "공휴일은 준비중입니다.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 

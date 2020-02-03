@@ -34,11 +34,13 @@ public class JsonExchangeRate {
         String dateStr = sdf.format(date); //null값 아직 해결 안 함.
 
         //공휴일 20201005 입니다.
-
+        //dateStr
+        //20200202
         String mykey = "2u3tcj729pppDBhULM3oFrRI7iRfkGlQ";
         String url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?"
                 +"authkey="+mykey        //인증키
-                +"&searchdate="+dateStr  //날짜               주말에 null 값으로 변화되서 아무것도 나오지 않음.. 흠..... 대책이 필요함.
+
+                +"&searchdate="+  dateStr//날짜               주말에 null 값으로 변화되서 아무것도 나오지 않음.. 흠..... 대책이 필요함.
                 +"&data=AP01";           //(성공==AP01)
         StringRequest request = new StringRequest(             //Volley 라이브러리
                 Request.Method.GET,

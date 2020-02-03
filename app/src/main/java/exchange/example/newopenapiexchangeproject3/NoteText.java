@@ -87,8 +87,8 @@ public class NoteText extends AppCompatActivity {
         setContentView(R.layout.note_text);
 
         ///////////////////////////카메라를 사용하는 경우/////////////////////////////////////////////
-        ivCamera = findViewById(R.id.iv_updateNote_first_camera);
-        ivCemeraImage = findViewById(R.id.iv_camareaImage);
+        //ivCamera = findViewById(R.id.iv_updateNote_first_camera);
+        //ivCemeraImage = findViewById(R.id.iv_camareaImage);
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ //sdk version이 마시멜로우보다 높은 겨우
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){ //처음에 거부되어있다면
@@ -98,15 +98,15 @@ public class NoteText extends AppCompatActivity {
 
 
         //카메라 이미지 선택시.
-        ivCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                setImageUri();
-                if(imgUri!=null) intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-                startActivityForResult(intent, 1000);
-            }
-        });
+//        ivCamera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                setImageUri();
+//                if(imgUri!=null) intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+//                startActivityForResult(intent, 1000);
+//            }
+//        });
         ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 

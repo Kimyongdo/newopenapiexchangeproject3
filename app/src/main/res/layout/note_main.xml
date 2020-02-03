@@ -94,17 +94,17 @@
                                     애니메이션 이미지 누가 담당하는거지 -->
                 <!--                여기 이미지는 24px로만 가능 -->
                 <!--                국가 추가 하기                          -->
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/menu_item_world"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:fab_size="mini"
-                    app:fab_label="국가 선택"
-                    android:src="@drawable/worldwide1"
-                    app:fab_colorNormal="#41AF39"
-                    app:fab_colorPressed="#41AF39"
-                    android:onClick="ClikNationSelction2"
-                    />
+<!--                <com.github.clans.fab.FloatingActionButton-->
+<!--                    android:id="@+id/menu_item_world"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    app:fab_size="mini"-->
+<!--                    app:fab_label="국가 선택"-->
+<!--                    android:src="@drawable/worldwide1"-->
+<!--                    app:fab_colorNormal="#41AF39"-->
+<!--                    app:fab_colorPressed="#41AF39"-->
+<!--                    android:onClick="ClikNationSelction2"-->
+<!--                    />-->
 
                 <!--                 환율 계산하기                            -->
                 <com.github.clans.fab.FloatingActionButton

@@ -19,14 +19,13 @@
         >
 
 
-        <ImageView
-            android:id="@+id/iv_updateNote_first_camera"
-            android:layout_width="18sp"
-            android:layout_height="18sp"
-            android:src="@drawable/photocamera"
-            android:layout_alignParentRight="true"
-            android:clickable="true"
-            />
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_updateNote_first_camera"-->
+<!--            android:layout_width="18sp"-->
+<!--            android:layout_height="18sp"-->
+<!--            android:src="@drawable/photocamera"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            />-->
 
         <ImageView
             android:id="@+id/iv_updateNote_first_done"
@@ -98,7 +97,7 @@
             android:id="@+id/tv_note_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="노트북(종류 넣을 곳)"
+            android:text="노트북"
             android:textSize="16dp"
             android:layout_toRightOf="@id/notebookimage"
             android:layout_marginLeft="10dp"

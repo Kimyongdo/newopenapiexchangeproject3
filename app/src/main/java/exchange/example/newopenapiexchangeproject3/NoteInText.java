@@ -183,8 +183,8 @@ public class NoteInText extends AppCompatActivity {
 
 
         //////////////////////////////////////////////카메라/////////////////////////////////////////////////////////////
-        ivCamera = findViewById(R.id.iv_updateNote_second_camera);
-        ivCemeraImage = findViewById(R.id.iv_camareaImage_second);
+        //ivCamera = findViewById(R.id.iv_updateNote_second_camera);
+        //ivCemeraImage = findViewById(R.id.iv_camareaImage_second);
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ //sdk version이 마시멜로우보다 높은 겨우
             int chekcedPersmission =checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE); //Write쓰면 Read권한도 동시에 발현
